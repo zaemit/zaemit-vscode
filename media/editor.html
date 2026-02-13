@@ -1,0 +1,1550 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="{{cspContent}}">
+    <title>Bazix Visual Editor</title>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+    <link rel="stylesheet" href="{{editorCssUri}}">
+    <link rel="stylesheet" href="{{codemirrorCssUri}}">
+</head>
+<body>
+    <!-- Top Toolbar -->
+    <header class="toolbar">
+        <div class="toolbar-left">
+            <a href="/" class="logo" style="text-decoration: none; display: flex; align-items: center; gap: 10px; margin-right: 12px;">
+                <div class="logo-icon" style="width: 29px; height: 29px; flex-shrink: 0;">
+                    <svg viewBox="0 0 36 36" fill="none" style="width: 100%; height: 100%; display: block;">
+                        <rect width="36" height="36" rx="8" fill="url(#logoGradEditor)"/>
+                        <path d="M10 11 L24 11 L10 25 L24 25" stroke="url(#logoPathGrad)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                        <defs>
+                            <linearGradient id="logoGradEditor" x1="0" y1="0" x2="36" y2="36" gradientUnits="userSpaceOnUse">
+                                <stop offset="0%" stop-color="#667eea"/>
+                                <stop offset="100%" stop-color="#764ba2"/>
+                            </linearGradient>
+                            <linearGradient id="logoPathGrad" x1="10" y1="11" x2="24" y2="25" gradientUnits="userSpaceOnUse">
+                                <stop offset="0%" stop-color="#ffffff"/>
+                                <stop offset="100%" stop-color="#e0e7ff"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <span class="logo-text" style="font-size: 16px; font-weight: 600; color: var(--text-primary, #1a1a1a);">Zaemit</span>
+            </a>
+            <a href="/" class="back-btn" id="backBtn" title="Back to Project" style="margin-right: 8px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="15,18 9,12 15,6"/>
+                </svg>
+            </a>
+            <span class="project-name" id="projectName">Loading...</span>
+        </div>
+        <div class="toolbar-center">
+            <div class="view-modes" id="viewModes">
+                <!-- Desktop: 100% (fixed) -->
+                <div class="view-btn-wrapper">
+                    <input type="checkbox" class="view-checkbox" data-width="100%" id="check-desktop" checked>
+                    <button class="view-btn active" data-view="desktop" data-width="100%" data-fixed="true" title="Desktop">
+                        <span class="view-check-indicator"></span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
+                        </svg>
+                        <span class="view-label">PC</span>
+                    </button>
+                </div>
+                <!-- Tablet: 768px (removable) -->
+                <div class="view-btn-wrapper">
+                    <input type="checkbox" class="view-checkbox" data-width="768" id="check-768">
+                    <button class="view-btn" data-view="tablet-768" data-width="768" title="768px">
+                        <span class="view-check-indicator"></span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="4" y="2" width="16" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18"/>
+                        </svg>
+                        <span class="view-label">768</span>
+                        <span class="view-remove" title="Remove">&times;</span>
+                    </button>
+                </div>
+                <!-- Add breakpoint button -->
+                <button class="view-add-btn" id="addViewBtn" title="Add breakpoint">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                    </svg>
+                </button>
+                <!-- Mobile: 480px (fixed) -->
+                <div class="view-btn-wrapper">
+                    <input type="checkbox" class="view-checkbox" data-width="480" id="check-480">
+                    <button class="view-btn" data-view="mobile" data-width="480" data-fixed="true" title="Mobile">
+                        <span class="view-check-indicator"></span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18"/>
+                        </svg>
+                        <span class="view-label">480</span>
+                    </button>
+                </div>
+            </div>
+            <div class="zoom-control" id="zoomControl">
+                <span class="zoom-label">Zoom</span>
+                <div class="zoom-level-display" id="zoomLevelDisplay" title="Click to select zoom level">100%</div>
+                <div class="zoom-dropdown hidden" id="zoomDropdown">
+                    <div class="zoom-option" data-zoom="0.25">25%</div>
+                    <div class="zoom-option" data-zoom="0.5">50%</div>
+                    <div class="zoom-option" data-zoom="0.75">75%</div>
+                    <div class="zoom-option" data-zoom="1">100%</div>
+                    <div class="zoom-option" data-zoom="1.25">125%</div>
+                    <div class="zoom-option" data-zoom="1.5">150%</div>
+                    <div class="zoom-option" data-zoom="2">200%</div>
+                    <div class="zoom-option" data-zoom="3">300%</div>
+                </div>
+            </div>
+        </div>
+        <div class="toolbar-right">
+            <div class="undo-redo-group">
+                <button id="undoBtn" class="btn-icon-small" title="Undo (Ctrl+Z)">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="1,4 1,10 7,10"/>
+                        <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+                    </svg>
+                </button>
+                <button id="redoBtn" class="btn-icon-small" title="Redo (Ctrl+Y)">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="23,4 23,10 17,10"/>
+                        <path d="M20.49 15a9 9 0 1 1-2.13-9.36L23 10"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="save-status" id="saveStatus">
+                <span class="status-dot"></span>
+                <span class="status-text">Saved</span>
+            </div>
+            <button id="showVersions" class="btn btn-primary" title="Version History & Publish">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <polyline points="12,6 12,12 16,14"/>
+                </svg>
+                Versions
+            </button>
+            <div class="user-profile hidden" id="userProfile" style="display:none;">
+            </div>
+            <div class="user-dropdown hidden" id="userDropdown">
+                <div class="dropdown-credit-info" id="dropdownCreditInfo">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="13,2 3,14 12,14 11,22 21,10 12,10 13,2"/>
+                    </svg>
+                    <span>AI Credits: <strong id="aiCreditCount">-</strong></span>
+                </div>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item" id="openPreview">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                        <polyline points="15,3 21,3 21,9"/>
+                        <line x1="10" y1="14" x2="21" y2="3"/>
+                    </svg>
+                    Preview
+                </a>
+                <a href="#" class="dropdown-item" id="exportZip">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="7,10 12,15 17,10"/>
+                        <line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
+                    Export ZIP
+                </a>
+                <a href="#" class="dropdown-item" id="settingsBtn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                    </svg>
+                    Settings
+                </a>
+                <a href="#" class="dropdown-item" id="shortcutsBtn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="4" width="20" height="16" rx="2"/>
+                        <path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M8 12h8M6 16h.01M10 16h4"/>
+                    </svg>
+                    Keyboard Shortcuts
+                </a>
+                <div class="dropdown-divider"></div>
+                <a href="/" class="dropdown-item">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                        <polyline points="9,22 9,12 15,12 15,22"/>
+                    </svg>
+                    Back to Hub
+                </a>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item text-danger">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                        <polyline points="16,17 21,12 16,7"/>
+                        <line x1="21" y1="12" x2="9" y2="12"/>
+                    </svg>
+                    Logout
+                </a>
+            </div>
+            <!-- Settings Popup -->
+            <div class="settings-popup hidden" id="settingsPopup">
+                <div class="settings-popup-header">
+                    <span>Settings</span>
+                    <button class="settings-close-btn" id="settingsCloseBtn">&times;</button>
+                </div>
+                <div class="settings-popup-content">
+                    <div class="settings-item">
+                        <div class="settings-item-header">
+                            <span class="settings-item-title">Quick Text Edit</span>
+                            <label class="settings-toggle">
+                                <input type="checkbox" id="quickTextEditToggle" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <p class="settings-description">Click once on text to start editing immediately, without double-clicking.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Shortcuts Modal -->
+            <div class="shortcuts-modal hidden" id="shortcutsModal">
+                <div class="shortcuts-modal-overlay"></div>
+                <div class="shortcuts-modal-content">
+                    <div class="shortcuts-modal-header">
+                        <h2>Keyboard Shortcuts</h2>
+                        <button class="shortcuts-close-btn" id="shortcutsCloseBtn">&times;</button>
+                    </div>
+                    <div class="shortcuts-modal-body">
+                        <div class="shortcuts-section">
+                            <h3>General</h3>
+                            <div class="shortcut-item"><span class="shortcut-keys"><kbd>Ctrl</kbd>+<kbd>S</kbd></span><span class="shortcut-desc">Save</span></div>
+                            <div class="shortcut-item"><span class="shortcut-keys"><kbd>Ctrl</kbd>+<kbd>Z</kbd></span><span class="shortcut-desc">Undo</span></div>
+                            <div class="shortcut-item"><span class="shortcut-keys"><kbd>Ctrl</kbd>+<kbd>Y</kbd></span><span class="shortcut-desc">Redo</span></div>
+                            <div class="shortcut-item"><span class="shortcut-keys"><kbd>Escape</kbd></span><span class="shortcut-desc">Deselect / Exit edit mode</span></div>
+                        </div>
+                        <div class="shortcuts-section">
+                            <h3>Element Operations</h3>
+                            <div class="shortcut-item"><span class="shortcut-keys"><kbd>Alt</kbd>+<kbd>C</kbd></span><span class="shortcut-desc">Copy element</span></div>
+                            <div class="shortcut-item"><span class="shortcut-keys"><kbd>Alt</kbd>+<kbd>X</kbd></span><span class="shortcut-desc">Cut element</span></div>
+                            <div class="shortcut-item"><span class="shortcut-keys"><kbd>Alt</kbd>+<kbd>V</kbd></span><span class="shortcut-desc">Paste element</span></div>
+                            <div class="shortcut-item"><span class="shortcut-keys"><kbd>Alt</kbd>+<kbd>D</kbd></span><span class="shortcut-desc">Duplicate element</span></div>
+                            <div class="shortcut-item"><span class="shortcut-keys"><kbd>Delete</kbd></span><span class="shortcut-desc">Delete element</span></div>
+                            <div class="shortcut-item"><span class="shortcut-keys"><kbd>Alt</kbd>+<kbd>P</kbd></span><span class="shortcut-desc">Select parent element</span></div>
+                            <div class="shortcut-item"><span class="shortcut-keys"><kbd>Alt</kbd>+<kbd>↑</kbd>/<kbd>↓</kbd></span><span class="shortcut-desc">Move element up/down</span></div>
+                            <div class="shortcut-item"><span class="shortcut-keys"><kbd>Alt</kbd>+<kbd>L</kbd>/<kbd>M</kbd>/<kbd>R</kbd></span><span class="shortcut-desc">Align left/center/right</span></div>
+                        </div>
+                        <div class="shortcuts-section">
+                            <h3>Z-Index</h3>
+                            <div class="shortcut-item"><span class="shortcut-keys"><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>↑</kbd></span><span class="shortcut-desc">Increase z-index</span></div>
+                            <div class="shortcut-item"><span class="shortcut-keys"><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>↓</kbd></span><span class="shortcut-desc">Decrease z-index</span></div>
+                        </div>
+                        <div class="shortcuts-section">
+                            <h3>Text Formatting</h3>
+                            <div class="shortcut-item"><span class="shortcut-keys"><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd></span><span class="shortcut-desc">Bold</span></div>
+                            <div class="shortcut-item"><span class="shortcut-keys"><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>I</kbd></span><span class="shortcut-desc">Italic</span></div>
+                            <div class="shortcut-item"><span class="shortcut-keys"><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>U</kbd></span><span class="shortcut-desc">Underline</span></div>
+                            <div class="shortcut-item"><span class="shortcut-keys"><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>=</kbd></span><span class="shortcut-desc">Increase font size</span></div>
+                            <div class="shortcut-item"><span class="shortcut-keys"><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>-</kbd></span><span class="shortcut-desc">Decrease font size</span></div>
+                        </div>
+                        <div class="shortcuts-section">
+                            <h3>Text Alignment</h3>
+                            <div class="shortcut-item"><span class="shortcut-keys"><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>L</kbd></span><span class="shortcut-desc">Align left</span></div>
+                            <div class="shortcut-item"><span class="shortcut-keys"><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>E</kbd></span><span class="shortcut-desc">Align center</span></div>
+                            <div class="shortcut-item"><span class="shortcut-keys"><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>R</kbd></span><span class="shortcut-desc">Align right</span></div>
+                            <div class="shortcut-item"><span class="shortcut-keys"><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>J</kbd></span><span class="shortcut-desc">Justify</span></div>
+                        </div>
+                        <div class="shortcuts-section">
+                            <h3>Line Height & Letter Spacing</h3>
+                            <div class="shortcut-item"><span class="shortcut-keys"><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>H</kbd></span><span class="shortcut-desc">Increase line height</span></div>
+                            <div class="shortcut-item"><span class="shortcut-keys"><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>G</kbd></span><span class="shortcut-desc">Decrease line height</span></div>
+                            <div class="shortcut-item"><span class="shortcut-keys"><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>K</kbd></span><span class="shortcut-desc">Increase letter spacing</span></div>
+                            <div class="shortcut-item"><span class="shortcut-keys"><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>N</kbd></span><span class="shortcut-desc">Decrease letter spacing</span></div>
+                        </div>
+                        <div class="shortcuts-section">
+                            <h3>Panels</h3>
+                            <div class="shortcut-item"><span class="shortcut-keys"><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>L</kbd></span><span class="shortcut-desc">Toggle layer panel</span></div>
+                            <div class="shortcut-item"><span class="shortcut-keys"><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd></span><span class="shortcut-desc">Toggle property panel</span></div>
+                            <div class="shortcut-item"><span class="shortcut-keys"><kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>K</kbd></span><span class="shortcut-desc">Open this shortcuts modal</span></div>
+                        </div>
+                        <div class="shortcuts-section">
+                            <h3>View Mode</h3>
+                            <div class="shortcut-item"><span class="shortcut-keys"><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>1</kbd>~<kbd>8</kbd></span><span class="shortcut-desc">Switch view mode (PC, Tablet, Mobile...)</span></div>
+                        </div>
+                        <div class="shortcuts-section">
+                            <h3>Zoom & View</h3>
+                            <div class="shortcut-item"><span class="shortcut-keys"><kbd>Ctrl</kbd>+<kbd>Scroll</kbd></span><span class="shortcut-desc">Zoom in/out</span></div>
+                            <div class="shortcut-item"><span class="shortcut-keys"><kbd>Ctrl</kbd>+<kbd>0</kbd></span><span class="shortcut-desc">Reset zoom to 100%</span></div>
+                            <div class="shortcut-item"><span class="shortcut-keys"><kbd>Space</kbd>+<kbd>Drag</kbd></span><span class="shortcut-desc">Pan view</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Editor Area -->
+    <div class="editor-container">
+        <!-- Left Panel Toggle Buttons -->
+        <div class="left-panel-toggles">
+            <!-- AI 버튼 제거됨 (VS Code Extension) -->
+            <button class="left-panel-toggle-btn" id="layerPanelExpandBtn" title="레이어 패널 (Ctrl+Shift+L)">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="12,2 2,7 12,12 22,7 12,2"/>
+                    <polyline points="2,17 12,22 22,17"/>
+                    <polyline points="2,12 12,17 22,12"/>
+                </svg>
+            </button>
+            <button class="left-panel-toggle-btn" id="templatePanelExpandBtn" title="템플릿 패널 (Ctrl+Shift+T)">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                    <line x1="3" y1="9" x2="21" y2="9"/>
+                    <line x1="9" y1="21" x2="9" y2="9"/>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Left: Layer Panel -->
+        <div class="layer-panel collapsed" id="layerPanel">
+            <div class="panel-header">
+                <span class="panel-title">Layers</span>
+                <div class="layer-panel-actions">
+                    <button class="layer-action-btn" id="layerCollapseAllBtn" title="Collapse All">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="4,14 10,14 10,20"/>
+                            <polyline points="20,10 14,10 14,4"/>
+                            <line x1="14" y1="10" x2="21" y2="3"/>
+                            <line x1="3" y1="21" x2="10" y2="14"/>
+                        </svg>
+                    </button>
+                    <button class="layer-action-btn" id="layerExpandAllBtn" title="Expand All">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="15,3 21,3 21,9"/>
+                            <polyline points="9,21 3,21 3,15"/>
+                            <line x1="21" y1="3" x2="14" y2="10"/>
+                            <line x1="3" y1="21" x2="10" y2="14"/>
+                        </svg>
+                    </button>
+                    <button class="panel-toggle-btn" id="layerPanelToggleBtn" title="Close Panel">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="15,18 9,12 15,6"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="layer-panel-content">
+                <div class="layer-tree" id="layerTree">
+                    <!-- DOM tree will be rendered here -->
+                </div>
+            </div>
+            <div class="layer-panel-footer">
+                <div class="layer-selection-info" id="layerSelectionInfo">
+                    <span class="selection-count">0 selected</span>
+                </div>
+                <div class="layer-bulk-actions hidden" id="layerBulkActions">
+                    <button class="layer-bulk-btn" id="layerBulkMoveUp" title="Move Up">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="18,15 12,9 6,15"/>
+                        </svg>
+                    </button>
+                    <button class="layer-bulk-btn" id="layerBulkMoveDown" title="Move Down">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6,9 12,15 18,9"/>
+                        </svg>
+                    </button>
+                    <button class="layer-bulk-btn" id="layerBulkDuplicate" title="Duplicate">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                        </svg>
+                    </button>
+                    <button class="layer-bulk-btn layer-bulk-danger" id="layerBulkDelete" title="Delete">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="3,6 5,6 21,6"/>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <!-- Layer Resizer (inside panel for absolute positioning) -->
+            <div class="resizer layer-resizer hidden" id="layerResizer"></div>
+        </div>
+
+        <!-- Left: Template Panel -->
+        <div class="template-panel hidden" id="templatePanel">
+            <div class="panel-header">
+                <span class="panel-title">템플릿</span>
+                <button class="panel-toggle-btn" id="templatePanelToggleBtn" title="Close Panel">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="15,18 9,12 15,6"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="template-filters">
+                <div class="template-search">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"/>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                    </svg>
+                    <input type="text" class="template-search-input" placeholder="템플릿 검색...">
+                </div>
+                <div class="template-filter-row">
+                    <select class="template-category-select">
+                        <option value="all">전체 카테고리</option>
+                        <option value="hero">히어로</option>
+                        <option value="features">특징</option>
+                        <option value="pricing">가격표</option>
+                        <option value="testimonial">후기</option>
+                        <option value="cta">CTA</option>
+                        <option value="footer">푸터</option>
+                        <option value="form">폼</option>
+                        <option value="gallery">갤러리</option>
+                        <option value="custom">사용자 정의</option>
+                    </select>
+                </div>
+                <div class="template-type-filter">
+                    <button class="template-type-btn active" data-type="all">전체</button>
+                    <button class="template-type-btn" data-type="system">기본</button>
+                    <button class="template-type-btn" data-type="user">내 템플릿</button>
+                </div>
+            </div>
+            <div class="template-grid-container">
+                <div class="template-grid">
+                    <!-- Templates will be rendered here -->
+                </div>
+            </div>
+            <div class="resizer template-resizer hidden" id="templateResizer"></div>
+        </div>
+
+        <!-- AI Chat Panel 제거됨 (VS Code Extension - AI는 VS Code 내장 기능 사용) -->
+        <div class="ai-chat-panel collapsed hidden" id="aiChatPanel" style="display:none !important;">
+            <div class="ai-chat-resize-handle" id="aiChatResizeHandle"></div>
+            <div class="ai-chat-header">
+                <div class="ai-chat-title">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                    </svg>
+                    <span>AI Assistant</span>
+                </div>
+                <div class="ai-chat-actions">
+                    <button class="ai-chat-close-btn" id="aiChatCloseBtn" title="Close">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="15,18 9,12 15,6"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="ai-chat-messages" id="aiChatMessages">
+                <div class="ai-chat-welcome">
+                    <div class="ai-avatar">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="4" y="8" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                            <circle cx="9" cy="14" r="1.5" fill="currentColor"/>
+                            <circle cx="15" cy="14" r="1.5" fill="currentColor"/>
+                            <path d="M10 17.5h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            <path d="M12 4v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            <circle cx="12" cy="3" r="1.5" fill="currentColor"/>
+                            <path d="M2 12h2M20 12h2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <h3>Chat with AI Assistant</h3>
+                    <p>Ask anything - design changes, code writing, questions, and more.</p>
+                    <div class="ai-chat-suggestions">
+                        <button class="suggestion-btn" data-message="Change the background color of this page to blue">Change Background</button>
+                        <button class="suggestion-btn" data-message="Add a new button and center it">Add Button</button>
+                        <button class="suggestion-btn" data-message="Make the header sticky">Sticky Header</button>
+                        <button class="suggestion-btn" data-message="Add responsive design">Add Responsive</button>
+                    </div>
+                </div>
+            </div>
+            <div class="ai-chat-input-container">
+                <!-- 첨부 파일 프리뷰 -->
+                <div class="ai-attachments-preview hidden" id="aiAttachmentsPreview"></div>
+
+                <div class="ai-chat-context-indicator hidden" id="aiChatContext">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 3l9 4.5v9L12 21l-9-4.5v-9L12 3z"/>
+                        <path d="M12 12l9-4.5"/>
+                        <path d="M12 12v9"/>
+                        <path d="M12 12L3 7.5"/>
+                    </svg>
+                    <span class="ai-chat-context-label">선택됨</span>
+                    <span class="ai-chat-context-text" id="aiChatContextText"></span>
+                </div>
+
+                <!-- 액션 버튼들 + 모델 선택 -->
+                <div class="ai-chat-actions">
+                    <button class="ai-action-btn" id="aiWebSearchBtn" title="웹 검색">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                        </svg>
+                    </button>
+                    <button class="ai-action-btn" id="aiImageUploadBtn" title="이미지 업로드">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                            <circle cx="8.5" cy="8.5" r="1.5"/>
+                            <polyline points="21,15 16,10 5,21"/>
+                        </svg>
+                    </button>
+                    <button class="ai-action-btn" id="aiPdfUploadBtn" title="PDF 업로드">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                            <polyline points="14,2 14,8 20,8"/>
+                        </svg>
+                    </button>
+                    <input type="file" id="aiImageInput" accept="image/*" multiple hidden />
+                    <input type="file" id="aiPdfInput" accept=".pdf" hidden />
+                    <select class="ai-model-selector" id="aiModelSelector" title="AI 모델">
+                        <option value="claude-opus-4.6">Opus 4.6 (최강)</option>
+                        <option value="claude-haiku-4.5">Haiku 4.5 (빠름)</option>
+                        <option value="openai-gpt-5.2">GPT-5.2</option>
+                        <option value="openai-gpt-4.1-mini">GPT-4.1 Mini (가성비)</option>
+                        <option value="gemini-3-pro" selected>Gemini 3 (최신)</option>
+                    </select>
+                </div>
+
+                <div class="ai-chat-input-wrapper">
+                    <textarea
+                        id="aiChatInput"
+                        placeholder="메시지를 입력하세요... (Enter 전송, Shift+Enter 줄바꿈)"
+                        rows="1"></textarea>
+                    <button class="ai-chat-send-btn" id="aiChatSendBtn" disabled title="Send message (Enter)">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="22" y1="2" x2="11" y2="13"/>
+                            <polygon points="22,2 15,22 11,13 2,9 22,2"/>
+                        </svg>
+                    </button>
+                </div>
+                <!-- Footer 제거됨 - 모델 선택이 상단으로 이동 -->
+            </div>
+        </div>
+
+        <!-- AI Toggle Container 제거됨 -->
+        <div class="ai-chat-toggle-container hidden" id="aiChatToggleContainer" style="display:none !important;">
+            <!-- 확장 버튼들 (hover 시 표시) -->
+            <div class="ai-expand-buttons">
+                <!-- 대화창 열기 버튼 -->
+                <button class="ai-expand-btn ai-chat-open-btn" id="aiChatOpenBtn" title="AI 대화창 열기">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                    </svg>
+                </button>
+                <!-- 음성 입력 버튼 (미니 모드) -->
+                <button class="ai-expand-btn ai-voice-toggle-btn" id="aiVoiceToggleBtn" title="음성으로 빠른 질문">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                        <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                        <line x1="12" y1="19" x2="12" y2="23"/>
+                        <line x1="8" y1="23" x2="16" y2="23"/>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- 메인 버튼 (AI 로봇 아이콘) -->
+            <button class="ai-chat-toggle-btn ai-main-btn" id="aiChatToggleBtn" title="AI Assistant">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <defs>
+                        <linearGradient id="aiGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <!-- AI Robot Icon -->
+                    <rect x="4" y="8" width="16" height="12" rx="2" stroke="url(#aiGradient)" stroke-width="1.5" fill="none"/>
+                    <circle cx="9" cy="14" r="1.5" fill="url(#aiGradient)"/>
+                    <circle cx="15" cy="14" r="1.5" fill="url(#aiGradient)"/>
+                    <path d="M10 17.5h4" stroke="url(#aiGradient)" stroke-width="1.5" stroke-linecap="round"/>
+                    <path d="M12 4v4" stroke="url(#aiGradient)" stroke-width="1.5" stroke-linecap="round"/>
+                    <circle cx="12" cy="3" r="1.5" fill="url(#aiGradient)"/>
+                    <path d="M2 12h2M20 12h2" stroke="url(#aiGradient)" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+            </button>
+        </div>
+
+        <!-- AI 미니 입력 제거됨 -->
+        <div class="ai-mini-input-mode hidden" id="aiMiniInputMode" style="display:none !important;">
+            <!-- 닫기 버튼 -->
+            <button class="ai-mini-close-btn" id="aiMiniCloseBtn" title="닫기 (Alt+V)">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+            </button>
+            <!-- 메시지 말풍선 컨테이너 (위로 쌓임) -->
+            <div class="ai-mini-messages" id="aiMiniMessages"></div>
+
+            <!-- 입력 영역 -->
+            <div class="ai-mini-input-area">
+                <!-- 선택된 엘리먼트 표시 (입력창 바로 위) -->
+                <div class="ai-mini-selection hidden" id="aiMiniSelection">
+                    <span class="ai-mini-selection-icon">🎯</span>
+                    <span class="ai-mini-selection-text" id="aiMiniSelectionText"></span>
+                </div>
+                <!-- 모델 선택기 -->
+                <div class="ai-mini-model-row">
+                    <select class="ai-model-selector ai-mini-model-selector" id="aiMiniModelSelector" title="AI 모델">
+                        <option value="claude-opus-4.6">Opus 4.6 (최강)</option>
+                        <option value="claude-haiku-4.5">Haiku 4.5 (빠름)</option>
+                        <option value="openai-gpt-5.2">GPT-5.2</option>
+                        <option value="openai-gpt-4.1-mini">GPT-4.1 Mini (가성비)</option>
+                        <option value="gemini-3-pro" selected>Gemini 3 (최신)</option>
+                    </select>
+                </div>
+                <div class="ai-mini-input-wrapper">
+                    <textarea id="aiMiniInput" placeholder="음성으로 말하거나 직접 입력하세요..." rows="1"></textarea>
+                    <button class="ai-mini-send-btn" id="aiMiniSendBtn" disabled title="전송">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="22" y1="2" x2="11" y2="13"/>
+                            <polygon points="22,2 15,22 11,13 2,9 22,2"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="ai-mini-status" id="aiMiniStatus">🎤 음성으로 말하고 Enter로 전송</div>
+            </div>
+        </div>
+
+        <!-- Center: Preview Panel -->
+        <div class="preview-panel">
+            <div class="preview-wrapper">
+                <iframe id="previewFrame"></iframe>
+            </div>
+            <div class="preview-vertical-resize-handle" id="previewVerticalResizeHandle"></div>
+        </div>
+
+        <!-- Resizer -->
+        <div class="resizer" id="resizer"></div>
+
+        <!-- Right: Properties Panel -->
+        <div class="properties-panel" id="propertiesPanel">
+            <div class="panel-header">
+                <span class="panel-title">Properties</span>
+                <div class="panel-tabs">
+                    <button class="tab-btn active" data-tab="styles">Styles</button>
+                    <button class="tab-btn" data-tab="element">Element</button>
+                    <button class="tab-btn" data-tab="files">Files</button>
+                </div>
+                <button class="panel-toggle-btn" id="panelToggleBtn" title="Close Panel">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9,18 15,12 9,6"/>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="panel-content">
+                <!-- Styles Tab -->
+                <div class="tab-content active" id="tab-styles">
+                    <!-- State Selector (sticky header) -->
+                    <div class="state-selector-container hidden" id="stateSelectorContainer">
+                        <div class="state-selector-row">
+                            <div class="state-selector" id="stateSelector">
+                                <button class="state-btn active" data-state="">기본</button>
+                                <button class="state-btn" data-state=":hover">:hover</button>
+                                <button class="state-btn" data-state=":focus">:focus</button>
+                                <button class="state-btn" data-state=":active">:active</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="no-selection">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                            <path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/><path d="M13 13l6 6"/>
+                        </svg>
+                        <p>Select an element to edit its styles</p>
+                    </div>
+                    <div class="style-properties hidden">
+                        <!-- Typography -->
+                        <div class="property-section">
+                            <h3 class="section-title">Typography</h3>
+                            <div class="property-row">
+                                <label>Font Family</label>
+                                <select id="styleFontFamily">
+                                    <option value="">inherit</option>
+                                    <option value="Arial, sans-serif">Arial</option>
+                                    <option value="Helvetica, sans-serif">Helvetica</option>
+                                    <option value="'Times New Roman', serif">Times New Roman</option>
+                                    <option value="Georgia, serif">Georgia</option>
+                                    <option value="Verdana, sans-serif">Verdana</option>
+                                    <option value="'Courier New', monospace">Courier New</option>
+                                    <option value="'Trebuchet MS', sans-serif">Trebuchet MS</option>
+                                    <option value="'Lucida Console', monospace">Lucida Console</option>
+                                    <option value="Impact, sans-serif">Impact</option>
+                                    <option value="'Comic Sans MS', cursive">Comic Sans MS</option>
+                                    <option value="system-ui, sans-serif">System UI</option>
+                                    <option value="monospace">Monospace</option>
+                                    <option value="cursive">Cursive</option>
+                                    <option value="fantasy">Fantasy</option>
+                                </select>
+                            </div>
+                            <div class="property-grid">
+                                <div class="property-row half">
+                                    <label title="Alt+Shift+= increase, Alt+Shift+- decrease">Font Size</label>
+                                    <input type="text" id="styleFontSize" placeholder="16px" title="Alt+Shift+= increase, Alt+Shift+- decrease" />
+                                </div>
+                                <div class="property-row half">
+                                    <label title="Alt+Shift+B toggle">Font Weight</label>
+                                    <div class="btn-group" id="styleFontWeightGroup">
+                                        <button class="style-btn" data-value="normal" title="Normal weight">N</button>
+                                        <button class="style-btn" data-value="500" title="Medium weight">M</button>
+                                        <button class="style-btn" data-value="bold" title="Bold (Alt+Shift+B)">B</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="property-row">
+                                <label title="Alt+Shift+I toggle">Font Style</label>
+                                <div class="btn-group" id="styleFontStyleGroup">
+                                    <button class="style-btn" data-value="normal" title="Normal style">Normal</button>
+                                    <button class="style-btn" data-value="italic" title="Italic (Alt+Shift+I)">Italic</button>
+                                </div>
+                            </div>
+                            <div class="property-row">
+                                <label title="Alt+Shift+U toggle">Decoration</label>
+                                <div class="btn-group" id="styleTextDecorationGroup">
+                                    <button class="style-btn" data-value="none" title="No decoration">None</button>
+                                    <button class="style-btn" data-value="underline" title="Underline (Alt+Shift+U)">U̲</button>
+                                    <button class="style-btn" data-value="line-through" title="Strikethrough">S̶</button>
+                                </div>
+                            </div>
+                            <div class="property-row">
+                                <label>Transform</label>
+                                <div class="btn-group" id="styleTextTransformGroup">
+                                    <button class="style-btn" data-value="none" title="No transform">Aa</button>
+                                    <button class="style-btn" data-value="uppercase" title="All uppercase">AA</button>
+                                    <button class="style-btn" data-value="lowercase" title="All lowercase">aa</button>
+                                    <button class="style-btn" data-value="capitalize" title="Capitalize first letter">Aa</button>
+                                </div>
+                            </div>
+                            <div class="property-row">
+                                <label title="Alt+Shift+L/E/R/J text align">Text Align</label>
+                                <div class="align-buttons">
+                                    <button class="align-btn" data-align="left" title="Align left (Alt+Shift+L)">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <line x1="17" y1="10" x2="3" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="17" y1="18" x2="3" y2="18"/>
+                                        </svg>
+                                    </button>
+                                    <button class="align-btn" data-align="center" title="Align center (Alt+Shift+E)">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <line x1="18" y1="10" x2="6" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="18" y1="18" x2="6" y2="18"/>
+                                        </svg>
+                                    </button>
+                                    <button class="align-btn" data-align="right" title="Align right (Alt+Shift+R)">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <line x1="21" y1="10" x2="7" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="21" y1="18" x2="7" y2="18"/>
+                                        </svg>
+                                    </button>
+                                    <button class="align-btn" data-align="justify" title="Justify (Alt+Shift+J)">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <line x1="21" y1="10" x2="3" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="21" y1="18" x2="3" y2="18"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="property-grid">
+                                <div class="property-row half">
+                                    <label title="Alt+Shift+H increase, Alt+Shift+G decrease">Line Height</label>
+                                    <input type="text" id="styleLineHeight" placeholder="normal" title="Alt+Shift+H increase, Alt+Shift+G decrease" />
+                                </div>
+                                <div class="property-row half">
+                                    <label title="Alt+Shift+K increase, Alt+Shift+N decrease">Letter Spacing</label>
+                                    <input type="text" id="styleLetterSpacing" placeholder="normal" title="Alt+Shift+K increase, Alt+Shift+N decrease" />
+                                </div>
+                            </div>
+                            <div class="property-row">
+                                <label>Color</label>
+                                <div class="color-input">
+                                    <input type="color" id="styleColorPicker" />
+                                    <input type="text" id="styleColor" placeholder="#000000" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Layout & Display -->
+                        <div class="property-section">
+                            <h3 class="section-title">Layout</h3>
+                            <div class="property-row">
+                                <label>Display</label>
+                                <div class="btn-group wrap" id="styleDisplayGroup">
+                                    <button class="style-btn" data-value="block" title="Block element (full width)">block</button>
+                                    <button class="style-btn" data-value="inline-block" title="Inline block (inline with sizing)">in-block</button>
+                                    <button class="style-btn" data-value="flex" title="Flexbox container">flex</button>
+                                    <button class="style-btn" data-value="grid" title="Grid container">grid</button>
+                                    <button class="style-btn" data-value="inline" title="Inline element (content width)">inline</button>
+                                    <button class="style-btn" data-value="none" title="Hide element">none</button>
+                                </div>
+                            </div>
+                            <div class="property-row">
+                                <label>Position</label>
+                                <div class="btn-group" id="stylePositionGroup">
+                                    <button class="style-btn" data-value="static" title="Static (document flow)">static</button>
+                                    <button class="style-btn" data-value="relative" title="Relative (original position)">rel</button>
+                                    <button class="style-btn" data-value="absolute" title="Absolute (parent relative)">abs</button>
+                                    <button class="style-btn" data-value="fixed" title="Fixed (viewport)">fixed</button>
+                                </div>
+                            </div>
+                            <div class="position-fields hidden" id="positionFieldsGroup">
+                                <div class="property-grid">
+                                    <div class="property-row half">
+                                        <label>top</label>
+                                        <input type="text" id="styleTop" placeholder="auto" tabindex="1" />
+                                    </div>
+                                    <div class="property-row half">
+                                        <label>right</label>
+                                        <input type="text" id="styleRight" placeholder="auto" tabindex="2" />
+                                    </div>
+                                </div>
+                                <div class="property-grid">
+                                    <div class="property-row half">
+                                        <label>bottom</label>
+                                        <input type="text" id="styleBottom" placeholder="auto" tabindex="3" />
+                                    </div>
+                                    <div class="property-row half">
+                                        <label>left</label>
+                                        <input type="text" id="styleLeft" placeholder="auto" tabindex="4" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="property-row">
+                                <label>Float</label>
+                                <div class="btn-group" id="styleFloatGroup">
+                                    <button class="style-btn" data-value="none" title="No float">none</button>
+                                    <button class="style-btn" data-value="left" title="Float left">left</button>
+                                    <button class="style-btn" data-value="right" title="Float right">right</button>
+                                </div>
+                            </div>
+                            <div class="property-row">
+                                <label>Z-Index</label>
+                                <input type="text" id="styleZIndex" placeholder="auto" />
+                            </div>
+                            <div class="property-row">
+                                <label>Direction</label>
+                                <div class="btn-group" id="styleDirectionGroup">
+                                    <button class="style-btn" data-value="ltr" title="Left to Right">LTR</button>
+                                    <button class="style-btn" data-value="rtl" title="Right to Left">RTL</button>
+                                </div>
+                            </div>
+
+                            <!-- Flexbox (shown when display: flex) -->
+                            <div class="display-section hidden" id="flexboxSection">
+                                <div class="display-section-title">Flexbox</div>
+                                <div class="property-row">
+                                    <label>Direction</label>
+                                    <div class="btn-group" id="styleFlexDirectionGroup">
+                                        <button class="style-btn" data-value="row" title="Row (left→right)">→</button>
+                                        <button class="style-btn" data-value="row-reverse" title="Row reverse (right→left)">←</button>
+                                        <button class="style-btn" data-value="column" title="Column (top→bottom)">↓</button>
+                                        <button class="style-btn" data-value="column-reverse" title="Column reverse (bottom→top)">↑</button>
+                                    </div>
+                                </div>
+                                <div class="property-row">
+                                    <label>Wrap</label>
+                                    <div class="btn-group" id="styleFlexWrapGroup">
+                                        <button class="style-btn" data-value="nowrap" title="No wrap">no</button>
+                                        <button class="style-btn" data-value="wrap" title="Auto wrap">wrap</button>
+                                        <button class="style-btn" data-value="wrap-reverse" title="Wrap reverse (역방향 줄바꿈)">rev</button>
+                                    </div>
+                                </div>
+                                <div class="property-row">
+                                    <label>Justify</label>
+                                    <div class="btn-group wrap" id="styleJustifyContentGroup">
+                                        <button class="style-btn" data-value="flex-start" title="Align start">start</button>
+                                        <button class="style-btn" data-value="center" title="가운데 정렬">center</button>
+                                        <button class="style-btn" data-value="flex-end" title="Align end">end</button>
+                                        <button class="style-btn" data-value="space-between" title="Space between">between</button>
+                                        <button class="style-btn" data-value="space-around" title="Space around">around</button>
+                                    </div>
+                                </div>
+                                <div class="property-row">
+                                    <label>Align</label>
+                                    <div class="btn-group" id="styleAlignItemsGroup">
+                                        <button class="style-btn" data-value="stretch" title="Stretch">stretch</button>
+                                        <button class="style-btn" data-value="flex-start" title="Align start">start</button>
+                                        <button class="style-btn" data-value="center" title="가운데 정렬">center</button>
+                                        <button class="style-btn" data-value="flex-end" title="Align end">end</button>
+                                    </div>
+                                </div>
+                                <div class="property-row">
+                                    <label>A.Content</label>
+                                    <div class="btn-group wrap" id="styleAlignContentGroup">
+                                        <button class="style-btn" data-value="stretch" title="Stretch (기본)">stretch</button>
+                                        <button class="style-btn" data-value="flex-start" title="Start">start</button>
+                                        <button class="style-btn" data-value="center" title="Center">center</button>
+                                        <button class="style-btn" data-value="flex-end" title="End">end</button>
+                                        <button class="style-btn" data-value="space-between" title="Space between">between</button>
+                                    </div>
+                                </div>
+                                <div class="property-grid">
+                                    <div class="property-row half">
+                                        <label>Gap</label>
+                                        <input type="text" id="styleGap" placeholder="0" />
+                                    </div>
+                                    <div class="property-row half">
+                                        <label>Flex</label>
+                                        <input type="text" id="styleFlex" placeholder="0 1 auto" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Grid (shown when display: grid) -->
+                            <div class="display-section hidden" id="gridSection">
+                                <div class="display-section-title">Grid</div>
+                                <div class="property-row">
+                                    <label>Flow</label>
+                                    <div class="btn-group" id="styleGridAutoFlowGroup">
+                                        <button class="style-btn" data-value="row" title="Row (가로 방향 배치)">row</button>
+                                        <button class="style-btn" data-value="column" title="Column (세로 방향 배치)">col</button>
+                                    </div>
+                                </div>
+                                <div class="property-row">
+                                    <label>Columns</label>
+                                    <input type="text" id="styleGridTemplateColumns" placeholder="1fr 1fr" />
+                                </div>
+                                <div class="property-row">
+                                    <label>Rows</label>
+                                    <input type="text" id="styleGridTemplateRows" placeholder="auto" />
+                                </div>
+                                <div class="property-grid">
+                                    <div class="property-row half">
+                                        <label>Col Gap</label>
+                                        <input type="text" id="styleColumnGap" placeholder="0" />
+                                    </div>
+                                    <div class="property-row half">
+                                        <label>Row Gap</label>
+                                        <input type="text" id="styleRowGap" placeholder="0" />
+                                    </div>
+                                </div>
+                                <div class="property-row">
+                                    <label>Justify</label>
+                                    <div class="btn-group wrap" id="styleJustifyItemsGroup">
+                                        <button class="style-btn" data-value="start" title="Align start">start</button>
+                                        <button class="style-btn" data-value="center" title="가운데 정렬">center</button>
+                                        <button class="style-btn" data-value="end" title="Align end">end</button>
+                                        <button class="style-btn" data-value="stretch" title="Stretch">stretch</button>
+                                    </div>
+                                </div>
+                                <div class="property-row">
+                                    <label>Align</label>
+                                    <div class="btn-group wrap" id="styleAlignItemsGridGroup">
+                                        <button class="style-btn" data-value="start" title="Align start">start</button>
+                                        <button class="style-btn" data-value="center" title="가운데 정렬">center</button>
+                                        <button class="style-btn" data-value="end" title="Align end">end</button>
+                                        <button class="style-btn" data-value="stretch" title="Stretch">stretch</button>
+                                    </div>
+                                </div>
+                                <div class="property-grid">
+                                    <div class="property-row half">
+                                        <label>Col Span</label>
+                                        <input type="text" id="styleGridColumn" placeholder="auto" />
+                                    </div>
+                                    <div class="property-row half">
+                                        <label>Row Span</label>
+                                        <input type="text" id="styleGridRow" placeholder="auto" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Size (Box Model) -->
+                        <div class="property-section">
+                            <h3 class="section-title">Size</h3>
+                            <div class="box-model">
+                                <div class="box-margin">
+                                    <span class="box-label">margin</span>
+                                    <input type="text" class="box-input top" id="marginTop" placeholder="0" tabindex="10" />
+                                    <input type="text" class="box-input right" id="marginRight" placeholder="0" tabindex="11" />
+                                    <input type="text" class="box-input bottom" id="marginBottom" placeholder="0" tabindex="12" />
+                                    <input type="text" class="box-input left" id="marginLeft" placeholder="0" tabindex="13" />
+
+                                    <!-- Padding layer -->
+                                    <div class="box-padding">
+                                        <span class="box-label">padding</span>
+                                        <input type="text" class="box-input top" id="paddingTop" placeholder="0" tabindex="14" />
+                                        <input type="text" class="box-input right" id="paddingRight" placeholder="0" tabindex="15" />
+                                        <input type="text" class="box-input bottom" id="paddingBottom" placeholder="0" tabindex="16" />
+                                        <input type="text" class="box-input left" id="paddingLeft" placeholder="0" tabindex="17" />
+
+                                        <!-- Content -->
+                                        <div class="box-content">
+                                            <div class="box-content-inputs">
+                                                <input type="text" class="box-input" id="boxWidth" placeholder="auto" title="Width" tabindex="18" />
+                                                <span>×</span>
+                                                <input type="text" class="box-input" id="boxHeight" placeholder="auto" title="Height" tabindex="19" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Size Limits -->
+                            <div class="property-grid" style="margin-top: 12px;">
+                                <div class="property-row half">
+                                    <label>min-width</label>
+                                    <input type="text" id="styleMinWidth" placeholder="0" />
+                                </div>
+                                <div class="property-row half">
+                                    <label>min-height</label>
+                                    <input type="text" id="styleMinHeight" placeholder="0" />
+                                </div>
+                                <div class="property-row half">
+                                    <label>max-width</label>
+                                    <input type="text" id="styleMaxWidth" placeholder="none" />
+                                </div>
+                                <div class="property-row half">
+                                    <label>max-height</label>
+                                    <input type="text" id="styleMaxHeight" placeholder="none" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Border -->
+                        <div class="property-section">
+                            <h3 class="section-title">Border</h3>
+                            <div class="property-row">
+                                <label>Side</label>
+                                <div class="border-side-selector" id="borderSideGroup">
+                                    <button class="style-btn all-btn active" data-value="all" title="All sides">▢</button>
+                                    <div class="side-toggles">
+                                        <button class="style-btn side-btn" data-value="top" title="Top">▔</button>
+                                        <button class="style-btn side-btn" data-value="right" title="Right">▕</button>
+                                        <button class="style-btn side-btn" data-value="bottom" title="Bottom">▁</button>
+                                        <button class="style-btn side-btn" data-value="left" title="Left">▏</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="property-grid">
+                                <div class="property-row half">
+                                    <label>Width</label>
+                                    <input type="text" id="styleBorderWidth" placeholder="0" />
+                                </div>
+                                <div class="property-row half">
+                                    <label>Style</label>
+                                    <div class="btn-group" id="styleBorderStyleGroup">
+                                        <button class="style-btn" data-value="none" title="No border">−</button>
+                                        <button class="style-btn" data-value="solid" title="Solid">━</button>
+                                        <button class="style-btn" data-value="dashed" title="Dashed">┅</button>
+                                        <button class="style-btn" data-value="dotted" title="Dotted">┈</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="property-row">
+                                <label>Color</label>
+                                <div class="color-input">
+                                    <input type="color" id="styleBorderColorPicker" />
+                                    <input type="text" id="styleBorderColor" placeholder="#000000" />
+                                </div>
+                            </div>
+                            <div class="property-row">
+                                <label>Radius</label>
+                                <input type="text" id="styleBorderRadius" placeholder="0" />
+                            </div>
+                        </div>
+
+                        <!-- Background -->
+                        <div class="property-section">
+                            <h3 class="section-title">Background</h3>
+                            <div class="property-row">
+                                <label>Color</label>
+                                <div class="color-input">
+                                    <input type="color" id="styleBgColorPicker" />
+                                    <input type="text" id="styleBgColor" placeholder="#ffffff 또는 transparent" />
+                                </div>
+                            </div>
+                            <div class="property-row">
+                                <label>Image<br>Gradient</label>
+                                <div class="bg-image-input-wrap">
+                                    <input type="text" id="styleBgImage" placeholder="url(...)" />
+                                    <button id="bgImageEditBtn" class="bg-image-edit-btn" title="Edit background image" disabled>
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="property-row">
+                                <label>Size</label>
+                                <div class="btn-group" id="styleBgSizeGroup">
+                                    <button class="style-btn" data-value="auto" title="Original size">auto</button>
+                                    <button class="style-btn" data-value="cover" title="Cover (may crop)">cover</button>
+                                    <button class="style-btn" data-value="contain" title="Contain (may have space)">contain</button>
+                                </div>
+                            </div>
+                            <div class="property-row">
+                                <label>Position</label>
+                                <select id="styleBgPosition">
+                                    <option value="">Default</option>
+                                    <option value="center">Center</option>
+                                    <option value="top">Top</option>
+                                    <option value="bottom">Bottom</option>
+                                    <option value="left">Left</option>
+                                    <option value="right">Right</option>
+                                    <option value="top left">Top Left</option>
+                                    <option value="top right">Top Right</option>
+                                    <option value="bottom left">Bottom Left</option>
+                                    <option value="bottom right">Bottom Right</option>
+                                </select>
+                            </div>
+                            <div class="property-row">
+                                <label>Repeat</label>
+                                <div class="btn-group" id="styleBgRepeatGroup">
+                                    <button class="style-btn" data-value="repeat" title="Repeat both">all</button>
+                                    <button class="style-btn" data-value="repeat-x" title="Repeat X">x</button>
+                                    <button class="style-btn" data-value="repeat-y" title="Repeat Y">y</button>
+                                    <button class="style-btn" data-value="no-repeat" title="No repeat">no</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Effects -->
+                        <div class="property-section">
+                            <h3 class="section-title">Effects</h3>
+                            <div class="property-row">
+                                <label>Opacity</label>
+                                <input type="range" id="styleOpacityRange" min="0" max="1" step="0.1" value="1" />
+                                <input type="text" id="styleOpacity" placeholder="1" style="width: 40px; flex: none;" />
+                            </div>
+                            <div class="property-row">
+                                <label>Box Shadow</label>
+                                <input type="range" id="styleBoxShadowRange" min="0" max="30" step="1" value="0" />
+                                <input type="color" id="styleBoxShadowColor" value="#000000" title="Shadow Color" style="width: 28px; height: 24px; padding: 0; border: 1px solid var(--border-color); cursor: pointer; flex: none;" />
+                                <input type="text" id="styleBoxShadow" placeholder="none" style="width: 70px; flex: none;" />
+                            </div>
+                            <div class="property-row">
+                                <label>Text Shadow</label>
+                                <input type="range" id="styleTextShadowRange" min="0" max="10" step="1" value="0" />
+                                <input type="color" id="styleTextShadowColor" value="#000000" title="Shadow Color" style="width: 28px; height: 24px; padding: 0; border: 1px solid var(--border-color); cursor: pointer; flex: none;" />
+                                <input type="text" id="styleTextShadow" placeholder="none" style="width: 70px; flex: none;" />
+                            </div>
+                            <div class="property-row">
+                                <label>Transform</label>
+                                <input type="text" id="styleTransform" placeholder="none" />
+                            </div>
+                            <div class="property-row">
+                                <label>Transition</label>
+                                <input type="text" id="styleTransition" placeholder="all 0.3s" />
+                            </div>
+                            <div class="property-row">
+                                <label>Cursor</label>
+                                <div class="btn-group wrap" id="styleCursorGroup">
+                                    <button class="style-btn" data-value="default" title="Default cursor">def</button>
+                                    <button class="style-btn" data-value="pointer" title="Pointer cursor">ptr</button>
+                                    <button class="style-btn" data-value="move" title="Move cursor">move</button>
+                                    <button class="style-btn" data-value="text" title="Text cursor">text</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Overflow -->
+                        <div class="property-section">
+                            <h3 class="section-title">Overflow</h3>
+                            <div class="property-row">
+                                <label>X</label>
+                                <div class="btn-group" id="styleOverflowXGroup">
+                                    <button class="style-btn" data-value="visible" title="Show overflow">show</button>
+                                    <button class="style-btn" data-value="hidden" title="Hide overflow">hide</button>
+                                    <button class="style-btn" data-value="scroll" title="Always scroll">scroll</button>
+                                    <button class="style-btn" data-value="auto" title="Auto scroll">auto</button>
+                                </div>
+                            </div>
+                            <div class="property-row">
+                                <label>Y</label>
+                                <div class="btn-group" id="styleOverflowYGroup">
+                                    <button class="style-btn" data-value="visible" title="Show overflow">show</button>
+                                    <button class="style-btn" data-value="hidden" title="Hide overflow">hide</button>
+                                    <button class="style-btn" data-value="scroll" title="Always scroll">scroll</button>
+                                    <button class="style-btn" data-value="auto" title="Auto scroll">auto</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Element Tab -->
+                <div class="tab-content" id="tab-element">
+                    <div class="no-selection">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                            <path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/><path d="M13 13l6 6"/>
+                        </svg>
+                        <p>Click an element in the preview to select it</p>
+                    </div>
+                    <div class="element-properties hidden">
+                        <div class="property-section">
+                            <h3 class="section-title">Element Info</h3>
+                            <div class="property-row">
+                                <label>Tag</label>
+                                <select id="elementTag">
+                                    <option value="div">div</option>
+                                    <option value="span">span</option>
+                                    <option value="p">p</option>
+                                    <option value="a">a</option>
+                                    <option value="button">button</option>
+                                    <option value="h1">h1</option>
+                                    <option value="h2">h2</option>
+                                    <option value="h3">h3</option>
+                                    <option value="h4">h4</option>
+                                    <option value="h5">h5</option>
+                                    <option value="h6">h6</option>
+                                    <option value="ul">ul</option>
+                                    <option value="ol">ol</option>
+                                    <option value="li">li</option>
+                                    <option value="header">header</option>
+                                    <option value="footer">footer</option>
+                                    <option value="nav">nav</option>
+                                    <option value="main">main</option>
+                                    <option value="section">section</option>
+                                    <option value="article">article</option>
+                                    <option value="aside">aside</option>
+                                    <option value="form">form</option>
+                                    <option value="input">input</option>
+                                    <option value="textarea">textarea</option>
+                                    <option value="label">label</option>
+                                    <option value="img">img</option>
+                                    <option value="video">video</option>
+                                    <option value="audio">audio</option>
+                                    <option value="table">table</option>
+                                    <option value="tr">tr</option>
+                                    <option value="td">td</option>
+                                    <option value="th">th</option>
+                                </select>
+                            </div>
+                            <div class="property-row">
+                                <label>ID</label>
+                                <input type="text" id="elementId" placeholder="Enter ID" />
+                            </div>
+                            <div class="property-row">
+                                <label>Classes</label>
+                                <input type="text" id="elementClasses" placeholder="Enter classes" />
+                            </div>
+                        </div>
+                        <div class="property-section">
+                            <h3 class="section-title">Attributes</h3>
+                            <div id="attributesList" class="attributes-list"></div>
+                            <div class="add-attribute-row">
+                                <select id="attributePreset" class="attr-preset-select">
+                                    <option value="">-- Select attribute --</option>
+                                    <optgroup label="Link">
+                                        <option value="href">href (URL)</option>
+                                        <option value="target">target (new tab)</option>
+                                        <option value="rel">rel (relationship)</option>
+                                        <option value="download">download</option>
+                                    </optgroup>
+                                    <optgroup label="Image/Media">
+                                        <option value="src">src (source path)</option>
+                                        <option value="alt">alt (alt text)</option>
+                                        <option value="width">width</option>
+                                        <option value="height">height</option>
+                                        <option value="loading">loading (lazy load)</option>
+                                    </optgroup>
+                                    <optgroup label="Form">
+                                        <option value="type">type (input type)</option>
+                                        <option value="name">name</option>
+                                        <option value="value">value</option>
+                                        <option value="placeholder">placeholder (hint)</option>
+                                        <option value="required">required</option>
+                                        <option value="disabled">disabled</option>
+                                        <option value="readonly">readonly</option>
+                                        <option value="maxlength">maxlength (max length)</option>
+                                        <option value="min">min (minimum)</option>
+                                        <option value="max">max (maximum)</option>
+                                        <option value="pattern">pattern</option>
+                                        <option value="autocomplete">autocomplete</option>
+                                    </optgroup>
+                                    <optgroup label="Accessibility">
+                                        <option value="title">title (tooltip)</option>
+                                        <option value="aria-label">aria-label</option>
+                                        <option value="aria-hidden">aria-hidden</option>
+                                        <option value="role">role</option>
+                                        <option value="tabindex">tabindex (tab order)</option>
+                                    </optgroup>
+                                    <optgroup label="Data">
+                                        <option value="data-*">data-* (custom data)</option>
+                                    </optgroup>
+                                    <optgroup label="Other">
+                                        <option value="custom">Custom input...</option>
+                                    </optgroup>
+                                </select>
+                                <button class="btn btn-small btn-add" id="addAttribute">+</button>
+                            </div>
+                        </div>
+
+                        <!-- Link Section (shown for <a> tags) -->
+                        <div class="property-section link-section-simple hidden" id="linkOptionsSection">
+                            <h3 class="section-title">Link</h3>
+                            <div class="link-input-group">
+                                <input type="text" id="linkHref" placeholder="Enter URL (https://example.com)" class="link-url-input" />
+                                <label class="link-newtab-check">
+                                    <input type="checkbox" id="linkNewTabToggle" />
+                                    <span>New tab</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Image Section (shown for <img> tags) -->
+                        <div class="property-section image-section-enhanced hidden" id="imageOptionsSection">
+                            <h3 class="section-title">Image</h3>
+                            <!-- Preview thumbnail -->
+                            <div class="image-preview-container">
+                                <img id="imagePreviewThumb" src="" alt="Preview" class="image-preview-thumb" />
+                                <span id="imageNaturalSize" class="image-natural-size"></span>
+                            </div>
+                            <!-- Action buttons -->
+                            <div class="image-source-actions">
+                                <button id="imageFromBrowser" class="img-action-btn" title="이미지 브라우저에서 선택">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                                    Browse
+                                </button>
+                                <button id="imageFromUpload" class="img-action-btn" title="파일 업로드">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                                    Upload
+                                </button>
+                                <button id="imageEditBtn" class="img-action-btn" title="이미지 편집">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                                    Edit
+                                </button>
+                            </div>
+                            <!-- Image URL -->
+                            <div class="property-row">
+                                <label>Image URL</label>
+                                <input type="text" id="imageSrc" placeholder="https://example.com/image.jpg" />
+                            </div>
+                            <!-- Alt text -->
+                            <div class="property-row">
+                                <label>Alt text</label>
+                                <input type="text" id="imageAlt" placeholder="Description" />
+                            </div>
+                            <!-- Size -->
+                            <div class="property-row image-size-row">
+                                <label>Size</label>
+                                <div class="image-size-inputs">
+                                    <input type="text" id="imageWidth" placeholder="auto" class="size-input" />
+                                    <span class="size-separator">×</span>
+                                    <input type="text" id="imageHeight" placeholder="auto" class="size-input" />
+                                    <button id="imageSizeLock" class="size-lock-btn active" title="비율 유지">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- Object Fit -->
+                            <div class="property-row">
+                                <label>Object Fit</label>
+                                <div class="btn-group" id="imageObjectFitGroup">
+                                    <button data-value="fill" title="Fill">Fill</button>
+                                    <button data-value="contain" title="Contain">Contain</button>
+                                    <button data-value="cover" title="Cover">Cover</button>
+                                    <button data-value="none" title="None">None</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Files Tab -->
+                <div class="tab-content" id="tab-files">
+                    <div class="file-list-only" id="fileList"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Panel Expand Button (when panel is collapsed) -->
+        <button class="panel-expand-btn hidden" id="panelExpandBtn" title="Open Panel">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="15,18 9,12 15,6"/>
+            </svg>
+        </button>
+    </div>
+
+    <!-- Version History Panel -->
+    <div class="version-panel hidden" id="versionPanel">
+        <div class="version-header">
+            <h3>Version History</h3>
+            <button class="btn-close" id="closeVersions">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+            </button>
+        </div>
+        <div class="version-actions">
+            <button id="saveVersionBtn" class="btn btn-primary btn-full">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                    <polyline points="17,21 17,13 7,13 7,21"/>
+                    <polyline points="7,3 7,8 15,8"/>
+                </svg>
+                Save New Version
+            </button>
+        </div>
+        <div class="version-list" id="versionList"></div>
+        <div class="version-panel-footer">
+            <p class="publish-hint">Click <strong>Publish</strong> on a version to make it live</p>
+        </div>
+    </div>
+
+    <!-- Save Version Modal -->
+    <div class="modal-overlay hidden" id="saveModal">
+        <div class="modal modal-small">
+            <div class="modal-header">
+                <h2>Save Version</h2>
+                <button class="modal-close" id="closeSaveModal">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Version Message</label>
+                    <input type="text" id="versionMessage" placeholder="Enter version name (auto-generated if empty)" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelSave">Cancel</button>
+                <button class="btn btn-primary" id="confirmSave">Save Version</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Auto-save Recovery Modal -->
+    <div class="modal-overlay hidden" id="autoSaveRecoveryModal">
+        <div class="modal modal-small">
+            <div class="modal-header">
+                <h2>Auto-save Recovery</h2>
+                <button class="modal-close" id="closeAutoSaveRecoveryModal">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p style="margin-bottom: 12px;">An auto-saved version is available.</p>
+                <p id="autoSaveRecoveryInfo" style="color: var(--text-muted); font-size: 13px; margin-bottom: 16px;"></p>
+                <p style="font-size: 14px;">Would you like to restore the auto-saved page?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="dismissAutoSaveRecovery">No (Load manual save)</button>
+                <button class="btn btn-primary" id="confirmAutoSaveRecovery">Yes (Restore auto-save)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Code Editor Modal -->
+    <div class="modal-overlay hidden" id="codeEditorModal">
+        <div class="modal code-editor-modal" id="codeEditorModalContent">
+            <div class="modal-header code-editor-modal-header">
+                <div class="code-editor-title">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14,2 14,8 20,8"/>
+                    </svg>
+                    <span id="currentFileName">Select a file</span>
+                    <span class="file-language-badge" id="fileLangBadge">HTML</span>
+                </div>
+                <div class="code-editor-actions">
+                    <button class="btn btn-primary" id="saveFile">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                            <polyline points="17,21 17,13 7,13 7,21"/>
+                            <polyline points="7,3 7,8 15,8"/>
+                        </svg>
+                        Save
+                    </button>
+                    <button class="modal-close" id="closeCodeEditor">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="code-editor-body">
+                <div id="codeEditorContainer" class="code-editor-container"></div>
+            </div>
+            <div class="resize-handle resize-handle-right"></div>
+            <div class="resize-handle resize-handle-bottom"></div>
+            <div class="resize-handle resize-handle-corner"></div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay hidden" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <p id="loadingMessage">Loading...</p>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast hidden" id="toast"><span id="toastMessage"></span></div>
+
+    <!-- Text Selection Toolbar -->
+    <div class="text-selection-toolbar" id="textSelectionToolbar">
+        <select id="selectionFontFamily" title="Font Family">
+            <option value="">Font</option>
+            <option value="Arial, sans-serif">Arial</option>
+            <option value="Helvetica, sans-serif">Helvetica</option>
+            <option value="'Times New Roman', serif">Times New Roman</option>
+            <option value="Georgia, serif">Georgia</option>
+            <option value="Verdana, sans-serif">Verdana</option>
+            <option value="'Courier New', monospace">Courier New</option>
+            <option value="'Trebuchet MS', sans-serif">Trebuchet MS</option>
+            <option value="'Lucida Console', monospace">Lucida Console</option>
+            <option value="Impact, sans-serif">Impact</option>
+            <option value="'Comic Sans MS', cursive">Comic Sans MS</option>
+            <option value="system-ui, sans-serif">System UI</option>
+            <option value="monospace">Monospace</option>
+            <option value="cursive">Cursive</option>
+            <option value="fantasy">Fantasy</option>
+        </select>
+        <select id="selectionFontSize" title="Font Size">
+            <option value="">Size</option>
+            <option value="8px">8</option>
+            <option value="9px">9</option>
+            <option value="10px">10</option>
+            <option value="11px">11</option>
+            <option value="12px">12</option>
+            <option value="14px">14</option>
+            <option value="16px">16</option>
+            <option value="18px">18</option>
+            <option value="20px">20</option>
+            <option value="24px">24</option>
+            <option value="28px">28</option>
+            <option value="32px">32</option>
+            <option value="36px">36</option>
+            <option value="40px">40</option>
+            <option value="48px">48</option>
+            <option value="56px">56</option>
+            <option value="64px">64</option>
+            <option value="72px">72</option>
+            <option value="80px">80</option>
+            <option value="96px">96</option>
+            <option value="120px">120</option>
+        </select>
+        <input type="color" id="selectionColor" value="#000000" title="Text Color" />
+        <input type="color" id="selectionBgColor" value="#ffff00" title="Background Color" />
+        <button id="selectionBold" title="Bold"><b>B</b></button>
+        <button id="selectionItalic" title="Italic"><i>I</i></button>
+        <button id="selectionUnderline" title="Underline"><u>U</u></button>
+        <button id="selectionStrike" title="Strikethrough"><s>S</s></button>
+        <button id="selectionLink" title="Add Link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+            </svg>
+        </button>
+        <button id="selectionLineBreak" title="Insert Responsive Line Break">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 10 4 15 9 20"/>
+                <path d="M20 4v7a4 4 0 0 1-4 4H4"/>
+            </svg>
+        </button>
+        <button id="selectionClear" title="Clear Formatting (Unwrap)">Clear</button>
+    </div>
+
+    <!-- Link Modal (for text selection toolbar) -->
+    <div class="link-modal hidden" id="linkModal">
+        <div class="link-modal-content">
+            <h4>Add Link</h4>
+            <input type="text" id="linkModalUrl" placeholder="Enter URL (https://example.com)" />
+            <label class="link-modal-checkbox">
+                <input type="checkbox" id="linkModalNewTab" />
+                <span>Open in new tab</span>
+            </label>
+            <div class="link-modal-buttons">
+                <button id="linkModalCancel" class="btn-secondary">Cancel</button>
+                <button id="linkModalApply" class="btn-primary">Apply</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- VS Code Bridge (fetch 인터셉터 - 모듈보다 먼저 로드) -->
+    <script src="{{bridgeUri}}"></script>
+    <!-- CodeMirror -->
+    <script src="{{codemirrorJsUri}}"></script>
+    <!-- Bundled Editor Modules -->
+    <script src="{{webviewJsUri}}"></script>
+
+</body>
+</html>

@@ -1,0 +1,41 @@
+{
+  "name": "bazix-visual-editor",
+  "displayName": "Bazix Visual Editor",
+  "description": "Visual HTML/CSS editor for VS Code - edit web pages visually with drag & drop, style editing, and live preview",
+  "version": "0.0.1",
+  "publisher": "bazix",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "customEditors": [
+      {
+        "viewType": "bazix.visualEditor",
+        "displayName": "Bazix Visual Editor",
+        "selector": [
+          {
+            "filenamePattern": "*.html"
+          }
+        ],
+        "priority": "option"
+      }
+    ]
+  },
+  "type": "module",
+  "scripts": {
+    "sync": "node scripts/sync-modules.js",
+    "build": "npm run sync && node esbuild.config.mjs",
+    "dev": "npm run sync && node esbuild.config.mjs --watch",
+    "vscode:prepublish": "npm run build"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.85.0",
+    "esbuild": "^0.20.0",
+    "typescript": "^5.3.0"
+  }
+}

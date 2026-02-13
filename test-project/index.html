@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="ko"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bazix PoC Test</title>
+    
+<style id="bazix-injected-css">* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: #333; }
+
+.hero {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+    padding: 60px 40px;
+    text-align: center;
+}
+.hero h1 { font-size: 2.5rem; margin-bottom: 12px; }
+.subtitle { font-size: 1.1rem; opacity: 0.9; }
+
+.content { max-width: 800px; margin: 40px auto; padding: 0 20px; }
+
+.card {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.card h2 { font-size: 1.3rem; margin-bottom: 12px; color: #222; }
+.card p { color: #666; line-height: 1.6; margin-bottom: 16px; }
+
+.btn {
+    padding: 10px 24px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    font-weight: 500;
+}
+.btn.primary { background: #667eea; color: #fff; }
+.btn.secondary { background: #e0e0e0; color: #333; }
+
+.grid-demo {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-top: 20px;
+}
+.grid-item {
+    background: #f5f5f5;
+    padding: 24px;
+    text-align: center;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+
+footer {
+    text-align: center;
+    padding: 30px;
+    color: #999;
+    font-size: 13px;
+    border-top: 1px solid #eee;
+    margin-top: 40px;
+}
+</style><style id="bazix-temp-styles">#card2 { }
+.p-1ecj09 { color: rgb(255, 26, 26); }
+.p-07ovjk { color: rgb(255, 26, 26); }
+.h2-7ty0wu { color: rgb(255, 36, 36); }
+.content { direction: ltr; }
+.div-avhbz3 { }
+#card1 { padding-bottom: 21px; }
+.btn.primary { }
+.h2-7ty0wu:hover { color: rgb(255, 46, 46); }
+.grid-item:hover { color: rgb(255, 26, 26); }
+@media (max-width: 485px) {
+  #card2 { }
+  .p-1ecj09 { color: rgb(102, 102, 102); }
+  .h2-7ty0wu { color: rgb(34, 34, 34); }
+  .content { direction: ltr; }
+  .grid-item { margin-bottom: 85px; }
+  #card1 { padding-bottom: 21px; }
+  .btn { transform: rotate(357deg); }
+}
+@media (max-width: 481px) {
+  #card2 { }
+  .p-1ecj09 { color: rgb(102, 102, 102); }
+  .h2-7ty0wu { color: rgb(34, 34, 34); }
+  .content { direction: ltr; }
+  .grid-item { margin-bottom: 85px; }
+  #card1 { padding-bottom: 21px; }
+  .btn { transform: rotate(357deg); }
+}
+</style><style id="bazix-injected-css">* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: #333; }
+
+.hero {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+    padding: 60px 40px;
+    text-align: center;
+}
+.hero h1 { font-size: 2.5rem; margin-bottom: 12px; }
+.subtitle { font-size: 1.1rem; opacity: 0.9; }
+
+.content {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 0 20px;
+  direction: ltr;
+}
+
+.card {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.card h2 { font-size: 1.3rem; margin-bottom: 12px; color: #222; }
+.card p { color: #666; line-height: 1.6; margin-bottom: 16px; }
+
+.btn {
+    padding: 10px 24px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    font-weight: 500;
+}
+.btn.primary {
+  background: #667eea;
+  color: #fff;
+}
+.btn.secondary { background: #e0e0e0; color: #333; }
+
+.grid-demo {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-top: 20px;
+}
+.grid-item {
+    background: #f5f5f5;
+    padding: 24px;
+    text-align: center;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+
+footer {
+    text-align: center;
+    padding: 30px;
+    color: #999;
+    font-size: 13px;
+    border-top: 1px solid #eee;
+    margin-top: 40px;
+}
+
+#card2 {
+  ;
+}
+
+.p-1ecj09 {
+  color: rgb(255, 26, 26);
+}
+
+.p-07ovjk {
+  color: rgb(255, 26, 26);
+}
+
+.h2-7ty0wu {
+  color: rgb(255, 36, 36);
+}
+
+.div-avhbz3 {
+  ;
+}
+
+#card1 {
+  padding-bottom: 21px;
+}
+
+.h2-7ty0wu:hover {
+  color: rgb(255, 46, 46);
+}</style><style id="bazix-injected-css">* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: #333; }
+
+.hero {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+    padding: 60px 40px;
+    text-align: center;
+}
+.hero h1 { font-size: 2.5rem; margin-bottom: 12px; }
+.subtitle { font-size: 1.1rem; opacity: 0.9; }
+
+.content {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 0 20px;
+  direction: ltr;
+}
+
+.card {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.card h2 { font-size: 1.3rem; margin-bottom: 12px; color: #222; }
+.card p { color: #666; line-height: 1.6; margin-bottom: 16px; }
+
+.btn {
+    padding: 10px 24px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    font-weight: 500;
+}
+.btn.primary {
+  background: #667eea;
+  color: #fff;
+}
+.btn.secondary { background: #e0e0e0; color: #333; }
+
+.grid-demo {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-top: 20px;
+}
+.grid-item {
+    background: #f5f5f5;
+    padding: 24px;
+    text-align: center;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+
+footer {
+    text-align: center;
+    padding: 30px;
+    color: #999;
+    font-size: 13px;
+    border-top: 1px solid #eee;
+    margin-top: 40px;
+}
+
+#card2 {
+  ;
+}
+
+.p-1ecj09 {
+  color: rgb(255, 26, 26);
+}
+
+.p-07ovjk {
+  color: rgb(255, 26, 26);
+}
+
+.h2-7ty0wu {
+  color: rgb(255, 36, 36);
+}
+
+.div-avhbz3 {
+  ;
+}
+
+#card1 {
+  padding-bottom: 21px;
+}
+
+.h2-7ty0wu:hover {
+  color: rgb(255, 46, 46);
+}</style><style id="bazix-injected-css">* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: #333; }
+
+.hero {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+    padding: 60px 40px;
+    text-align: center;
+}
+.hero h1 { font-size: 2.5rem; margin-bottom: 12px; }
+.subtitle { font-size: 1.1rem; opacity: 0.9; }
+
+.content {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 0 20px;
+  direction: ltr;
+}
+
+.card {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.card h2 { font-size: 1.3rem; margin-bottom: 12px; color: #222; }
+.card p { color: #666; line-height: 1.6; margin-bottom: 16px; }
+
+.btn {
+    padding: 10px 24px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    font-weight: 500;
+}
+.btn.primary {
+  background: #667eea;
+  color: #fff;
+}
+.btn.secondary { background: #e0e0e0; color: #333; }
+
+.grid-demo {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-top: 20px;
+}
+.grid-item {
+    background: #f5f5f5;
+    padding: 24px;
+    text-align: center;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+
+footer {
+    text-align: center;
+    padding: 30px;
+    color: #999;
+    font-size: 13px;
+    border-top: 1px solid #eee;
+    margin-top: 40px;
+}
+
+.p-1ecj09 {
+  color: rgb(255, 26, 26);
+}
+
+.p-07ovjk {
+  color: rgb(255, 26, 26);
+}
+
+.h2-7ty0wu {
+  color: rgb(255, 36, 36);
+}
+
+.div-avhbz3 {
+  ;
+}
+
+#card1 {
+  padding-bottom: 21px;
+}
+
+.h2-7ty0wu:hover {
+  color: rgb(255, 46, 46);
+}</style><style id="bazix-injected-css">* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: #333; }
+
+.hero {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+    padding: 60px 40px;
+    text-align: center;
+}
+.hero h1 { font-size: 2.5rem; margin-bottom: 12px; }
+.subtitle { font-size: 1.1rem; opacity: 0.9; }
+
+.content {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 0 20px;
+  direction: ltr;
+}
+
+.card {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.card h2 { font-size: 1.3rem; margin-bottom: 12px; color: #222; }
+.card p { color: #666; line-height: 1.6; margin-bottom: 16px; }
+
+.btn {
+    padding: 10px 24px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    font-weight: 500;
+}
+.btn.primary {
+  background: #667eea;
+  color: #fff;
+}
+.btn.secondary { background: #e0e0e0; color: #333; }
+
+.grid-demo {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-top: 20px;
+}
+.grid-item {
+    background: #f5f5f5;
+    padding: 24px;
+    text-align: center;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+
+footer {
+    text-align: center;
+    padding: 30px;
+    color: #999;
+    font-size: 13px;
+    border-top: 1px solid #eee;
+    margin-top: 40px;
+}
+
+#card2 {
+  ;
+}
+
+.p-1ecj09 {
+  color: rgb(255, 26, 26);
+}
+
+.p-07ovjk {
+  color: rgb(255, 26, 26);
+}
+
+.h2-7ty0wu {
+  color: rgb(255, 36, 36);
+}
+
+.div-avhbz3 {
+  ;
+}
+
+#card1 {
+  padding-bottom: 21px;
+}
+
+.h2-7ty0wu:hover {
+  color: rgb(255, 46, 46);
+}</style></head>
+<body>
+    <header class="hero">
+        <h1 class="">Bazix Visual Editor</h1>
+        <p class="subtitle">VS Code Extension PoC Test</p>
+    </header>
+
+    <main class="content" style="">
+        
+
+        <section class="card" id="card2" style="">
+            <h2 class="">Another Card</h2>
+            <div class="grid-item" style="">Item 3</div><button class="btn secondary" style="">Secondary Button</button><button class="btn secondary" style="">Secondary Button</button><p class="">Testing hover highlighting and click selection.</p>
+            
+        </section><section class="card" id="card1" style="">
+            <h2 class="h2-7ty0wu" style="">Card Title<div class="grid-item" style="">Item 3</div></h2>
+            <p class="p-1ecj09 p-07ovjk" style="">This is a test card to verify element selection and overlay rendering in the VS Code WebView.</p>
+            <button class="btn primary" style="">Primary Button</button>
+        </section>
+
+        <section class="grid-demo">
+            <div class="grid-item">Item 1</div>
+            
+            
+            <div class="grid-item div-avhbz3" style="">Item 4</div><div class="grid-item" style="">Item 2</div>
+        </section>
+    </main>
+
+    <footer class="">
+        <p class="">© 2026 Bazix PoC Test</p>
+    </footer>
+
+    
+<script>// Simple interactivity for PoC test
+console.log('Bazix PoC test script loaded');
+</script><script>document.addEventListener("click",function(e){var a=e.target.closest("a");if(a&&a.href){e.preventDefault();}});</script>
+
+<script>// Simple interactivity for PoC test
+console.log('Bazix PoC test script loaded');
+</script><script>document.addEventListener("click",function(e){var a=e.target.closest("a");if(a&&a.href){e.preventDefault();}});</script><script>// Simple interactivity for PoC test
+console.log('Bazix PoC test script loaded');
+</script><script>document.addEventListener("click",function(e){var a=e.target.closest("a");if(a&&a.href){e.preventDefault();}});</script><script>// Simple interactivity for PoC test
+console.log('Bazix PoC test script loaded');
+</script><script>document.addEventListener("click",function(e){var a=e.target.closest("a");if(a&&a.href){e.preventDefault();}});</script><script>// Simple interactivity for PoC test
+console.log('Bazix PoC test script loaded');
+</script><script>document.addEventListener("click",function(e){var a=e.target.closest("a");if(a&&a.href){e.preventDefault();}});</script></body></html>

@@ -1,0 +1,16 @@
+node_modules/
+dist/
+*.vsix
+
+# 공유 모듈 (npm run sync로 원본에서 자동 복사됨)
+# VS Code 전용 파일만 직접 관리: EditorApp.js, CodeEditor.js, VSCodeBridge.js, webview-entry.js
+media/modules/*.js
+!media/modules/EditorApp.js
+!media/modules/CodeEditor.js
+!media/modules/VSCodeBridge.js
+!media/modules/webview-entry.js
+media/modules/styles/
+
+# 공유 리소스 (sync로 복사)
+media/lib/
+media/editor.css
