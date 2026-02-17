@@ -2,14 +2,14 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import { MessageHandler } from './messageHandler';
 
-export class BazixEditorProvider implements vscode.CustomTextEditorProvider {
+export class ZaemitEditorProvider implements vscode.CustomTextEditorProvider {
 
-    public static readonly viewType = 'bazix.visualEditor';
+    public static readonly viewType = 'zaemit.visualEditor';
 
     public static register(context: vscode.ExtensionContext): vscode.Disposable {
         return vscode.window.registerCustomEditorProvider(
-            BazixEditorProvider.viewType,
-            new BazixEditorProvider(context),
+            ZaemitEditorProvider.viewType,
+            new ZaemitEditorProvider(context),
             {
                 webviewOptions: { retainContextWhenHidden: true },
                 supportsMultipleEditorsPerDocument: false
@@ -36,6 +36,12 @@ export class BazixEditorProvider implements vscode.CustomTextEditorProvider {
             ]
         };
 
+        // 에디터 탭에 Z 로고 아이콘 표시
+        webviewPanel.iconPath = {
+            light: vscode.Uri.joinPath(this.context.extensionUri, 'media', 'icons', 'zaemit-icon-light.svg'),
+            dark: vscode.Uri.joinPath(this.context.extensionUri, 'media', 'icons', 'zaemit-icon-dark.svg')
+        };
+
         // WebView HTML 로드 및 URI 치환
         webviewPanel.webview.html = await this.getWebviewContent(
             webviewPanel.webview,
@@ -46,15 +52,17 @@ export class BazixEditorProvider implements vscode.CustomTextEditorProvider {
         const messageHandler = new MessageHandler(
             webviewPanel.webview,
             document,
-            projectDir
+            projectDir,
+            this.context.extensionUri
         );
 
         webviewPanel.webview.onDidReceiveMessage(
             (msg) => messageHandler.handleMessage(msg)
         );
 
-        // 문서 외부 변경 감지
+        // 문서 외부 변경 감지 (에디터 내부 저장은 무시)
         const changeDocumentSubscription = vscode.workspace.onDidChangeTextDocument(e => {
+            if (messageHandler.isApplyingEdit) { return; }
             if (e.document.uri.toString() === document.uri.toString() && e.contentChanges.length > 0) {
                 webviewPanel.webview.postMessage({
                     type: 'file:externalChange',
@@ -82,7 +90,7 @@ export class BazixEditorProvider implements vscode.CustomTextEditorProvider {
         // WebView URI 생성
         const editorCssUri = webview.asWebviewUri(vscode.Uri.joinPath(mediaUri, 'editor.css'));
         const codemirrorCssUri = webview.asWebviewUri(vscode.Uri.joinPath(mediaUri, 'lib', 'codemirror', 'codemirror.css'));
-        const bridgeUri = webview.asWebviewUri(vscode.Uri.joinPath(mediaUri, 'modules', 'VSCodeBridge.js'));
+        const bridgeUri = webview.asWebviewUri(vscode.Uri.joinPath(this.context.extensionUri, 'dist', 'bridge.js'));
         const codemirrorJsUri = webview.asWebviewUri(vscode.Uri.joinPath(mediaUri, 'lib', 'codemirror', 'codemirror.js'));
         const webviewJsUri = webview.asWebviewUri(vscode.Uri.joinPath(this.context.extensionUri, 'dist', 'webview.js'));
 
@@ -94,7 +102,7 @@ export class BazixEditorProvider implements vscode.CustomTextEditorProvider {
             `img-src ${webview.cspSource} https: data: blob:`,
             `font-src ${webview.cspSource} https: data:`,
             `frame-src blob: data: ${webview.cspSource}`,
-            `connect-src https: data:`
+            `connect-src ${webview.cspSource} https: data: blob:`
         ].join('; ');
 
         // 플레이스홀더 치환

@@ -19,8 +19,9 @@ import ProjectLoader from './ProjectLoader.js';
 import ZoomManager from './ZoomManager.js';
 import UndoRedoManager from './UndoRedoManager.js';
 import ClipboardManager from './ClipboardManager.js';
-import VersionManager from './VersionManager.js';
-import AutoSaveManager from './AutoSaveManager.js';
+// VersionManager, AutoSaveManager disabled for VS Code (premium feature)
+// import VersionManager from './VersionManager.js';
+// import AutoSaveManager from './AutoSaveManager.js';
 import OverlayManager from './OverlayManager.js';
 import DragDropManager from './DragDropManager.js';
 import SettingsManager from './SettingsManager.js';
@@ -28,16 +29,16 @@ import SettingsManager from './SettingsManager.js';
 import ResizeDragManager from './ResizeDragManager.js';
 import SpacingDragManager from './SpacingDragManager.js';
 import GapOverlayManager from './GapOverlayManager.js';
-// Phase 2: Version Panel (PublishManager removed for VS Code)
-import VersionPanel from './VersionPanel.js';
-// Phase 3: Recovery module
-import RecoveryModal from './RecoveryModal.js';
+// Phase 2: Version Panel disabled for VS Code (premium feature)
+// import VersionPanel from './VersionPanel.js';
+// Phase 3: Recovery module disabled for VS Code (depends on AutoSave)
+// import RecoveryModal from './RecoveryModal.js';
 // Phase 5: Text toolbar modules
 import TextSelectionToolbar from './TextSelectionToolbar.js';
 import ResponsiveBreakManager from './ResponsiveBreakManager.js';
 // Phase 6: AI Chat (removed for VS Code - use VS Code built-in AI)
-// Phase 7: Template Manager
-import TemplateManager from './TemplateManager.js';
+// Phase 7: Template Manager disabled for VS Code (premium feature)
+// import TemplateManager from './TemplateManager.js';
 // Phase 8: Table Editor
 import TableEditor from './TableEditor.js';
 // Phase 9: DOM Snapshot Manager (AI data-* 속성 추적)
@@ -49,8 +50,10 @@ import ImageManager from './ImageManager.js';
 import ImageEditorModal from './ImageEditorModal.js';
 // Phase 12: Image Toolbar (inline quick transforms)
 import ImageToolbar from './ImageToolbar.js';
-// Phase 13: Icon Picker
-import IconPickerManager from './IconPickerManager.js';
+// Phase 13: Icon Picker disabled for VS Code (premium feature)
+// import IconPickerManager from './IconPickerManager.js';
+// Phase 14: Motion Manager (VS Code only)
+import MotionManager from './MotionManager.js';
 
 class EditorApp extends EventEmitter {
     constructor() {
@@ -58,6 +61,18 @@ class EditorApp extends EventEmitter {
         this.modules = {};
         this.initialized = false;
         this.screenshotTimer = null;
+
+        // ★ data/blob URL → 상대 경로 매핑 (VS Code 이미지 URL 복원용)
+        this._imageUrlMap = new Map();
+
+        // 유료 기능 플래그 (나중에 라이선스 체크로 교체)
+        this._premiumFeatures = {
+            icons: false,
+            templates: false,
+            versionControl: false,
+            publish: false,
+            imageLibrary: false,
+        };
     }
 
     async init() {
@@ -88,7 +103,7 @@ class EditorApp extends EventEmitter {
         window.addEventListener('beforeunload', (e) => {
             if (this.hasUnsavedChanges()) {
                 e.preventDefault();
-                e.returnValue = '저장되지 않은 변경사항이 있습니다. 페이지를 떠나시겠습니까?';
+                e.returnValue = 'You have unsaved changes. Are you sure you want to leave?';
                 return e.returnValue;
             }
         });
@@ -141,9 +156,9 @@ class EditorApp extends EventEmitter {
         // Clipboard
         this.modules.clipboard = new ClipboardManager(previewFrame);
 
-        // Version control (uses projectId from above)
-        this.modules.version = new VersionManager(projectId);
-        this.modules.autoSave = new AutoSaveManager(projectId);
+        // Version control disabled in VS Code (premium feature)
+        this.modules.version = null;
+        this.modules.autoSave = null;
 
         // Overlay and handles
         this.modules.overlay = new OverlayManager(previewFrame);
@@ -169,14 +184,12 @@ class EditorApp extends EventEmitter {
         this.modules.gapOverlay.init(previewFrame);
         this.modules.gapOverlay.setZoomManager(this.modules.zoom);
 
-        // Phase 2: Version Panel and Publish Manager
-        this.modules.versionPanel = new VersionPanel(this.modules.version, this.modules.projectLoader);
-        this.modules.versionPanel.init();
-        // PublishManager removed for VS Code Extension
+        // Phase 2: Version Panel disabled in VS Code (premium feature)
+        this.modules.versionPanel = null;
+        this.modules.publishManager = null;
 
-        // Phase 3: Recovery Modal
-        this.modules.recoveryModal = new RecoveryModal(this.modules.autoSave);
-        this.modules.recoveryModal.init();
+        // Phase 3: Recovery Modal disabled in VS Code (depends on AutoSave)
+        this.modules.recoveryModal = null;
 
         // Phase 5: Text Selection Toolbar and Responsive Break Manager
         this.modules.textToolbar = new TextSelectionToolbar();
@@ -207,9 +220,8 @@ class EditorApp extends EventEmitter {
         // AI는 VS Code 내장 AI (Copilot, Claude 등) 사용
         this.modules.aiChat = null;
 
-        // Phase 7: Template Manager
-        this.modules.templateManager = new TemplateManager();
-        this.modules.templateManager.init(this.modules.multiCanvas);
+        // Phase 7: Template Manager disabled in VS Code (premium feature)
+        this.modules.templateManager = null;
 
         // Phase 8: Table Editor
         this.modules.tableEditor = new TableEditor({
@@ -246,15 +258,12 @@ class EditorApp extends EventEmitter {
         this.modules.imageToolbar = new ImageToolbar();
         this.modules.imageToolbar.init(previewFrame);
 
-        // Phase 13: Icon Picker
-        this.modules.iconPicker = new IconPickerManager({
-            previewManager: this.modules.preview,
-            undoRedoManager: this.modules.undoRedo,
-            uiHelper: this.modules.ui,
-            editorApp: this,
-            selectionManager: this.modules.selection
-        });
-        this.modules.iconPicker.init();
+        // Phase 13: Icon Picker disabled in VS Code (premium feature)
+        this.modules.iconPicker = null;
+
+        // Phase 14: Motion Manager (VS Code only)
+        this.modules.motionManager = new MotionManager();
+        this.modules.motionManager.init();
 
         // Property panels
         this.modules.propertyPanel = new PropertyPanel(this.modules.elementSelector);
@@ -345,6 +354,27 @@ class EditorApp extends EventEmitter {
 
             // 최초 접속 시 스크린샷 캡처 (스크린샷 없으면)
             this.captureScreenshotIfMissing();
+
+            // Motion Manager: iframe 로드 후 @keyframes + observer 재주입
+            const previewDoc = this.modules.preview.getDocument();
+            if (previewDoc) {
+                this.modules.motionManager?.reinjectAssets(previewDoc);
+            }
+
+            // VS Code: 멀티캔버스 첫 번째 iframe 로드 후 상대 경로 이미지 → data URL 변환
+            // (autoEnable()로 새 iframe 생성 → onload 완료 후 document에 접근 가능)
+            if (window.vscBridge) {
+                const onMainIframeLoaded = (iframe) => {
+                    this.modules.multiCanvas.off('multiview:mainIframeLoaded', onMainIframeLoaded);
+                    const iframeDoc = iframe.contentDocument;
+                    if (iframeDoc) {
+                        this._resolveIframeImages(iframeDoc).catch(err =>
+                            console.error('[resolveImages] Error:', err)
+                        );
+                    }
+                };
+                this.modules.multiCanvas.on('multiview:mainIframeLoaded', onMainIframeLoaded);
+            }
         });
 
         // Sync element selection between modules
@@ -401,14 +431,18 @@ class EditorApp extends EventEmitter {
             this.modules.aiChat?.emit('element:selected', { element });
 
             // Icon Picker: update replace target if select-mode is active
-            if (this._isLucideIcon(element)) {
+            if (this.modules.iconPicker && this._isLucideIcon(element)) {
                 this.modules.iconPicker.updateSelectedIcon(this._findLucideSvg(element));
             }
+
+            // Motion Manager: update panel
+            this.modules.motionManager?.setSelectedElement(element);
         });
 
         // When element is deselected (from ElementSelector)
         this.modules.elementSelector.on('element:deselected', () => {
             this.clearSelectionUI();
+            this.modules.motionManager?.clearSelection();
             // Notify AI Chat of deselection
             this.modules.aiChat?.emit('element:deselected');
         });
@@ -416,6 +450,7 @@ class EditorApp extends EventEmitter {
         // When element is deselected (from SelectionManager - for cut, escape, etc.)
         this.modules.selection.on('element:deselected', () => {
             this.clearSelectionUI();
+            this.modules.motionManager?.clearSelection();
             // Notify AI Chat of deselection
             this.modules.aiChat?.emit('element:deselected');
         });
@@ -427,8 +462,8 @@ class EditorApp extends EventEmitter {
                 this.modules.imageManager.openImageSelector(element);
                 return;
             }
-            // Lucide icon (SVG): open icon selector for replacement
-            if (this._isLucideIcon(element)) {
+            // Lucide icon (SVG): open icon selector for replacement (premium feature)
+            if (this.modules.iconPicker && this._isLucideIcon(element)) {
                 this.modules.iconPicker.openIconSelector(this._findLucideSvg(element));
                 return;
             }
@@ -548,7 +583,7 @@ class EditorApp extends EventEmitter {
                 return;
             }
 
-            if (this._isLucideIcon(element)) {
+            if (this.modules.iconPicker && this._isLucideIcon(element)) {
                 this.modules.iconPicker.openIconSelector(this._findLucideSvg(element));
                 return;
             }
@@ -787,8 +822,8 @@ class EditorApp extends EventEmitter {
             }
         });
 
-        // IconPickerManager events
-        this.modules.iconPicker.on('icon:inserted', ({ element, iconName }) => {
+        // IconPickerManager events (premium feature - may be null)
+        this.modules.iconPicker?.on('icon:inserted', ({ element, iconName }) => {
             this.saveHTML();
             if (this.modules.multiCanvas?._isInitialized) {
                 this.modules.multiCanvas.syncBodyToAll();
@@ -801,7 +836,7 @@ class EditorApp extends EventEmitter {
             });
         });
 
-        this.modules.iconPicker.on('icon:replaced', ({ element, iconName }) => {
+        this.modules.iconPicker?.on('icon:replaced', ({ element, iconName }) => {
             this.saveHTML();
             if (this.modules.multiCanvas?._isInitialized) {
                 this.modules.multiCanvas.syncBodyToAll();
@@ -841,6 +876,9 @@ class EditorApp extends EventEmitter {
         });
 
         // ImageEditorModal events
+        this.modules.imageEditor.on('editor:opened', () => {
+            this.modules.imageToolbar?.hide();
+        });
         this.modules.imageEditor.on('image:edited', ({ element, oldSrc, newSrc }) => {
             this.saveHTML();
             requestAnimationFrame(() => {
@@ -1123,6 +1161,7 @@ class EditorApp extends EventEmitter {
         this.modules.keyboard.on('shortcut:save', async () => {
             // 서버에 저장 (Ctrl+S) - 프로젝트 루트에만 저장
             // 저장된 버전들은 별개이므로 버전 폴더는 건드리지 않음
+            await this.saveCSS();
             await this.saveToServer();
         });
 
@@ -1378,16 +1417,9 @@ class EditorApp extends EventEmitter {
             }
         });
 
-        // Publish shortcut (Ctrl+Alt+Shift+S)
+        // Publish shortcut (Ctrl+Alt+Shift+S) - disabled in VS Code (premium feature)
         this.modules.keyboard.on('shortcut:publish', async () => {
-            // 먼저 CSS 병합 후 현재 버전 퍼블리시
-            await this.saveCSS();
-            const currentVersionId = this.modules.publishManager?.project?.currentVersionId;
-            if (currentVersionId) {
-                this.modules.publishManager?.publishVersion(currentVersionId);
-            } else {
-                this.modules.ui.showToast('No version to publish', 'error');
-            }
+            this.modules.ui.showInfo('Publish is a premium feature (coming soon)');
         });
 
         // Alt+V / Enter / ESC (미니 AI 대화창) → AIChatManager._registerGlobalShortcuts()에서 처리
@@ -1572,49 +1604,13 @@ class EditorApp extends EventEmitter {
             this.saveHTML();
         });
 
-        // Version events
-        this.modules.version.on('version:saved', (result) => {
-            // Update project's currentVersionId for manual saves
-            if (result?.currentVersionId) {
-                this.modules.projectLoader.updateProject({ currentVersionId: result.currentVersionId });
-                this.modules.versionPanel.renderVersionList();
-            }
-            this.modules.ui.showSuccess('Version saved');
-            this.modules.autoSave.recordManualSave();
-        });
-
-        this.modules.version.on('version:restored', (result) => {
-            // Update project's currentVersionId
-            if (result?.currentVersionId) {
-                this.modules.projectLoader.updateProject({ currentVersionId: result.currentVersionId });
-            }
-            this.modules.ui.showSuccess('Version restored');
-            this.modules.versionPanel.clearPreviewVersion();
-            this.modules.versionPanel.renderVersionList();
-            this.modules.preview.refresh();
-        });
-
-        this.modules.version.on('version:updated', () => {
-            this.modules.ui.showSuccess('Saved');
-            this.modules.versionPanel.renderVersionList();
-        });
+        // Version events (disabled in VS Code - premium feature)
 
         // AI Chat events removed for VS Code Extension
 
         // AI Chat/Action events removed for VS Code Extension
 
-        // Auto-save events
-        this.modules.autoSave.on('autosave:trigger', async () => {
-            // 5분 자동저장 트리거 - 실제 서버 저장 수행
-            if (this.hasUnsavedChanges()) {
-                await this.saveToServer();
-                this.modules.autoSave.onSaveComplete();
-            }
-        });
-
-        this.modules.autoSave.on('autosave:success', () => {
-            this.modules.ui.showSuccess('Auto-saved');
-        });
+        // Auto-save events (disabled in VS Code - manual save only)
 
         // Resize/Drag manager events (Phase 1)
         this.modules.resizeDrag.on('resize:move', () => {
@@ -1787,179 +1783,11 @@ class EditorApp extends EventEmitter {
             }
         });
 
-        // Version Manager events - update VersionPanel and PublishManager when versions are loaded
-        this.modules.version.on('versions:loaded', (versions) => {
-            this.modules.versionPanel.setVersions(versions);
-            this.modules.publishManager?.setVersions(versions);
-        });
+        // Version Manager events (disabled in VS Code - premium feature)
 
-        // Version Panel events
-        this.modules.versionPanel.on('version:publish', async ({ versionId }) => {
-            // Publish 시점에만 임시 CSS를 style.css에 병합
-            await this.saveCSS();
-            this.modules.publishManager?.publishVersion(versionId);
-        });
+        // Version Panel, Publish Manager events (disabled in VS Code - premium feature)
 
-        this.modules.versionPanel.on('version:publishCurrent', async () => {
-            // 현재 작업 상태를 바로 퍼블리시
-            await this.saveCSS();
-            await this.saveToServer(); // 현재 상태 저장
-
-            if (!confirm('현재 작업 상태를 퍼블리시하시겠습니까?\n이 내용이 공개됩니다.')) {
-                return;
-            }
-
-            try {
-                const projectId = this.modules.projectLoader.getProjectId();
-                const response = await fetch(`/api/projects/${projectId}/publish`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({}) // versionId 없이 요청 → 현재 작업 상태 퍼블리시
-                });
-
-                if (!response.ok) throw new Error('Publish failed');
-
-                const result = await response.json();
-                const publicUrl = window.location.origin + result.publicUrl;
-
-                // Update local project data
-                const project = this.modules.projectLoader.getProject();
-                if (project) {
-                    project.publishedAt = result.publishedAt;
-                    project.publishedVersionId = null; // 현재 작업 상태는 버전 ID 없음
-                }
-
-                this.modules.versionPanel.renderVersionList();
-                this.modules.ui.showToast('퍼블리시 완료!', 'success');
-
-                setTimeout(() => {
-                    const copyUrl = confirm(`Published at:\n${publicUrl}\n\nClick OK to copy URL to clipboard.`);
-                    if (copyUrl) {
-                        navigator.clipboard.writeText(publicUrl).catch(() => {
-                            prompt('Copy this URL:', publicUrl);
-                        });
-                    }
-                }, 500);
-
-            } catch (err) {
-                console.error('Error publishing current:', err);
-                this.modules.ui.showToast('퍼블리시 실패', 'error');
-            }
-        });
-
-        this.modules.versionPanel.on('version:preview', ({ folder }) => {
-            this.modules.version.previewVersion(folder);
-        });
-
-        this.modules.versionPanel.on('version:restore', ({ folder }) => {
-            this.modules.version.restoreVersion(folder);
-        });
-
-        // Published 폴더 미리보기
-        this.modules.versionPanel.on('version:previewPublished', async () => {
-            const projectId = this.modules.projectLoader.getProjectId();
-            const previewUrl = `/api/projects/${projectId}/published/preview`;
-            const previewFrame = document.getElementById('previewFrame');
-            if (previewFrame) {
-                previewFrame.src = previewUrl;
-                this.modules.versionPanel.setPreviewVersion('published');
-            }
-        });
-
-        // Published 폴더에서 복원
-        this.modules.versionPanel.on('version:restorePublished', async () => {
-            if (!confirm('퍼블리시된 버전으로 복원하시겠습니까?\n현재 작업 내용이 덮어씌워집니다.')) {
-                return;
-            }
-
-            try {
-                const projectId = this.modules.projectLoader.getProjectId();
-                const response = await fetch(`/api/projects/${projectId}/published/restore`, {
-                    method: 'POST'
-                });
-
-                if (!response.ok) throw new Error('Restore failed');
-
-                // 파일 다시 로드
-                await this.modules.fileManager.loadFiles();
-                this.modules.preview.refresh();
-                this.modules.versionPanel.clearPreviewVersion();
-                this.modules.ui.showToast('퍼블리시된 버전으로 복원되었습니다.', 'success');
-            } catch (err) {
-                console.error('Error restoring published:', err);
-                this.modules.ui.showToast('복원 실패', 'error');
-            }
-        });
-
-        this.modules.versionPanel.on('version:save', async ({ message }) => {
-            // 버전 저장 전에 현재 CSS와 HTML을 서버에 먼저 저장
-            await this.saveCSS();
-            await this.saveToServer();
-            this.modules.version.saveVersion(message);
-        });
-
-        this.modules.versionPanel.on('version:showCurrent', () => {
-            // Exit preview mode and show current version
-            this.modules.version.exitPreview();
-            this.modules.versionPanel.clearPreviewVersion();
-            this.modules.preview.refresh();
-        });
-
-        this.modules.versionPanel.on('version:rename', ({ folder, currentMessage }) => {
-            const newMessage = prompt('Enter new version name:', currentMessage || '');
-            if (newMessage !== null && newMessage !== currentMessage) {
-                this.renameVersion(folder, newMessage);
-            }
-        });
-
-        this.modules.versionPanel.on('version:delete', ({ folder }) => {
-            if (confirm('Are you sure you want to delete this version?')) {
-                this.modules.version.deleteVersion(folder);
-            }
-        });
-
-        // Version preview event - load preview via iframe src (not doc.write to preserve base URL)
-        this.modules.version.on('version:preview', ({ versionFolder }) => {
-            this.modules.versionPanel.setPreviewVersion(versionFolder);
-            // Load preview HTML by setting iframe src to the preview API URL
-            const previewFrame = document.getElementById('previewFrame');
-            if (previewFrame) {
-                const projectId = this.modules.projectLoader.getProjectId();
-                previewFrame.src = `/api/projects/${projectId}/versions/${versionFolder}/preview`;
-            }
-        });
-
-        this.modules.version.on('version:deleted', () => {
-            this.modules.ui.showSuccess('Version deleted');
-        });
-
-        this.modules.version.on('version:error', (err) => {
-            this.modules.ui.showError(err.message || 'Version operation failed');
-        });
-
-        // Publish Manager events
-        this.modules.publishManager?.on('publish:success', ({ publicUrl }) => {
-            this.modules.ui.showSuccess(`Published at: ${publicUrl}`);
-        });
-
-        this.modules.publishManager?.on('publish:error', ({ message }) => {
-            this.modules.ui.showError(message);
-        });
-
-        this.modules.publishManager?.on('publish:info', ({ message }) => {
-            this.modules.ui.showInfo(message);
-        });
-
-        // Recovery Modal events
-        this.modules.recoveryModal.on('recovery:confirm', ({ autoSaveVersion }) => {
-            this.modules.version.restoreVersion(autoSaveVersion.id);
-        });
-
-        this.modules.recoveryModal.on('recovery:dismiss', ({ manualSaveVersion }) => {
-            if (manualSaveVersion) {
-                this.modules.version.restoreVersion(manualSaveVersion.id);
-            }
-        });
+        // Recovery Modal events (disabled in VS Code - depends on AutoSave)
 
         // Text Selection Toolbar events
         this.modules.textToolbar.on('toolbar:save', () => {
@@ -2259,10 +2087,10 @@ class EditorApp extends EventEmitter {
                     if (tempCSS) {
                         const doc = this.modules.preview.getDocument();
                         if (doc) {
-                            let tempStyleTag = doc.getElementById('bazix-temp-styles');
+                            let tempStyleTag = doc.getElementById('zaemit-temp-styles');
                             if (!tempStyleTag) {
                                 tempStyleTag = doc.createElement('style');
-                                tempStyleTag.id = 'bazix-temp-styles';
+                                tempStyleTag.id = 'zaemit-temp-styles';
                                 (doc.head || doc.documentElement).appendChild(tempStyleTag);
                             }
                             tempStyleTag.textContent = tempCSS;
@@ -2324,58 +2152,45 @@ class EditorApp extends EventEmitter {
             }
         });
 
-        // Template Manager events
-        this.modules.templateManager.on('template:inserted', ({ template, element }) => {
-            // Record structure change for undo
-            const parent = element.parentNode;
-            if (parent) {
-                const parentPath = this.modules.undoRedo.getElementPath(parent);
-                const index = Array.from(parent.children).indexOf(element);
-                this.modules.undoRedo.recordStructureChange('add', {
-                    parentPath,
-                    index,
-                    html: element.outerHTML
-                });
-            }
-            // ★ 멀티뷰: body 내용을 모든 iframe에 동기화 및 높이 재계산
-            // (_isInitialized만 체크, isMultiViewEnabled 체크 금지!)
-            if (this.modules.multiCanvas?._isInitialized) {
-                this.modules.multiCanvas.syncBodyToAll();
-                // 모든 iframe 높이 재계산
-                setTimeout(() => {
-                    this.modules.multiCanvas.iframes?.forEach(iframe => {
-                        const w = parseInt(iframe.style.width);
-                        const h = this.modules.multiCanvas.calculateHeight(iframe, w);
-                        iframe.style.height = h + 'px';
-                    });
-                    this.modules.multiCanvas._updateResizeHandles?.();
-                }, 100);
-            } else {
-                // ★ PC 모드 (단일 뷰): iframe 높이 재계산
-                setTimeout(() => {
-                    const previewFrame = document.getElementById('previewFrame');
-                    if (previewFrame) {
-                        try {
-                            const doc = previewFrame.contentDocument;
-                            if (doc && doc.body) {
-                                const contentHeight = doc.body.scrollHeight;
-                                previewFrame.style.height = contentHeight + 'px';
-                            }
-                        } catch (err) {
-                            console.warn('Failed to resize iframe:', err);
-                        }
-                    }
-                }, 100);
-            }
+        // Template Manager events (disabled in VS Code - premium feature)
 
-            this.modules.layerPanel?.refresh();
+        // Motion Manager events (VS Code only)
+        this.modules.motionManager?.on('motion:applied', ({ element, motion, oldMotion }) => {
+            this.modules.undoRedo.recordChange({
+                type: 'attribute',
+                element,
+                property: 'data-zaemit-motion',
+                oldValue: oldMotion,
+                newValue: motion
+            });
             this.saveHTML();
-            // CSS 병합은 publish 시에만 수행
-            this.modules.ui.showSuccess(`템플릿 "${template.name}" 삽입됨`);
         });
 
-        this.modules.templateManager.on('template:error', ({ message }) => {
-            this.modules.ui.showError(message);
+        this.modules.motionManager?.on('motion:removed', ({ element, oldMotion }) => {
+            this.modules.undoRedo.recordChange({
+                type: 'attribute',
+                element,
+                property: 'data-zaemit-motion',
+                oldValue: oldMotion,
+                newValue: ''
+            });
+            this.saveHTML();
+        });
+
+        this.modules.motionManager?.on('motion:changed', () => {
+            this.saveHTML();
+        });
+
+        // Motion 탭 전환 시 현재 선택된 요소의 모션 상태 반영
+        this.modules.tabManager.on('tab:change', ({ to }) => {
+            if (to === 'motion') {
+                const sel = this.modules.selection.getSelectedElement();
+                if (sel) {
+                    this.modules.motionManager?.setSelectedElement(sel);
+                } else {
+                    this.modules.motionManager?.clearSelection();
+                }
+            }
         });
 
         // Template panel toggle button event
@@ -2421,6 +2236,12 @@ class EditorApp extends EventEmitter {
         this.modules.keyboard.on('shortcut:toggleTemplatePanel', () => {
             this.toggleTemplatePanel();
         });
+
+        // ★ VS Code 전용: 파일에서 이미지 삽입 기능
+        if (window.vscBridge) {
+            this._setupExternalFileDrop();
+            this._injectInsertImageMenuItem();
+        }
     }
 
     /**
@@ -2491,7 +2312,7 @@ class EditorApp extends EventEmitter {
 
             // 1. UID로 active iframe에서 찾기
             if (change.uid && activeDoc) {
-                element = activeDoc.querySelector(`[data-bazix-uid="${change.uid}"]`);
+                element = activeDoc.querySelector(`[data-zaemit-uid="${change.uid}"]`);
             }
 
             // 2. 못 찾으면 location으로 시도
@@ -2552,6 +2373,18 @@ class EditorApp extends EventEmitter {
                 if (this.modules.stylePanel && this.modules.stylePanel.updateStyles) {
                     this.modules.stylePanel.updateStyles();
                 }
+            }
+        }
+
+        // ★ Update overlay and style panel for cssRuleSnapshot changes (배경이미지 등 CSS 규칙 복원)
+        if (change.type === 'cssRuleSnapshot') {
+            // 오버레이 업데이트
+            this.modules.overlay.updateOverlay();
+            this.modules.gapOverlay?.updateGapOverlay();
+
+            // Update style panel
+            if (this.modules.stylePanel && this.modules.stylePanel.updateStyles) {
+                this.modules.stylePanel.updateStyles();
             }
         }
 
@@ -2629,7 +2462,7 @@ class EditorApp extends EventEmitter {
             selector = '#' + mainElement.id;
         } else {
             const nonEditorClasses = Array.from(mainElement.classList).filter(cls =>
-                !cls.startsWith('bazix-') &&
+                !cls.startsWith('zaemit-') &&
                 !cls.startsWith('quick-text-edit') &&
                 !cls.startsWith('editor-') &&
                 !cls.startsWith('selected-') &&
@@ -2652,7 +2485,7 @@ class EditorApp extends EventEmitter {
 
         // CSS 규칙 찾기/생성
         const styleSheet = mainDoc?.querySelector('link[href*="style.css"]')?.sheet
-            || mainDoc?.querySelector('style#bazix-temp-styles')?.sheet;
+            || mainDoc?.querySelector('style#zaemit-temp-styles')?.sheet;
 
         if (styleSheet) {
             // 기존 규칙 찾기
@@ -2792,22 +2625,36 @@ class EditorApp extends EventEmitter {
                 if (existingRuleInfo && existingRuleInfo.rule) {
                     // ★ 셀렉터 고유성 검증 — 공유 셀렉터면 기존 규칙 수정하지 않음
                     const isUnique = styleSection.isSelectorUnique(existingRuleInfo.selector, mainDoc);
-                    if (isUnique) {
-                        // 고유 셀렉터 → 기존 규칙 직접 수정 (기존 동작)
+                    // ★ zaemit-temp-styles에 있는 규칙만 직접 수정 (다른 시트의 CSSOM 변경은 saveCSS에 반영 안 됨)
+                    const isInTempStyles = existingRuleInfo.sheet?.ownerNode?.id === 'zaemit-temp-styles';
+
+                    if (isUnique && isInTempStyles) {
+                        // ★ gap shorthand → longhand 분리
+                        this._splitGapShorthand(existingRuleInfo.rule, kebabProp);
+                        // 고유 셀렉터 in temp-styles → 기존 규칙 직접 수정
                         existingRuleInfo.rule.style.setProperty(kebabProp, change.newValue);
                         styleSection.removePropertyFromOtherRules(
                             existingRuleInfo.selector,
                             change.property,
                             existingRuleInfo.rule
                         );
+                    } else if (isUnique && !isInTempStyles) {
+                        // 고유 셀렉터 but 다른 시트 → temp-styles에 같은 셀렉터로 규칙 생성
+                        const tempRule = styleSection.findOrCreateRule(existingRuleInfo.selector);
+                        if (tempRule) {
+                            this._splitGapShorthand(tempRule, kebabProp);
+                            tempRule.style.setProperty(kebabProp, change.newValue);
+                        }
                     } else {
                         // 공유 셀렉터 → 고유 셀렉터(selector)의 베이스 규칙에 값 설정
                         if (baseRule) {
+                            this._splitGapShorthand(baseRule, kebabProp);
                             baseRule.style.setProperty(kebabProp, change.newValue);
                         }
                     }
                 } else if (baseRule) {
                     // 기존 규칙 없으면 베이스 규칙에 적용
+                    this._splitGapShorthand(baseRule, kebabProp);
                     baseRule.style.setProperty(kebabProp, change.newValue);
                 }
             }
@@ -2815,6 +2662,11 @@ class EditorApp extends EventEmitter {
             // 2. 활성화된 각 미디어쿼리 브레이크포인트에 적용
             for (const bp of allBreakpoints) {
                 if (selectedBreakpoints.includes(bp)) {
+                    // ★ 미디어쿼리 규칙에서도 gap shorthand 분리
+                    const mediaRule = styleSection.findOrCreateRuleInMediaQuery(selector, bp);
+                    if (mediaRule) {
+                        this._splitGapShorthand(mediaRule, kebabProp);
+                    }
                     // 활성화된 브레이크포인트 → newValue 적용
                     await styleSection.addCSSRuleInMediaQueryNoSave(change.property, change.newValue, bp);
                 }
@@ -2829,7 +2681,12 @@ class EditorApp extends EventEmitter {
 
                 // PC가 비활성화되어 있으면 베이스 규칙에 oldValue 보존
                 if (!isPCActive && baseRule && !baseRule.style.getPropertyValue(kebabProp)) {
-                    baseRule.style.setProperty(kebabProp, change.oldValue);
+                    // ★ gap longhand 설정 시 기존 gap shorthand가 있으면 스킵
+                    if ((kebabProp === 'column-gap' || kebabProp === 'row-gap') && baseRule.style.getPropertyValue('gap')) {
+                        // gap shorthand가 이미 값을 커버하므로 longhand 추가 불필요
+                    } else {
+                        baseRule.style.setProperty(kebabProp, change.oldValue);
+                    }
                 }
 
                 // 비활성화된 브레이크포인트에 oldValue 보존
@@ -2837,7 +2694,12 @@ class EditorApp extends EventEmitter {
                     if (!selectedBreakpoints.includes(bp)) {
                         const mediaRule = styleSection.findOrCreateRuleInMediaQuery(selector, bp);
                         if (mediaRule && !mediaRule.style.getPropertyValue(kebabProp)) {
-                            mediaRule.style.setProperty(kebabProp, change.oldValue);
+                            // ★ gap longhand 설정 시 기존 gap shorthand가 있으면 스킵
+                            if ((kebabProp === 'column-gap' || kebabProp === 'row-gap') && mediaRule.style.getPropertyValue('gap')) {
+                                // gap shorthand가 이미 값을 커버
+                            } else {
+                                mediaRule.style.setProperty(kebabProp, change.oldValue);
+                            }
                         }
                     }
                 }
@@ -2907,6 +2769,32 @@ class EditorApp extends EventEmitter {
     }
 
     /**
+     * Split gap shorthand into column-gap/row-gap longhands when setting a longhand.
+     * Prevents the shorthand from overriding the newly set longhand value.
+     * @param {CSSStyleRule} rule - CSS rule to check
+     * @param {string} kebabProp - The longhand property being set (column-gap or row-gap)
+     */
+    _splitGapShorthand(rule, kebabProp) {
+        if (!rule || (kebabProp !== 'column-gap' && kebabProp !== 'row-gap')) return;
+        const gapValue = rule.style.getPropertyValue('gap');
+        if (!gapValue) return;
+
+        // Parse gap shorthand: "20px" or "10px 20px" (row-gap column-gap)
+        const parts = gapValue.trim().split(/\s+/);
+        const rowGapVal = parts[0];
+        const colGapVal = parts.length > 1 ? parts[1] : parts[0];
+
+        // Remove shorthand, set longhands (the caller will override one of them)
+        rule.style.removeProperty('gap');
+        if (!rule.style.getPropertyValue('row-gap')) {
+            rule.style.setProperty('row-gap', rowGapVal);
+        }
+        if (!rule.style.getPropertyValue('column-gap')) {
+            rule.style.setProperty('column-gap', colGapVal);
+        }
+    }
+
+    /**
      * Save CSS file (merges temp styles into style.css)
      * 원본 파일 내용을 유지하면서 임시 스타일만 병합
      */
@@ -2930,26 +2818,43 @@ class EditorApp extends EventEmitter {
                 '.editor-highlight',
                 '.editor-hover',
                 '.editor-multi-select',
-                '.bazix-',
+                '.zaemit-',
                 '.quick-text-edit',
-                '[data-bazix-'
+                '[data-zaemit-'
             ];
 
-            // Merge temp styles from bazix-temp-styles tag (Property panel changes)
-            const tempStyleTag = doc.getElementById('bazix-temp-styles');
+            // Merge temp styles from zaemit-temp-styles tag (Property panel changes)
+            const tempStyleTag = doc.getElementById('zaemit-temp-styles');
             if (tempStyleTag && tempStyleTag.sheet && tempStyleTag.sheet.cssRules.length > 0) {
                 for (const rule of tempStyleTag.sheet.cssRules) {
                     const selectorText = rule.selectorText || '';
                     const isEditorRule = editorSelectors.some(sel =>
                         selectorText.includes(sel)
                     );
-                    if (!isEditorRule && rule.cssText) {
+                    // 빈 규칙(속성 없음) 스킵
+                    if (!isEditorRule && rule.cssText && rule.style?.length > 0) {
+                        // ★ VS Code: CSSOM의 blob/data URL을 원래 상대 경로로 복원
+                        let cleanCssText = rule.cssText;
+                        if (window.vscBridge) {
+                            cleanCssText = this._restoreImageUrlsInCssText(cleanCssText, selectorText, doc);
+                        }
                         // 새 규칙을 기존 CSS에 병합
-                        cssContent = this.mergeCSSRule(cssContent, selectorText, rule.cssText);
+                        cssContent = this.mergeCSSRule(cssContent, selectorText, cleanCssText);
                     }
                 }
                 // 임시 태그는 유지 (새로고침 시 자동 제거됨)
             }
+
+            // ★ 추적된 CSS 속성 제거 반영 (applyStyleChange에서 속성 제거 시 추적됨)
+            if (this._cssPropertyRemovals?.length > 0) {
+                for (const removal of this._cssPropertyRemovals) {
+                    cssContent = this._removeCSSPropertyFromText(cssContent, removal.selector, removal.property);
+                }
+                this._cssPropertyRemovals = [];
+            }
+
+            // 빈 규칙 제거 (예: .foo {\n  ;\n} 또는 .foo { } 또는 .foo {\n})
+            cssContent = cssContent.replace(/[^{}]+\{\s*;?\s*\}/g, '');
 
             // 빈 줄 정리
             cssContent = cssContent.replace(/\n{3,}/g, '\n\n').trim();
@@ -2969,6 +2874,132 @@ class EditorApp extends EventEmitter {
     }
 
     /**
+     * VS Code: CSSOM 규칙 텍스트의 blob/data URL을 원래 상대 경로로 복원
+     * saveCSS 병합 시 사용 (CSSOM에는 data URL이 들어가 있지만 파일에는 상대 경로 저장)
+     * @param {string} cssText - CSS rule text (e.g., ".foo { background-image: url('data:...'); }")
+     * @param {string} selector - CSS selector
+     * @param {Document} doc - iframe document
+     * @returns {string} - 복원된 CSS text
+     */
+    _restoreImageUrlsInCssText(cssText, selector, doc) {
+        if (!cssText.includes('url(')) return cssText;
+        // blob: 또는 data:image URL이 없으면 변환 불필요
+        if (!cssText.includes('blob:') && !cssText.includes('data:image')) return cssText;
+
+        // ★ 1단계: _imageUrlMap에서 data/blob URL → 상대 경로 매핑으로 복원 (가장 신뢰)
+        const blobDataUrlRegex = /url\(['"]?(blob:[^'")\s]+|data:image\/[^'")\s]+)['"]?\)/gi;
+        let mapRestored = false;
+        cssText = cssText.replace(blobDataUrlRegex, (match, rawUrl) => {
+            const saveUrl = this._imageUrlMap.get(rawUrl);
+            if (saveUrl) {
+                mapRestored = true;
+                return `url("${saveUrl}")`;
+            }
+            return match; // 매핑 없으면 원본 유지
+        });
+
+        // 모든 blob/data URL이 복원되었으면 완료
+        if (!cssText.includes('blob:') && !cssText.includes('data:image')) return cssText;
+
+        // ★ 2단계: selector로 DOM 요소를 찾아 data-zaemit-save-url 가져오기
+        try {
+            const el = doc.querySelector(selector);
+            const saveUrl = el?.getAttribute('data-zaemit-save-url');
+            if (saveUrl) {
+                cssText = cssText.replace(
+                    /url\(['"]?(?:blob:[^'")\s]+|data:image\/[^'")\s]+)['"]?\)/gi,
+                    `url("${saveUrl}")`
+                );
+                return cssText;
+            }
+        } catch (e) {
+            // 잘못된 selector 무시
+        }
+
+        // ★ 3단계: CSS 원본 파일에서 원래 URL 찾기
+        const originalCss = this.modules.fileManager.getFileContent('style.css') || '';
+        const originalUrl = this._findOriginalUrlInCss(originalCss, selector);
+        if (originalUrl) {
+            cssText = cssText.replace(
+                /url\(['"]?(?:blob:[^'")\s]+|data:image\/[^'")\s]+)['"]?\)/gi,
+                `url("${originalUrl}")`
+            );
+            return cssText;
+        }
+
+        // ★ 4단계: 복원 불가 → blob/data URL 포함 속성만 제거 (파일 오염 방지)
+        // 단, 경고 로그 출력
+        console.warn('[saveCSS] URL 복원 실패 - background-image 제거:', selector);
+        cssText = cssText.replace(
+            /\s*background(?:-image)?:\s*url\(['"]?(?:blob:[^'")\s]+|data:image\/[^'")\s]+)['"]?\)\s*;?/gi,
+            ''
+        );
+        return cssText;
+    }
+
+    /**
+     * CSS 원본 텍스트에서 특정 selector의 background-image url 추출
+     */
+    _findOriginalUrlInCss(cssText, selector) {
+        if (!cssText || !selector) return null;
+        // selector를 regex 이스케이프
+        const escaped = selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        // selector { ... background-image: url("..."); ... } 매칭
+        const ruleRegex = new RegExp(escaped + '\\s*\\{([^}]+)\\}', 'i');
+        const ruleMatch = cssText.match(ruleRegex);
+        if (!ruleMatch) return null;
+        const ruleBody = ruleMatch[1];
+        // background-image: url("path") 추출
+        const urlMatch = ruleBody.match(/background-image:\s*url\(['"]?([^'")\s]+)['"]?\)/i);
+        if (!urlMatch) return null;
+        const url = urlMatch[1];
+        // blob/data URL이 아닌 경우만 반환
+        if (url.startsWith('blob:') || url.startsWith('data:')) return null;
+        return url;
+    }
+
+    /**
+     * CSS 속성 제거를 추적 (saveCSS에서 파일 텍스트에 반영)
+     * @param {string} selector - CSS selector
+     * @param {string} property - CSS property (kebab-case)
+     */
+    _trackCSSPropertyRemoval(selector, property) {
+        if (!this._cssPropertyRemovals) {
+            this._cssPropertyRemovals = [];
+        }
+        const exists = this._cssPropertyRemovals.some(
+            r => r.selector === selector && r.property === property
+        );
+        if (!exists) {
+            this._cssPropertyRemovals.push({ selector, property });
+        }
+    }
+
+    /**
+     * CSS 텍스트에서 특정 selector의 특정 property 제거
+     * @param {string} css - CSS text content
+     * @param {string} selector - CSS selector
+     * @param {string} property - CSS property (kebab-case)
+     * @returns {string} Modified CSS text
+     */
+    _removeCSSPropertyFromText(css, selector, property) {
+        const escapedSelector = selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const regex = new RegExp(`(${escapedSelector})\\s*\\{([^}]*)\\}`, 'g');
+        return css.replace(regex, (match, sel, props) => {
+            const lines = props.split(';')
+                .map(l => l.trim())
+                .filter(l => {
+                    if (!l) return false;
+                    const colonIdx = l.indexOf(':');
+                    if (colonIdx < 0) return false;
+                    return l.substring(0, colonIdx).trim() !== property;
+                });
+            if (lines.length === 0) return ''; // 빈 규칙 제거
+            return `${sel} {\n  ${lines.join(';\n  ')};\n}`;
+        });
+    }
+
+    /**
      * 활성 iframe의 CSS를 메인 iframe으로 동기화
      * (저장 전에 호출하여 미디어쿼리 등 모든 CSS가 메인에 반영되도록 함)
      */
@@ -2978,7 +3009,7 @@ class EditorApp extends EventEmitter {
 
         if (!activeDoc || !mainDoc || activeDoc === mainDoc) return;
 
-        const activeTempStyle = activeDoc.getElementById('bazix-temp-styles');
+        const activeTempStyle = activeDoc.getElementById('zaemit-temp-styles');
         if (!activeTempStyle?.sheet?.cssRules) return;
 
         // 활성 iframe의 CSS를 추출
@@ -2987,13 +3018,13 @@ class EditorApp extends EventEmitter {
             cssContent += rule.cssText + '\n';
         }
 
-        // 메인 iframe의 bazix-temp-styles에 복사
-        let mainTempStyle = mainDoc.getElementById('bazix-temp-styles');
+        // 메인 iframe의 zaemit-temp-styles에 복사
+        let mainTempStyle = mainDoc.getElementById('zaemit-temp-styles');
         if (mainTempStyle) {
             mainTempStyle.remove();
         }
         mainTempStyle = mainDoc.createElement('style');
-        mainTempStyle.id = 'bazix-temp-styles';
+        mainTempStyle.id = 'zaemit-temp-styles';
         mainTempStyle.textContent = cssContent;
         mainDoc.head.appendChild(mainTempStyle);
     }
@@ -3141,14 +3172,45 @@ class EditorApp extends EventEmitter {
             const previewFrame = document.getElementById('previewFrame');
             if (previewFrame && bridge) {
                 const htmlContent = bridge.getFile('index.html');
-                const cssContent = bridge.getFile('style.css');
+                let cssContent = bridge.getFile('style.css');
                 const jsContent = bridge.getFile('script.js');
 
                 let fullHtml = htmlContent;
 
+                // ★ 이전 세션에서 정리 안 된 인제션 태그 먼저 제거
+                // (regex 버그 등으로 HTML 파일에 잔류할 수 있음)
+                fullHtml = fullHtml.replace(/<style\s+id=["']zaemit-injected-css["'][^>]*>[\s\S]*?<\/style>/gi, '');
+                fullHtml = fullHtml.replace(/<style\s+id=["']zaemit-temp-styles["'][^>]*>[\s\S]*?<\/style>/gi, '');
+                fullHtml = fullHtml.replace(/<script\s+id=["']zaemit-injected-js["'][^>]*>[\s\S]*?<\/script>/gi, '');
+                fullHtml = fullHtml.replace(/<script\s+id=["']zaemit-link-interceptor["'][^>]*>[\s\S]*?<\/script>/gi, '');
+
+                // ★ bare 링크 인터셉터 제거 (ID 없이 저장된 이전 버그 잔재)
+                fullHtml = fullHtml.replace(/<script>\s*document\.addEventListener\("click",function\(e\)\{var a=e\.target\.closest\("a"\);if\(a&&a\.href\)\{e\.preventDefault\(\);\}\}\);\s*<\/script>/gi, '');
+
+                // ★ bare script.js 중복 제거 (ID 없이 저장된 이전 버그 잔재)
+                // 속성 없는 <script>...</script> 중 내용이 script.js와 동일하면 제거
+                if (jsContent) {
+                    const trimmedJs = jsContent.trim();
+                    fullHtml = fullHtml.replace(/<script>([\s\S]*?)<\/script>/gi, (match, content) => {
+                        return content.trim() === trimmedJs ? '' : match;
+                    });
+                }
+
+                // ★ stale blob URL 정리 (이전 세션에서 누출된 blob URL은 무효)
+                // 인라인 스타일의 blob URL → none 으로 교체
+                fullHtml = fullHtml.replace(/url\(&quot;blob:[^&]*&quot;\)/gi, 'none');
+                fullHtml = fullHtml.replace(/url\(['"]?blob:[^'")\s]+['"]?\)/gi, 'none');
+                // img src 등의 blob URL 제거
+                fullHtml = fullHtml.replace(/(src\s*=\s*["'])blob:[^"']+(['"])/gi, '$1$2');
+
+                // ★ CSS 파일의 stale blob URL 정리 (이전 세션에서 누출된 blob URL은 무효)
+                if (cssContent) {
+                    cssContent = cssContent.replace(/url\(['"]?blob:[^'")\s]+['"]?\)/gi, 'url("none")');
+                }
+
                 // CSS 인라인 주입
                 if (cssContent) {
-                    const styleTag = '<style id="bazix-injected-css">' + cssContent + '</style>';
+                    const styleTag = '<style id="zaemit-injected-css">' + cssContent + '</style>';
                     if (fullHtml.includes('</head>')) {
                         fullHtml = fullHtml.replace('</head>', styleTag + '</head>');
                     } else {
@@ -3159,9 +3221,9 @@ class EditorApp extends EventEmitter {
                 // 외부 style.css 링크 제거 (이미 인라인 주입)
                 fullHtml = fullHtml.replace(/<link[^>]*href=["'][^"']*style\.css["'][^>]*>/gi, '');
 
-                // JS 인라인 주입
+                // JS 인라인 주입 (ID로 식별 가능하게)
                 if (jsContent) {
-                    const scriptTag = '<script>' + jsContent + '<\/script>';
+                    const scriptTag = '<script id="zaemit-injected-js">' + jsContent + '<\/script>';
                     if (fullHtml.includes('</body>')) {
                         fullHtml = fullHtml.replace('</body>', scriptTag + '</body>');
                     } else {
@@ -3172,24 +3234,37 @@ class EditorApp extends EventEmitter {
                 // 외부 script.js 링크 제거
                 fullHtml = fullHtml.replace(/<script[^>]*src=["'][^"']*script\.js["'][^>]*><\/script>/gi, '');
 
-                // 링크 클릭 차단 스크립트 주입
-                const interceptScript = '<script>document.addEventListener("click",function(e){var a=e.target.closest("a");if(a&&a.href){e.preventDefault();}});<\/script>';
+                // 링크 클릭 차단 스크립트 주입 (ID로 식별 가능하게)
+                const interceptScript = '<script id="zaemit-link-interceptor">document.addEventListener("click",function(e){var a=e.target.closest("a");if(a&&a.href){e.preventDefault();}});<\/script>';
                 if (fullHtml.includes('</body>')) {
                     fullHtml = fullHtml.replace('</body>', interceptScript + '</body>');
                 }
 
+                // ★ 프로젝트 폴더 base URI 주입 (상대 경로 이미지/리소스 해결)
+                // 주의: webview.asWebviewUri()가 URL-인코딩된 문자열 반환
+                //   (예: file%2B.vscode-resource → file+.vscode-resource)
+                //   <base> 태그의 href는 디코딩된 URL이어야 브라우저가 호스트명을 해석함
+                const projectBaseUri = window.vscBridge?.projectBaseUri;
+                if (projectBaseUri) {
+                    const decodedBaseUri = decodeURIComponent(projectBaseUri);
+                    const baseTag = `<base id="zaemit-editor-base" href="${decodedBaseUri}/">`;
+                    if (fullHtml.includes('<head>')) {
+                        fullHtml = fullHtml.replace('<head>', `<head>\n${baseTag}`);
+                    } else {
+                        fullHtml = `<head>${baseTag}</head>\n` + fullHtml;
+                    }
+                }
+
+                // srcdoc 방식으로 로드
+                // 이미지 등 상대 경로 리소스는 _resolveIframeImages()에서
+                // 부모 webview fetch → iframe blob URL로 변환하여 해결
                 previewFrame.srcdoc = fullHtml;
             }
 
             // Load files for code editor
             await this.modules.fileManager.loadFiles();
 
-            // Load versions
-            try {
-                await this.modules.version.loadVersions();
-            } catch (e) {
-                console.warn('[VS Code] Version loading skipped:', e.message);
-            }
+            // Version loading disabled in VS Code (premium feature)
         } catch (error) {
             console.error('Failed to load initial data:', error);
             throw error;
@@ -3876,7 +3951,7 @@ class EditorApp extends EventEmitter {
             this.closeAllLeftPanels('template');
             templatePanel.classList.remove('hidden');
             templateExpandBtn?.classList.add('active');
-            this.modules.templateManager.loadTemplates();
+            this.modules.templateManager?.loadTemplates();
         } else {
             templatePanel.classList.add('hidden');
             templateExpandBtn?.classList.remove('active');
@@ -3956,8 +4031,8 @@ class EditorApp extends EventEmitter {
         // Mark as unsaved (no server save)
         this.modules.ui.setUnsaved();
         this._hasUnsavedChanges = true;
-        // Notify AutoSaveManager to schedule 5-minute save
-        this.modules.autoSave.markChanged();
+        // AutoSave disabled in VS Code (manual save only)
+        this.modules.autoSave?.markChanged();
         // 멀티캔버스 동기화는 UndoRedoManager의 change:recorded 이벤트에서 처리
     }
 
@@ -3974,7 +4049,7 @@ class EditorApp extends EventEmitter {
             }
         } catch (err) {
             console.error('Error saving to server:', err);
-            this.modules.ui.showError('저장 실패: ' + err.message);
+            this.modules.ui.showError('Save failed: ' + err.message);
         }
     }
 
@@ -4485,6 +4560,742 @@ class EditorApp extends EventEmitter {
                 }
             }
         });
+
+        // ★ 이미지 패널에서 드래그한 이미지 드롭 처리
+        doc.addEventListener('dragover', (e) => {
+            if (e.dataTransfer.types.includes('application/x-zaemit-image')) {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = 'copy';
+                this._showImageDropFeedback(e, doc);
+            }
+        });
+
+        doc.addEventListener('dragleave', (e) => {
+            // iframe 밖으로 나갈 때만 피드백 제거
+            if (!e.relatedTarget || !doc.contains(e.relatedTarget)) {
+                this._clearImageDropFeedback(doc);
+            }
+        });
+
+        doc.addEventListener('drop', (e) => {
+            if (e.dataTransfer.types.includes('application/x-zaemit-image')) {
+                e.preventDefault();
+                this._clearImageDropFeedback(doc);
+                try {
+                    const data = JSON.parse(e.dataTransfer.getData('application/x-zaemit-image'));
+                    this._handleImageDrop(e, data, doc).catch(err => {
+                        console.error('[EditorApp] Image drop async error:', err);
+                    });
+                } catch (err) {
+                    console.error('[EditorApp] Image drop error:', err);
+                }
+            }
+        });
+    }
+
+    /**
+     * 이미지 드롭 시 대상 요소 시각적 피드백
+     */
+    _showImageDropFeedback(e, doc) {
+        const target = doc.elementFromPoint(e.clientX, e.clientY);
+        if (!target || target === doc.body || target === doc.documentElement) return;
+
+        // 에디터 오버레이 요소 무시
+        if (target.id?.startsWith('editor-') || target.classList?.contains('editor-resize-handle') ||
+            target.classList?.contains('editor-spacing-handle')) return;
+
+        // 이전 피드백 제거
+        this._clearImageDropFeedback(doc);
+
+        // 피드백 표시
+        const isImg = target.tagName === 'IMG';
+        target.setAttribute('data-zaemit-drop-target', '');
+        target.style.setProperty('outline', isImg ? '2px solid #2196F3' : '2px dashed #2196F3', 'important');
+        target.style.setProperty('outline-offset', '-2px', 'important');
+    }
+
+    /**
+     * 이미지 드롭 피드백 제거
+     */
+    _clearImageDropFeedback(doc) {
+        const prev = doc.querySelector('[data-zaemit-drop-target]');
+        if (prev) {
+            prev.removeAttribute('data-zaemit-drop-target');
+            prev.style.removeProperty('outline');
+            prev.style.removeProperty('outline-offset');
+        }
+    }
+
+    /**
+     * 이미지 드롭 처리: IMG → src 교체, 그 외 → background-image 설정
+     */
+    async _handleImageDrop(e, data, doc) {
+        const target = doc.elementFromPoint(e.clientX, e.clientY);
+        if (!target || target === doc.body || target === doc.documentElement) return;
+
+        // 에디터 오버레이 요소 무시
+        if (target.id?.startsWith('editor-') || target.classList?.contains('editor-resize-handle') ||
+            target.classList?.contains('editor-spacing-handle')) return;
+
+        // ★ VS Code: webview URI → data URL 변환
+        // srcdoc iframe(origin: null)에서 webview URI 직접 로딩 불가
+        // → 부모 webview에서 fetch → base64 data URL로 변환 (인라인이라 origin 무관)
+        let renderUrl = data.url;
+        let saveUrl = data.url;
+
+        if (window.vscBridge) {
+            saveUrl = this._toRelativeImagePath(data.url);
+            try {
+                const response = await fetch(data.url);
+                if (response.ok) {
+                    const blob = await response.blob();
+                    renderUrl = await new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.onloadend = () => resolve(reader.result);
+                        reader.onerror = reject;
+                        reader.readAsDataURL(blob);
+                    });
+                }
+            } catch (err) {
+                console.warn('[EditorApp] Image fetch for data URL failed:', err);
+            }
+        } else {
+            renderUrl = this._toRelativeImagePath(data.url);
+            saveUrl = renderUrl;
+        }
+
+        if (target.tagName === 'IMG') {
+            // IMG 요소: src 교체
+            const oldSrc = target.getAttribute('src') || '';
+            target.setAttribute('src', renderUrl);
+            if (window.vscBridge) {
+                target.setAttribute('data-zaemit-save-url', saveUrl);
+                this._imageUrlMap.set(renderUrl, saveUrl);
+            }
+
+            this.modules.undoRedo.recordChange({
+                type: 'attribute',
+                element: target,
+                property: 'src',
+                oldValue: oldSrc,
+                newValue: renderUrl,
+                timestamp: Date.now()
+            });
+
+            // 요소 선택 및 저장
+            this.modules.elementSelector?.selectElement(target);
+            this.saveHTML();
+        } else {
+            // ★ 일반 요소: CSS 규칙으로 background-image 설정
+            // 멀티뷰 활성화 상태에 따라 전체/일부 브레이크포인트에 적용
+            if (window.vscBridge) {
+                target.setAttribute('data-zaemit-save-url', saveUrl);
+                // ★ data URL → 상대 경로 매핑 저장 (saveCSS URL 복원용)
+                this._imageUrlMap.set(renderUrl, saveUrl);
+            }
+
+            // 1) 먼저 요소 선택 (style section의 selectedElement 참조 설정)
+            this.modules.elementSelector?.selectElement(target);
+
+            // 2) BackgroundStyleSection 접근
+            const bgSection = this.modules.stylePanel?.styleManager?.sections?.background;
+            if (!bgSection) {
+                // fallback: style section 미사용 시 inline 적용
+                target.style.backgroundImage = `url('${renderUrl}')`;
+                target.style.backgroundSize = 'cover';
+                target.style.backgroundRepeat = 'no-repeat';
+                this.saveHTML();
+                this.modules.uiHelper?.showToast('Background image set', 'success');
+                return;
+            }
+
+            // 3) 기본값 설정 여부 판단 (CSS 규칙 적용 전에 확인)
+            const win = doc.defaultView;
+            const computed = win?.getComputedStyle(target);
+            const needSize = computed &&
+                (!target.style.backgroundSize) &&
+                (computed.backgroundSize === 'auto' || computed.backgroundSize === 'auto auto');
+            const needRepeat = computed &&
+                (!target.style.backgroundRepeat) &&
+                computed.backgroundRepeat === 'repeat';
+
+            // 4) background-image CSS 규칙 적용 (렌더링용 URL 사용)
+            //    applyStyleChange: 셀렉터 boosting + 미디어쿼리 + cascade prevention + 멀티뷰 동기화 + undo 기록
+            //    CSS specificity: 부스팅 셀렉터(.a.b [0,2,0])가 원본(.a [0,1,0])의 background shorthand를 자연 오버라이드
+            const oldBg = bgSection.getEffectiveCSSValue('backgroundImage').value;
+            await bgSection.applyStyleChange('backgroundImage', `url('${renderUrl}')`, oldBg);
+
+            // 5) 기본값 설정 (backgroundSize, backgroundRepeat)
+            if (needSize) {
+                const oldSize = bgSection.getEffectiveCSSValue('backgroundSize').value;
+                await bgSection.applyStyleChange('backgroundSize', 'cover', oldSize);
+            }
+            if (needRepeat) {
+                const oldRepeat = bgSection.getEffectiveCSSValue('backgroundRepeat').value;
+                await bgSection.applyStyleChange('backgroundRepeat', 'no-repeat', oldRepeat);
+            }
+
+            // 6) ★ HTML + CSS 즉시 서버 저장
+            //    applyStyleChange가 CSS를 saveCSS()로 저장하지만, 이벤트 기반이라 비동기 경쟁 가능
+            //    HTML은 부스팅 클래스(h2-xxx)를 포함해야 하므로 즉시 저장 필수
+            await this.saveToServer();
+        }
+
+        this.modules.uiHelper?.showToast(
+            target.tagName === 'IMG' ? 'Image replaced' : 'Background image set',
+            'success'
+        );
+    }
+
+    /**
+     * 이미지 URL을 HTML 기준 상대 경로로 변환
+     * VS Code: webview URI → projectBaseUri 기준 상대 경로
+     * Web: /projects/folder-name/path → path
+     */
+    _toRelativeImagePath(url) {
+        // VS Code webview URI: projectBaseUri 기준으로 상대 경로 추출
+        const baseUri = window.vscBridge?.projectBaseUri;
+        if (baseUri) {
+            // percent-encoding 정규화 (file+ vs file%2B 등)
+            const decodedUrl = decodeURIComponent(url);
+            const decodedBase = decodeURIComponent(baseUri);
+            if (decodedUrl.startsWith(decodedBase)) {
+                let relative = decodedUrl.substring(decodedBase.length);
+                if (relative.startsWith('/')) relative = relative.substring(1);
+                return relative;
+            }
+        }
+
+        // Web editor: /projects/folder-name/images/photo.jpg → images/photo.jpg
+        if (url.startsWith('/projects/')) {
+            const parts = url.split('/');
+            return parts.slice(3).join('/');
+        }
+
+        return url;
+    }
+
+    /**
+     * VS Code: iframe 로드 후 상대 경로 이미지/배경을 blob URL로 변환
+     * srcdoc iframe(origin: null)에서 webview URI 직접 로딩 불가
+     * → 부모 webview에서 fetch → iframe 컨텍스트에서 blob URL 생성
+     * 저장 시 _getCleanHTML()에서 data-zaemit-save-url 기반으로 원래 경로 복원
+     */
+    async _resolveIframeImages(doc) {
+        if (!window.vscBridge) { console.log('[resolveImages] Skip: no vscBridge'); return; }
+        const baseUri = window.vscBridge.projectBaseUri;
+        if (!baseUri) { console.log('[resolveImages] Skip: no projectBaseUri'); return; }
+
+        const iframeWindow = doc.defaultView;
+        if (!iframeWindow) { console.log('[resolveImages] Skip: no defaultView'); return; }
+
+        console.log('[resolveImages] Starting... baseUri:', baseUri);
+        const decodedBase = decodeURIComponent(baseUri);
+
+        // blob → data URL 변환 헬퍼
+        const blobToDataUrl = (blob) => new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onloadend = () => resolve(reader.result);
+            reader.onerror = reject;
+            reader.readAsDataURL(blob);
+        });
+
+        // Data URL 캐시 (같은 이미지 중복 fetch 방지)
+        const dataUrlCache = new Map();
+        const toDataUrl = async (fetchUrl) => {
+            if (dataUrlCache.has(fetchUrl)) return dataUrlCache.get(fetchUrl);
+            try {
+                console.log('[resolveImages] Fetching:', fetchUrl);
+                const response = await fetch(fetchUrl);
+                if (!response.ok) {
+                    console.warn('[resolveImages] Fetch failed:', response.status, fetchUrl);
+                    dataUrlCache.set(fetchUrl, null);
+                    return null;
+                }
+                const blob = await response.blob();
+                const dataUrl = await blobToDataUrl(blob);
+                console.log('[resolveImages] OK:', fetchUrl, '→ data URL (' + blob.size + ' bytes)');
+                dataUrlCache.set(fetchUrl, dataUrl);
+                return dataUrl;
+            } catch (err) {
+                console.warn('[resolveImages] Fetch error:', fetchUrl, err.message);
+                dataUrlCache.set(fetchUrl, null);
+                return null;
+            }
+        };
+
+        // URL이 변환 필요한지 판단
+        const needsResolve = (url) => {
+            if (!url) return false;
+            url = url.trim();
+            if (!url || url === 'none' || url === 'initial' || url === 'inherit') return false;
+            if (url.startsWith('blob:') || url.startsWith('data:') || url.startsWith('javascript:')) return false;
+            if (url.startsWith('//')) return false;
+            // 외부 URL (vscode 리소스가 아닌 http/https)은 그대로
+            if ((url.startsWith('http:') || url.startsWith('https:')) &&
+                !url.includes('vscode-resource') && !url.includes('vscode-cdn')) return false;
+            return true;
+        };
+
+        // 상대 경로를 fetch 가능한 webview URI로 변환
+        // decodedBase 사용: URL-인코딩된 호스트명(%2B 등)은 fetch에서 실패함
+        const toFetchUrl = (url) => {
+            if (url.includes('vscode-resource') || url.includes('vscode-cdn')) return decodeURIComponent(url);
+            return decodedBase + '/' + url;
+        };
+
+        // 원본 상대 경로 추출 (저장용)
+        const toSavePath = (url) => {
+            const decoded = decodeURIComponent(url);
+            if (decoded.startsWith(decodedBase)) {
+                let rel = decoded.substring(decodedBase.length);
+                if (rel.startsWith('/')) rel = rel.substring(1);
+                return rel;
+            }
+            return url;
+        };
+
+        const promises = [];
+
+        // 1. <img src>, <source src>, <video src/poster> 처리
+        const imgEls = doc.querySelectorAll('img[src], source[src], video[src], video[poster]');
+        console.log('[resolveImages] Step 1: Found', imgEls.length, 'img/source/video elements');
+        imgEls.forEach(el => {
+            if (el.id?.startsWith('editor-') || el.closest('[id^="editor-"]')) return;
+
+            for (const attr of ['src', 'poster']) {
+                const val = el.getAttribute(attr);
+                if (!val || !needsResolve(val)) continue;
+                console.log('[resolveImages] IMG attr:', attr, '=', val);
+
+                const savePath = toSavePath(val);
+                const fetchUrl = toFetchUrl(val);
+
+                promises.push(
+                    toDataUrl(fetchUrl).then(dataUrl => {
+                        if (dataUrl) {
+                            el.setAttribute(attr, dataUrl);
+                            el.setAttribute('data-zaemit-save-url', savePath);
+                            this._imageUrlMap.set(dataUrl, savePath);
+                        }
+                    })
+                );
+            }
+        });
+
+        // 2. 인라인 style의 url() 처리 (background-image 등)
+        const styledEls = doc.querySelectorAll('[style]');
+        console.log('[resolveImages] Step 2: Found', styledEls.length, 'elements with style attribute');
+        styledEls.forEach(el => {
+            if (el.id?.startsWith('editor-') || el.closest('[id^="editor-"]')) return;
+
+            const style = el.getAttribute('style');
+            if (!style || !style.includes('url(')) return;
+            console.log('[resolveImages] Style url() found in:', el.tagName, el.className?.substring?.(0, 30));
+
+            const urlRegex = /url\(['"]?([^'")\s]+)['"]?\)/g;
+            let match;
+            const urlsToResolve = [];
+            while ((match = urlRegex.exec(style)) !== null) {
+                if (needsResolve(match[1])) {
+                    urlsToResolve.push(match[1]);
+                }
+            }
+            if (urlsToResolve.length === 0) return;
+
+            promises.push(
+                Promise.all(
+                    urlsToResolve.map(url => toDataUrl(toFetchUrl(url)).then(dataUrl => ({ url, dataUrl })))
+                ).then(results => {
+                    let newStyle = style;
+                    let firstSavePath = null;
+                    for (const { url, dataUrl } of results) {
+                        if (dataUrl) {
+                            const escaped = url.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                            newStyle = newStyle.replace(
+                                new RegExp(`url\\(['"]?${escaped}['"]?\\)`, 'g'),
+                                `url('${dataUrl}')`
+                            );
+                            const sp = toSavePath(url);
+                            if (!firstSavePath) firstSavePath = sp;
+                            this._imageUrlMap.set(dataUrl, sp);
+                        }
+                    }
+                    if (newStyle !== style) {
+                        el.setAttribute('style', newStyle);
+                        if (firstSavePath) el.setAttribute('data-zaemit-save-url', firstSavePath);
+                    }
+                })
+            );
+        });
+
+        // 3. <style> 태그 내 CSS url() 처리
+        // CSSOM 규칙의 url()은 base tag에 의해 절대 URI로 resolve됨
+        // → vscode-resource URL을 찾아 data URL로 변환
+        // (saveCSS()는 원본 텍스트 기반이므로 CSSOM data URL이 저장 파일에 누출되지 않음)
+        const styleEls = doc.querySelectorAll('style');
+        console.log('[resolveImages] Step 3: Found', styleEls.length, 'style elements');
+        for (const styleEl of styleEls) {
+            if (styleEl.id?.startsWith('editor-') || styleEl.id === 'zaemit-temp-styles') continue;
+            console.log('[resolveImages] Processing <style id="' + (styleEl.id || '') + '">');
+
+            const sheet = styleEl.sheet;
+            if (!sheet) continue;
+
+            try {
+                for (let i = 0; i < sheet.cssRules.length; i++) {
+                    const rule = sheet.cssRules[i];
+                    if (rule.type !== CSSRule.STYLE_RULE) continue;
+
+                    const propsToCheck = ['background-image', 'background', 'list-style-image', 'content', 'border-image-source'];
+                    for (const prop of propsToCheck) {
+                        const val = rule.style.getPropertyValue(prop);
+                        if (!val || !val.includes('url(')) continue;
+
+                        const cssUrlRegex = /url\(['"]?([^'")\s]+)['"]?\)/g;
+                        let cssMatch;
+                        const cssUrlsToResolve = [];
+                        while ((cssMatch = cssUrlRegex.exec(val)) !== null) {
+                            if (needsResolve(cssMatch[1])) {
+                                cssUrlsToResolve.push(cssMatch[1]);
+                            }
+                        }
+                        if (cssUrlsToResolve.length === 0) continue;
+                        console.log('[resolveImages] CSS rule:', rule.selectorText, prop, '→', cssUrlsToResolve);
+
+                        const ruleRef = rule;
+                        const propRef = prop;
+                        const valRef = val;
+
+                        promises.push(
+                            Promise.all(
+                                cssUrlsToResolve.map(url => toDataUrl(toFetchUrl(url)).then(dataUrl => ({ url, dataUrl })))
+                            ).then(results => {
+                                let newVal = valRef;
+                                let firstSavePathForRule = null;
+                                for (const { url, dataUrl } of results) {
+                                    if (dataUrl) {
+                                        const sp = toSavePath(url);
+                                        if (!firstSavePathForRule) firstSavePathForRule = sp;
+                                        this._imageUrlMap.set(dataUrl, sp);
+                                        const escaped = url.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                                        newVal = newVal.replace(
+                                            new RegExp(`url\\(['"]?${escaped}['"]?\\)`, 'g'),
+                                            `url('${dataUrl}')`
+                                        );
+                                    }
+                                }
+                                if (newVal !== valRef) {
+                                    ruleRef.style.setProperty(propRef, newVal);
+                                    // ★ CSS 규칙의 원래 URL을 매칭 요소에 저장
+                                    // saveCSS()에서 data URL → 원래 경로 복원 시 사용
+                                    if (firstSavePathForRule) {
+                                        try {
+                                            const matchedEl = doc.querySelector(ruleRef.selectorText);
+                                            if (matchedEl && !matchedEl.getAttribute('data-zaemit-save-url')) {
+                                                matchedEl.setAttribute('data-zaemit-save-url', firstSavePathForRule);
+                                            }
+                                        } catch(e) {}
+                                    }
+                                }
+                            })
+                        );
+                    }
+                }
+            } catch (err) {
+                // Cross-origin stylesheet 접근 실패 시 무시
+            }
+        }
+
+        if (promises.length > 0) {
+            console.log(`[EditorApp] Resolving ${promises.length} image reference(s) to blob URLs...`);
+            await Promise.allSettled(promises);
+            console.log('[EditorApp] Image resolution complete');
+        }
+    }
+
+    /**
+     * VS Code 탐색기에서 이미지 파일을 에디터 캔버스에 드래그앤드롭하는 기능 설정
+     * - IMG 요소 위: src 교체
+     * - 일반 요소 위: background-image 설정
+     */
+    _setupExternalFileDrop() {
+        // VS Code 환경에서만 활성화
+        if (!window.vscBridge) return;
+
+        const previewWrapper = document.querySelector('.preview-wrapper');
+        if (!previewWrapper) return;
+
+        const imageExts = ['.png', '.jpg', '.jpeg', '.gif', '.svg', '.webp', '.ico', '.bmp', '.avif'];
+
+        // 이미지 파일 확인
+        const isImageFile = (name) => {
+            if (!name) return false;
+            const ext = '.' + name.split('.').pop().toLowerCase();
+            return imageExts.includes(ext);
+        };
+
+        // iframe 내부 좌표 계산 (zoom 보정)
+        const getIframeCoords = (e) => {
+            const iframe = this.modules.preview.previewFrame;
+            if (!iframe) return null;
+            const rect = iframe.getBoundingClientRect();
+            const zoomLevel = this.modules.zoom?.getZoomLevel() || 1;
+            return {
+                x: (e.clientX - rect.left) / zoomLevel,
+                y: (e.clientY - rect.top) / zoomLevel
+            };
+        };
+
+        previewWrapper.addEventListener('dragover', (e) => {
+            // 이미지 패널 내부 드래그는 별도 핸들러에서 처리
+            if (e.dataTransfer.types.includes('application/x-zaemit-image')) return;
+
+            // 외부 파일 드롭 허용
+            if (e.dataTransfer.types.includes('Files') || e.dataTransfer.types.includes('text/uri-list')) {
+                e.preventDefault();
+                e.stopPropagation();
+                e.dataTransfer.dropEffect = 'copy';
+
+                // iframe 내부 요소 피드백 표시
+                const iframe = this.modules.preview.previewFrame;
+                const doc = iframe?.contentDocument;
+                if (doc) {
+                    const coords = getIframeCoords(e);
+                    if (coords) {
+                        this._showExternalDropFeedback(doc, coords.x, coords.y);
+                    }
+                }
+            }
+        });
+
+        previewWrapper.addEventListener('dragleave', (e) => {
+            if (!e.relatedTarget || !previewWrapper.contains(e.relatedTarget)) {
+                const doc = this.modules.preview.previewFrame?.contentDocument;
+                if (doc) this._clearImageDropFeedback(doc);
+            }
+        });
+
+        previewWrapper.addEventListener('drop', async (e) => {
+            // 이미지 패널 내부 드래그는 별도 핸들러에서 처리
+            if (e.dataTransfer.types.includes('application/x-zaemit-image')) return;
+
+            e.preventDefault();
+            e.stopPropagation();
+
+            const iframe = this.modules.preview.previewFrame;
+            const doc = iframe?.contentDocument;
+            if (!doc) return;
+
+            this._clearImageDropFeedback(doc);
+
+            // iframe 내부 좌표 계산
+            const coords = getIframeCoords(e);
+            if (!coords) return;
+
+            // 1. Files API로 파일 데이터 확인
+            const files = e.dataTransfer.files;
+            if (files && files.length > 0) {
+                const file = files[0];
+                if (!isImageFile(file.name)) {
+                    this.modules.ui?.showToast('Only image files can be dropped', 'warning');
+                    return;
+                }
+
+                // FileReader로 base64 인코딩
+                const reader = new FileReader();
+                reader.onload = async (evt) => {
+                    const base64 = evt.target.result.split(',')[1];
+                    await this._processExternalImageDrop(file.name, { base64Data: base64 }, doc, coords);
+                };
+                reader.readAsDataURL(file);
+                return;
+            }
+
+            // 2. URI list로 파일 경로 확인
+            const uriList = e.dataTransfer.getData('text/uri-list');
+            if (uriList) {
+                const uri = uriList.split('\n').find(u => u.trim() && !u.startsWith('#'));
+                if (uri) {
+                    let filePath = '';
+                    const trimmedUri = uri.trim();
+
+                    if (trimmedUri.startsWith('file:///')) {
+                        // file:///C:/path/to/image.png → C:\path\to\image.png
+                        filePath = decodeURIComponent(trimmedUri.replace('file:///', ''));
+                        // Unix path 유지 (Extension Host가 처리)
+                    } else if (trimmedUri.startsWith('file://')) {
+                        filePath = decodeURIComponent(trimmedUri.replace('file://', ''));
+                    }
+
+                    if (filePath) {
+                        const name = filePath.split(/[/\\]/).pop();
+                        if (!isImageFile(name)) {
+                            this.modules.ui?.showToast('Only image files can be dropped', 'warning');
+                            return;
+                        }
+                        await this._processExternalImageDrop(name, { filePath }, doc, coords);
+                        return;
+                    }
+                }
+            }
+
+            // 3. text/plain 폴백 (파일 경로일 수 있음)
+            const textData = e.dataTransfer.getData('text/plain');
+            if (textData) {
+                const name = textData.split(/[/\\]/).pop();
+                if (isImageFile(name)) {
+                    await this._processExternalImageDrop(name, { filePath: textData }, doc, coords);
+                }
+            }
+        });
+    }
+
+    /**
+     * 외부 드롭 시 iframe 내부 요소에 시각적 피드백 표시
+     */
+    _showExternalDropFeedback(doc, x, y) {
+        const target = doc.elementFromPoint(x, y);
+        if (!target || target === doc.body || target === doc.documentElement) return;
+        if (target.id?.startsWith('editor-') || target.classList?.contains('editor-resize-handle') ||
+            target.classList?.contains('editor-spacing-handle')) return;
+
+        // 이전 피드백 제거
+        this._clearImageDropFeedback(doc);
+
+        const isImg = target.tagName === 'IMG';
+        target.setAttribute('data-zaemit-drop-target', '');
+        target.style.setProperty('outline', isImg ? '3px solid #2196F3' : '3px dashed #4CAF50', 'important');
+        target.style.setProperty('outline-offset', '-3px', 'important');
+    }
+
+    /**
+     * 외부에서 드롭된 이미지를 Extension Host로 전송하여 프로젝트 폴더에 저장 후 적용
+     */
+    async _processExternalImageDrop(filename, data, doc, coords) {
+        try {
+            this.modules.ui?.showToast('Saving image...', 'info');
+
+            // Extension Host에 파일 저장 요청
+            const result = await window.vscBridge.sendCommand('images:saveDroppedFile', {
+                filename,
+                ...data
+            });
+
+            if (!result || !result.url) {
+                this.modules.ui?.showToast('Failed to save image', 'error');
+                return;
+            }
+
+            // 기존 _handleImageDrop 로직 재사용 (mock event 전달)
+            this._handleImageDrop(
+                { clientX: coords.x, clientY: coords.y },
+                { url: result.url, name: result.name },
+                doc
+            );
+        } catch (err) {
+            console.error('[EditorApp] External image drop error:', err);
+            this.modules.ui?.showToast('Image drop failed: ' + err.message, 'error');
+        }
+    }
+
+    /**
+     * VS Code 전용: 컨텍스트 메뉴에 "파일에서 이미지 삽입" 아이템 동적 추가
+     */
+    _injectInsertImageMenuItem() {
+        const menu = this.modules.contextMenu.contextMenu;
+        if (!menu) return;
+
+        // 구분선 추가
+        const divider = document.createElement('div');
+        divider.className = 'editor-context-menu-divider';
+
+        // 메뉴 아이템 추가
+        const item = document.createElement('div');
+        item.className = 'editor-context-menu-item';
+        item.dataset.action = 'insertImageFromFile';
+        item.innerHTML = '<span class="icon">📂</span><span>Insert image from file</span><span class="shortcut"></span>';
+
+        menu.appendChild(divider);
+        menu.appendChild(item);
+
+        // 이벤트 핸들러 등록
+        this.modules.contextMenu.on('action:insertImageFromFile', () => {
+            this._insertImageFromFile();
+        });
+    }
+
+    /**
+     * VS Code 파일 선택 다이얼로그를 열어 이미지를 선택하고 선택된 요소에 적용
+     * - IMG 요소: src 교체
+     * - 일반 요소: background-image 설정
+     */
+    async _insertImageFromFile() {
+        const element = this.modules.selection.getSelectedElement();
+        if (!element) {
+            this.modules.ui?.showToast('Please select an element first', 'warning');
+            return;
+        }
+
+        try {
+            const result = await window.vscBridge.sendCommand('images:pickFile');
+            if (!result || result.cancelled) return;
+            if (!result.url) {
+                this.modules.ui?.showToast('Failed to select image', 'error');
+                return;
+            }
+
+            const doc = this.modules.preview.getDocument();
+            if (!doc) return;
+
+            const url = this._toRelativeImagePath(result.url);
+
+            if (element.tagName === 'IMG') {
+                // IMG 요소: src 교체
+                const oldSrc = element.getAttribute('src') || '';
+                element.setAttribute('src', url);
+                this.modules.undoRedo.recordChange({
+                    type: 'attribute',
+                    elementPath: this.modules.undoRedo.getElementPath(element),
+                    property: 'src',
+                    oldValue: oldSrc,
+                    newValue: url,
+                    timestamp: Date.now()
+                });
+            } else {
+                // 일반 요소: background-image 설정
+                const win = doc.defaultView;
+                const computed = win.getComputedStyle(element);
+                const oldBg = element.style.backgroundImage || '';
+
+                element.style.backgroundImage = `url('${url}')`;
+                if (!element.style.backgroundSize && computed.backgroundSize === 'auto') {
+                    element.style.backgroundSize = 'cover';
+                }
+                if (!element.style.backgroundRepeat && computed.backgroundRepeat === 'repeat') {
+                    element.style.backgroundRepeat = 'no-repeat';
+                }
+
+                this.modules.undoRedo.recordChange({
+                    type: 'style',
+                    elementPath: this.modules.undoRedo.getElementPath(element),
+                    property: 'backgroundImage',
+                    oldValue: oldBg,
+                    newValue: `url('${url}')`,
+                    timestamp: Date.now()
+                });
+            }
+
+            this.saveHTML();
+            this.modules.overlay.updateOverlay();
+            this.modules.ui?.showToast(
+                element.tagName === 'IMG' ? 'Image replaced' : 'Background image set',
+                'success'
+            );
+        } catch (err) {
+            console.error('[EditorApp] Insert image from file error:', err);
+            this.modules.ui?.showToast('Failed to insert image: ' + err.message, 'error');
+        }
     }
 
     /**
@@ -4635,7 +5446,7 @@ class EditorApp extends EventEmitter {
             });
 
             // Remove editor-injected <base> tag (srcdoc용 상대 경로 해결용)
-            const editorBase = clonedDoc.querySelector('#bazix-editor-base');
+            const editorBase = clonedDoc.querySelector('#zaemit-editor-base');
             if (editorBase) editorBase.remove();
 
             // Remove editor UI elements from clone
@@ -4726,11 +5537,11 @@ class EditorApp extends EventEmitter {
                 }
             }
 
-            // Serialize bazix-temp-styles CSSOM rules to textContent before saving
+            // Serialize zaemit-temp-styles CSSOM rules to textContent before saving
             // (CSSOM modifications via rule.style.setProperty don't update textContent)
-            const tempStyle = clonedDoc.querySelector('#bazix-temp-styles');
+            const tempStyle = clonedDoc.querySelector('#zaemit-temp-styles');
             if (tempStyle) {
-                const liveStyle = doc.getElementById('bazix-temp-styles');
+                const liveStyle = doc.getElementById('zaemit-temp-styles');
                 if (liveStyle && liveStyle.sheet) {
                     let cssText = '';
                     for (const rule of liveStyle.sheet.cssRules) {
@@ -4826,6 +5637,124 @@ class EditorApp extends EventEmitter {
                     el.removeAttribute('class');
                 }
             });
+
+            // ===== VS Code Extension: 인라인 주입 태그 정리 =====
+            // srcdoc 프리뷰를 위해 주입한 인라인 CSS/JS를 제거하고 외부 파일 참조 복원
+            if (window.vscBridge) {
+                const head = clonedDoc.querySelector('head');
+                const body = clonedDoc.querySelector('body');
+
+                // 1. <style id="zaemit-injected-css"> 모두 제거 → <link href="style.css"> 복원
+                const injectedCssList = clonedDoc.querySelectorAll('#zaemit-injected-css');
+                if (injectedCssList.length > 0) {
+                    injectedCssList.forEach(el => el.remove());
+                    if (head) {
+                        const link = doc.createElement('link');
+                        link.rel = 'stylesheet';
+                        link.href = 'style.css';
+                        head.appendChild(link);
+                    }
+                }
+
+                // 2. <style id="zaemit-temp-styles"> 모두 제거 (saveCSS()에서 이미 style.css에 병합됨)
+                clonedDoc.querySelectorAll('#zaemit-temp-styles').forEach(el => el.remove());
+
+                // 3. <script id="zaemit-injected-js"> 모두 제거 → <script src="script.js"> 복원
+                const injectedJsList = clonedDoc.querySelectorAll('#zaemit-injected-js');
+                if (injectedJsList.length > 0) {
+                    injectedJsList.forEach(el => el.remove());
+                    if (body) {
+                        const script = doc.createElement('script');
+                        script.src = 'script.js';
+                        body.appendChild(script);
+                    }
+                }
+
+                // 4. <script id="zaemit-link-interceptor"> 모두 제거 (에디터 전용)
+                clonedDoc.querySelectorAll('#zaemit-link-interceptor').forEach(el => el.remove());
+
+                // 5. blob/data URL → 상대 경로 변환 (data-zaemit-save-url 속성 기반)
+                clonedDoc.querySelectorAll('[data-zaemit-save-url]').forEach(el => {
+                    const saveUrl = el.getAttribute('data-zaemit-save-url');
+                    // background-image blob/data URL 변환
+                    const style = el.getAttribute('style');
+                    if (style && (style.includes('blob:') || style.includes('data:image'))) {
+                        el.setAttribute('style', style.replace(/url\(['"]?(?:blob:|data:image\/)[^'")\s]+['"]?\)/gi, `url('${saveUrl}')`));
+                    }
+                    // src blob/data URL 변환
+                    const src = el.getAttribute('src');
+                    if (src && (src.startsWith('blob:') || src.startsWith('data:image'))) {
+                        el.setAttribute('src', saveUrl);
+                    }
+                    el.removeAttribute('data-zaemit-save-url');
+                });
+
+                // 5-b. data-zaemit-save-url 없이 남아있는 stale blob/data URL 정리
+                clonedDoc.querySelectorAll('[style]').forEach(el => {
+                    const style = el.getAttribute('style');
+                    if (style && style.includes('blob:')) {
+                        const cleaned = style.replace(/url\(['"]?blob:[^'")\s]+['"]?\)/gi, 'none');
+                        el.setAttribute('style', cleaned);
+                    }
+                });
+                clonedDoc.querySelectorAll('img[src], source[src], video[src]').forEach(el => {
+                    const src = el.getAttribute('src');
+                    if (src && src.startsWith('blob:')) {
+                        el.removeAttribute('src');
+                    }
+                });
+
+                // 6. webview URI → 상대 경로 변환 (인라인 스타일 + src 속성, fallback)
+                const baseUri = window.vscBridge?.projectBaseUri;
+                if (baseUri) {
+                    const decodedBase = decodeURIComponent(baseUri);
+                    clonedDoc.querySelectorAll('[style]').forEach(el => {
+                        let style = el.getAttribute('style');
+                        if (style && (style.includes('vscode-resource') || style.includes('vscode-cdn'))) {
+                            // url('webviewUri/path') → url('relativePath')
+                            style = style.replace(/url\(['"]?(https?:\/\/[^'")\s]+)['"]?\)/gi, (match, fullUrl) => {
+                                const decoded = decodeURIComponent(fullUrl);
+                                if (decoded.startsWith(decodedBase)) {
+                                    let rel = decoded.substring(decodedBase.length);
+                                    if (rel.startsWith('/')) rel = rel.substring(1);
+                                    return `url('${rel}')`;
+                                }
+                                return match;
+                            });
+                            el.setAttribute('style', style);
+                        }
+                    });
+                    clonedDoc.querySelectorAll('img[src], source[src], video[src], audio[src]').forEach(el => {
+                        const src = el.getAttribute('src');
+                        if (src && (src.includes('vscode-resource') || src.includes('vscode-cdn'))) {
+                            const decoded = decodeURIComponent(src);
+                            if (decoded.startsWith(decodedBase)) {
+                                let rel = decoded.substring(decodedBase.length);
+                                if (rel.startsWith('/')) rel = rel.substring(1);
+                                el.setAttribute('src', rel);
+                            }
+                        }
+                    });
+                }
+
+                // 7. bare 링크 인터셉터 + script.js 중복 제거 (ID 없이 저장된 이전 버그 잔재)
+                const jsFileContent = window.vscBridge?.getFile?.('script.js');
+                const trimmedJsContent = jsFileContent?.trim();
+                clonedDoc.querySelectorAll('script').forEach(script => {
+                    // src나 id가 있으면 건드리지 않음 (외부 참조 또는 이미 처리됨)
+                    if (script.src || script.id) return;
+                    const content = script.textContent.trim();
+                    // 링크 인터셉터 패턴
+                    if (content.includes('e.target.closest("a")') && content.includes('e.preventDefault()')) {
+                        script.remove();
+                        return;
+                    }
+                    // script.js 내용과 동일한 bare script
+                    if (trimmedJsContent && content === trimmedJsContent) {
+                        script.remove();
+                    }
+                });
+            }
 
             const html = '<!DOCTYPE html>\n' + clonedDoc.outerHTML;
             return html;
@@ -4944,7 +5873,7 @@ class EditorApp extends EventEmitter {
             });
 
             if (response.ok) {
-                await this.modules.version.loadVersions();
+                await this.modules.version?.loadVersions();
                 this.modules.ui.showSuccess('Version renamed');
             } else {
                 throw new Error('Failed to rename version');

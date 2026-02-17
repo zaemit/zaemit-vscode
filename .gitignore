@@ -9,6 +9,7 @@ media/modules/*.js
 !media/modules/CodeEditor.js
 !media/modules/VSCodeBridge.js
 !media/modules/webview-entry.js
+!media/modules/MotionManager.js
 media/modules/styles/
 
 # 공유 리소스 (sync로 복사)

@@ -17,6 +17,7 @@ class VSCodeBridge {
         this.projectId = 'vscode-project'; // VS Code에서는 고정 ID
         this.projectName = '';
         this.projectDir = '';
+        this.projectBaseUri = '';
         this._ready = false;
         this._readyCallbacks = [];
 
@@ -57,6 +58,7 @@ class VSCodeBridge {
                     this.projectFiles = msg.payload.files || {};
                     this.projectName = msg.payload.projectName || '';
                     this.projectDir = msg.payload.projectDir || '';
+                    this.projectBaseUri = msg.payload.projectBaseUri || '';
                     this._ready = true;
                     for (const cb of this._readyCallbacks) cb();
                     this._readyCallbacks = [];
@@ -147,6 +149,31 @@ class VSCodeBridge {
         if (this.vscode) {
             this.vscode.postMessage(msg);
         }
+    }
+
+    /**
+     * Extension Host에 커맨드 전송 (비-API 요청-응답 패턴)
+     * api:request가 아닌 커스텀 메시지 타입 사용
+     */
+    sendCommand(type, payload = {}) {
+        return new Promise((resolve, reject) => {
+            const requestId = this._generateId();
+            this.pending.set(requestId, { resolve, reject });
+
+            this.postMessage({
+                type,
+                requestId,
+                payload
+            });
+
+            // 60초 타임아웃 (폴더 다이얼로그 대기 시간 고려)
+            setTimeout(() => {
+                if (this.pending.has(requestId)) {
+                    this.pending.delete(requestId);
+                    reject(new Error(`Command timeout: ${type}`));
+                }
+            }, 60000);
+        });
     }
 
     /**

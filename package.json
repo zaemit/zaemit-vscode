@@ -1,22 +1,69 @@
 {
-  "name": "bazix-visual-editor",
-  "displayName": "Bazix Visual Editor",
+  "name": "zaemit-visual-editor",
+  "displayName": "Zaemit Visual Editor",
   "description": "Visual HTML/CSS editor for VS Code - edit web pages visually with drag & drop, style editing, and live preview",
-  "version": "0.0.1",
-  "publisher": "bazix",
+  "version": "0.0.7",
+  "publisher": "zaemit",
+  "license": "SEE LICENSE IN LICENSE",
+  "homepage": "https://zaemit.github.io/zaemit-vscode/docs/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zaemit/zaemit-vscode"
+  },
+  "bugs": {
+    "url": "https://github.com/zaemit/zaemit-vscode/issues"
+  },
   "engines": {
     "vscode": "^1.85.0"
   },
+  "icon": "media/icons/zaemit-logo-128.png",
   "categories": [
-    "Other"
+    "Other",
+    "Visualization"
+  ],
+  "keywords": [
+    "html",
+    "css",
+    "visual editor",
+    "wysiwyg",
+    "drag and drop",
+    "web design",
+    "live preview"
   ],
   "activationEvents": [],
   "main": "./dist/extension.js",
   "contributes": {
+    "commands": [
+      {
+        "command": "zaemit.openWithEditor",
+        "title": "Open with Zaemit Visual Editor",
+        "icon": {
+          "light": "media/icons/zaemit-icon-light.svg",
+          "dark": "media/icons/zaemit-icon-dark.svg"
+        }
+      },
+      {
+        "command": "zaemit.openCurrentFile",
+        "title": "Zaemit: Open Current File in Visual Editor",
+        "icon": {
+          "light": "media/icons/zaemit-icon-light.svg",
+          "dark": "media/icons/zaemit-icon-dark.svg"
+        }
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "zaemit.openWithEditor",
+          "when": "resourceExtname == .html",
+          "group": "navigation"
+        }
+      ]
+    },
     "customEditors": [
       {
-        "viewType": "bazix.visualEditor",
-        "displayName": "Bazix Visual Editor",
+        "viewType": "zaemit.visualEditor",
+        "displayName": "Zaemit Visual Editor",
         "selector": [
           {
             "filenamePattern": "*.html"
@@ -26,9 +73,8 @@
       }
     ]
   },
-  "type": "module",
   "scripts": {
-    "sync": "node scripts/sync-modules.js",
+    "sync": "node scripts/sync-modules.mjs",
     "build": "npm run sync && node esbuild.config.mjs",
     "dev": "npm run sync && node esbuild.config.mjs --watch",
     "vscode:prepublish": "npm run build"

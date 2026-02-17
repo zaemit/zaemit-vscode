@@ -1,0 +1,15 @@
+.vscode/**
+src/**
+scripts/**
+test-project/**
+node_modules/**
+esbuild.config.mjs
+tsconfig.json
+.gitignore
+**/*.map
+*.exe
+*.zip
+*.sed
+install.bat
+install.cmd
+media/modules/**

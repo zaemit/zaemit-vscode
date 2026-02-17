@@ -31,15 +31,29 @@ const webviewBuild = {
     }
 };
 
+// 3. VSCodeBridge 별도 minify (별도 <script>로 로드됨)
+const bridgeBuild = {
+    entryPoints: ['media/modules/VSCodeBridge.js'],
+    bundle: false,
+    outfile: 'dist/bridge.js',
+    platform: 'browser',
+    target: 'es2020',
+    format: 'esm',
+    sourcemap: false,
+    minify: !isWatch
+};
+
 if (isWatch) {
     const ctx1 = await esbuild.context(extensionBuild);
     const ctx2 = await esbuild.context(webviewBuild);
-    await Promise.all([ctx1.watch(), ctx2.watch()]);
+    const ctx3 = await esbuild.context(bridgeBuild);
+    await Promise.all([ctx1.watch(), ctx2.watch(), ctx3.watch()]);
     console.log('Watching for changes...');
 } else {
     await Promise.all([
         esbuild.build(extensionBuild),
-        esbuild.build(webviewBuild)
+        esbuild.build(webviewBuild),
+        esbuild.build(bridgeBuild)
     ]);
-    console.log('Build complete (Extension + WebView).');
+    console.log('Build complete (Extension + WebView + Bridge).');
 }

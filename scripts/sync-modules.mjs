@@ -1,7 +1,7 @@
 /**
  * sync-modules.js
  *
- * 원본 Bazix 에디터 모듈을 VS Code 확장 프로젝트로 동기화합니다.
+ * 원본 Zaemit 에디터 모듈을 VS Code 확장 프로젝트로 동기화합니다.
  * VS Code 전용으로 수정된 파일은 건너뜁니다.
  *
  * 사용: npm run sync
@@ -33,6 +33,8 @@ const EXCLUDE_FILES = new Set([
     'PublishManager.js',
     'VSCodeBridge.js',
     'webview-entry.js',
+    'MotionManager.js',
+    'ImageManager.js',
 ]);
 
 let copied = 0;
@@ -86,7 +88,7 @@ async function syncDirectory(srcDir, dstDir, excludes = new Set()) {
 }
 
 async function main() {
-    console.log('[sync] Bazix 에디터 모듈 동기화 시작...');
+    console.log('[sync] Zaemit 에디터 모듈 동기화 시작...');
     console.log(`[sync] 원본: ${relative(PROJECT_ROOT, SRC_MODULES)}`);
     console.log(`[sync] 대상: ${relative(PROJECT_ROOT, DST_MODULES)}`);
     console.log(`[sync] 제외: ${[...EXCLUDE_FILES].join(', ')}`);
