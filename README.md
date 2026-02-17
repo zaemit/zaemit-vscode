@@ -2,7 +2,7 @@
 
 > Edit HTML/CSS visually inside VS Code — no browser needed.
 
-![Zaemit Editor Overview](media/screenshots/ref1.png)
+![Zaemit Editor Overview](https://raw.githubusercontent.com/zaemit/zaemit-vscode/main/media/screenshots/ref1.png)
 
 ---
 
@@ -17,7 +17,7 @@ Tired of switching between your code editor and browser to tweak designs? Zaemit
 ### Visual Drag & Drop Editing
 Click any element to select it. Drag to move. Resize with handles. Rotate freely. Everything you do visually is reflected in clean, production-ready HTML/CSS code.
 
-![Visual Editing](media/screenshots/ref3.png)
+![Visual Editing](https://raw.githubusercontent.com/zaemit/zaemit-vscode/main/media/screenshots/ref3.png)
 
 ### Comprehensive Style Panel
 No more guessing CSS property names. The style panel gives you intuitive controls for:
@@ -29,7 +29,7 @@ No more guessing CSS property names. The style panel gives you intuitive control
 - **Effects** — Opacity, box shadow, text shadow, transform, transition, cursor
 - **Overflow** — Scroll behavior per axis
 
-![Style Panel](media/screenshots/ref4.png)
+![Style Panel](https://raw.githubusercontent.com/zaemit/zaemit-vscode/main/media/screenshots/ref4.png)
 
 ### Responsive Design Mode
 Instantly preview your page at different screen sizes. Switch between Desktop, Tablet, and Mobile viewports with a single click. Design responsive layouts without leaving VS Code.
@@ -53,7 +53,7 @@ Hold `Ctrl` and click to select multiple elements. Apply styles, move, or delete
 
 ## Getting Started
 
-![Getting Started](media/screenshots/ref2.png)
+![Getting Started](https://raw.githubusercontent.com/zaemit/zaemit-vscode/main/media/screenshots/ref2.png)
 
 ### 1. Install the Extension
 Search **"Zaemit"** in the VS Code Marketplace and click Install. No additional configuration needed.
