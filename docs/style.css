@@ -240,22 +240,26 @@ kbd {
     padding: 16px 20px;
     margin: 16px 0;
     font-size: 14px;
+    border: 1px solid;
 }
 .callout-tip {
-    background: #14532d20;
-    border-left: 3px solid #22c55e;
+    background: #14532d15;
+    border-color: #22c55e30;
 }
 .callout-tip .callout-title { color: #22c55e; }
+.callout-tip .callout-title::before { content: "✦ "; }
 .callout-warning {
-    background: #78350f20;
-    border-left: 3px solid #f59e0b;
+    background: #78350f15;
+    border-color: #f59e0b30;
 }
 .callout-warning .callout-title { color: #f59e0b; }
+.callout-warning .callout-title::before { content: "▲ "; }
 .callout-info {
-    background: #1e3a5f20;
-    border-left: 3px solid #3b82f6;
+    background: #1e3a5f15;
+    border-color: #3b82f630;
 }
 .callout-info .callout-title { color: #3b82f6; }
+.callout-info .callout-title::before { content: "● "; }
 .callout-title {
     font-weight: 600;
     margin-bottom: 4px;

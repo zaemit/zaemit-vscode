@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -74,7 +74,7 @@
 <!-- Hero -->
 <div class="hero">
     <h1><span>Zaemit</span> Visual Editor</h1>
-    <p>VS Code 안에서 HTML/CSS를 시각적으로 편집하세요. 브라우저 없이, 코드 에디터를 떠나지 않고.</p>
+    <p>Edit HTML/CSS visually inside VS Code. No browser needed, no context switching.</p>
     <span class="hero-badge">VS Code Extension v0.0.5</span>
 </div>
 
@@ -84,97 +84,97 @@
 
 <h2 id="installation">Installation</h2>
 
-<h3>VS Code Marketplace에서 설치</h3>
+<h3>Install from VS Code Marketplace</h3>
 <ol class="steps">
     <li>
-        <strong>VS Code를 엽니다.</strong><br>
-        좌측 사이드바에서 확장 프로그램 아이콘(블록 모양)을 클릭하거나, <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>X</kbd>를 누릅니다.
+        <strong>Open VS Code.</strong><br>
+        Click the Extensions icon in the left sidebar, or press <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>X</kbd>.
     </li>
     <li>
-        <strong>검색창에 "Zaemit"을 입력합니다.</strong><br>
-        검색 결과에서 <strong>Zaemit Visual Editor</strong>를 찾습니다.
+        <strong>Search for "Zaemit" in the search bar.</strong><br>
+        Find <strong>Zaemit Visual Editor</strong> in the search results.
     </li>
     <li>
-        <strong>Install 버튼을 클릭합니다.</strong><br>
-        설치가 완료되면 별도의 설정 없이 바로 사용할 수 있습니다.
+        <strong>Click the Install button.</strong><br>
+        Once installed, no additional configuration is needed. You're ready to go.
     </li>
 </ol>
 
 <div class="img-placeholder">
     <span class="label">IMAGE: marketplace-install.png</span>
-    VS Code Marketplace에서 Zaemit 검색 및 설치 화면
+    VS Code Marketplace search results showing Zaemit Visual Editor
 </div>
 
-<h3>VSIX 파일로 직접 설치</h3>
-<p><code>.vsix</code> 파일을 직접 받은 경우, 다음 방법으로 설치할 수 있습니다:</p>
+<h3>Install from VSIX File</h3>
+<p>If you received a <code>.vsix</code> file directly, you can install it using the command line:</p>
 <pre><code>code --install-extension zaemit-visual-editor-0.0.5.vsix --force</code></pre>
-<p>또는 VS Code에서 <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd> → <code>Extensions: Install from VSIX...</code>를 선택하고 파일을 지정합니다.</p>
+<p>Alternatively, open the Command Palette (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>) and select <code>Extensions: Install from VSIX...</code>, then choose the file.</p>
 
 
 <h2 id="first-open">Opening Your First File</h2>
 
-<p>Zaemit Visual Editor로 HTML 파일을 여는 방법은 두 가지입니다:</p>
+<p>There are two ways to open an HTML file with Zaemit Visual Editor:</p>
 
-<h3>방법 1: 우클릭 메뉴</h3>
+<h3>Method 1: Right-Click Context Menu</h3>
 <ol class="steps">
     <li>
-        <strong>VS Code 탐색기에서 <code>.html</code> 파일을 찾습니다.</strong><br>
-        프로젝트 내 어떤 HTML 파일이든 가능합니다.
+        <strong>Find any <code>.html</code> file in the VS Code Explorer.</strong><br>
+        Any HTML file in your project will work.
     </li>
     <li>
-        <strong>파일을 마우스 오른쪽 버튼으로 클릭합니다.</strong><br>
-        컨텍스트 메뉴가 나타납니다.
+        <strong>Right-click on the file.</strong><br>
+        A context menu will appear.
     </li>
     <li>
-        <strong>"Open with Zaemit Visual Editor"를 선택합니다.</strong><br>
-        새 에디터 탭에서 비주얼 에디터가 열립니다.
+        <strong>Select "Open with Zaemit Visual Editor".</strong><br>
+        The visual editor opens in a new editor tab.
     </li>
 </ol>
 
 <div class="img-placeholder">
     <span class="label">IMAGE: open-context-menu.png</span>
-    HTML 파일 우클릭 시 "Open with Zaemit Visual Editor" 메뉴
+    Right-click context menu showing "Open with Zaemit Visual Editor" option
 </div>
 
-<h3>방법 2: 상태바 버튼</h3>
-<p>VS Code 하단 상태바에 있는 <strong>Zaemit</strong> 버튼을 클릭하면, 현재 열려 있는 HTML 파일을 비주얼 에디터로 엽니다.</p>
+<h3>Method 2: Status Bar Button</h3>
+<p>Click the <strong>Zaemit</strong> button in the bottom status bar of VS Code. This opens the currently active HTML file in the visual editor.</p>
 
 <div class="img-placeholder">
     <span class="label">IMAGE: status-bar-button.png</span>
-    VS Code 하단 상태바의 Zaemit 버튼
+    VS Code status bar with the Zaemit button highlighted
 </div>
 
 <div class="callout callout-tip">
     <div class="callout-title">TIP</div>
-    HTML 파일이 아닌 파일이 열려 있을 때 Zaemit 버튼을 누르면 "HTML 파일을 열어주세요" 안내가 나타납니다.
+    If a non-HTML file is currently open, clicking the Zaemit button will show a message asking you to open an HTML file first.
 </div>
 
 
 <h2 id="editor-overview">Editor Overview</h2>
 
-<p>Zaemit Visual Editor는 크게 4개의 영역으로 구성됩니다:</p>
+<p>The Zaemit Visual Editor interface consists of four main areas:</p>
 
 <div class="img-placeholder">
     <span class="label">IMAGE: editor-overview-annotated.png</span>
-    에디터 전체 화면 구성 (각 영역 번호 표시)
+    Full editor layout with numbered annotations for each area
 </div>
 
 <div class="feature-grid">
     <div class="feature-card">
-        <h4>1. Canvas (중앙)</h4>
-        <p>HTML 페이지의 라이브 프리뷰. 여기서 요소를 클릭하고, 드래그하고, 수정합니다. iframe 기반으로 실제 브라우저 렌더링과 동일합니다.</p>
+        <h4>1. Canvas (Center)</h4>
+        <p>A live preview of your HTML page. Click, drag, and modify elements directly here. Rendered in an iframe for accurate browser-like rendering.</p>
     </div>
     <div class="feature-card">
-        <h4>2. Layer Panel (좌측)</h4>
-        <p>페이지의 DOM 트리를 시각적으로 보여줍니다. 요소를 탐색하고, 이름을 변경하고, 순서를 바꿀 수 있습니다.</p>
+        <h4>2. Layer Panel (Left)</h4>
+        <p>Displays the DOM tree visually. Browse, select, rename, and reorder elements in the hierarchy.</p>
     </div>
     <div class="feature-card">
-        <h4>3. Style Panel (우측)</h4>
-        <p>선택한 요소의 CSS 속성을 편집합니다. 레이아웃, 크기, 타이포그래피, 테두리, 배경, 효과 등 모든 스타일을 제어합니다.</p>
+        <h4>3. Style Panel (Right)</h4>
+        <p>Edit CSS properties of the selected element. Controls for layout, size, typography, borders, backgrounds, effects, and more.</p>
     </div>
     <div class="feature-card">
-        <h4>4. Toolbar (상단)</h4>
-        <p>뷰 모드 전환(Desktop/Tablet/Mobile), 줌 컨트롤, 저장, 실행취소/다시실행 등의 도구 모음입니다.</p>
+        <h4>4. Toolbar (Top)</h4>
+        <p>View mode switching (Desktop/Tablet/Mobile), zoom controls, save, undo/redo, and other tools.</p>
     </div>
 </div>
 
@@ -185,151 +185,151 @@
 
 <h2 id="selecting-elements">Selecting Elements</h2>
 
-<p>캔버스에서 요소를 클릭하면 해당 요소가 선택됩니다. 선택된 요소에는 다음이 표시됩니다:</p>
+<p>Click on any element in the canvas to select it. When selected, the following indicators appear:</p>
 
 <ul>
-    <li><strong>파란색 테두리</strong> — 선택된 요소의 경계를 나타냅니다</li>
-    <li><strong>리사이즈 핸들</strong> — 8개 방향(모서리 4개 + 변 4개)의 크기 조절 핸들</li>
-    <li><strong>회전 핸들</strong> — 상단에 회전을 위한 원형 핸들</li>
-    <li><strong>요소 라벨</strong> — 좌측 상단에 태그명(예: div, h1, img)이 표시됩니다</li>
-    <li><strong>스페이싱 핸들</strong> — 요소 주변에 마진/패딩 조절 핸들이 나타납니다</li>
+    <li><strong>Blue border</strong> — Outlines the boundaries of the selected element</li>
+    <li><strong>Resize handles</strong> — 8 handles (4 corners + 4 edges) for resizing</li>
+    <li><strong>Rotation handle</strong> — A circular handle above the element for rotation</li>
+    <li><strong>Element label</strong> — Tag name (e.g., div, h1, img) shown at the top-left corner</li>
+    <li><strong>Spacing handles</strong> — Handles around the element for adjusting margin and padding</li>
 </ul>
 
 <div class="img-placeholder">
     <span class="label">IMAGE: element-selected.png</span>
-    요소 선택 시 나타나는 오버레이 (테두리, 핸들, 라벨 표시)
+    Selected element with overlay showing border, handles, and label
 </div>
 
 <div class="callout callout-info">
     <div class="callout-title">INFO</div>
-    캔버스의 빈 영역을 클릭하면 선택이 해제됩니다. <kbd>Esc</kbd> 키를 눌러도 선택 해제됩니다.
+    Click on an empty area of the canvas to deselect. You can also press <kbd>Esc</kbd> to deselect.
 </div>
 
-<h3>요소 선택 방법들</h3>
+<h3>Ways to Select Elements</h3>
 <ul>
-    <li><strong>캔버스 클릭</strong> — 가장 기본적인 방법. 원하는 요소를 직접 클릭</li>
-    <li><strong>Layer Panel 클릭</strong> — 좌측 레이어 패널에서 요소 이름을 클릭</li>
-    <li><strong>중첩 요소</strong> — 요소가 겹쳐있는 경우, 라벨의 왼쪽 화살표(◀)를 클릭하면 부모 요소를 선택할 수 있습니다</li>
+    <li><strong>Canvas click</strong> — The most common method. Click directly on the desired element.</li>
+    <li><strong>Layer Panel click</strong> — Click an element name in the left Layer Panel.</li>
+    <li><strong>Nested elements</strong> — If elements overlap, click the left arrow (◀) on the label to select the parent element.</li>
 </ul>
 
 
 <h2 id="moving-elements">Moving Elements</h2>
 
-<p>선택한 요소를 드래그하면 위치를 이동할 수 있습니다.</p>
+<p>Drag a selected element to move it to a new position.</p>
 
-<h3>드래그 이동</h3>
+<h3>Drag to Move</h3>
 <ol>
-    <li>요소를 클릭하여 선택합니다</li>
-    <li>선택된 요소를 마우스로 누른 채 드래그합니다</li>
-    <li>원하는 위치에서 마우스를 놓습니다</li>
+    <li>Click an element to select it.</li>
+    <li>Press and hold the mouse button, then drag.</li>
+    <li>Release the mouse at the desired location.</li>
 </ol>
 
 <div class="callout callout-tip">
     <div class="callout-title">TIP</div>
-    CSS <code>position</code> 속성이 <code>static</code>인 요소는 드래그해도 DOM 순서만 변경됩니다. 자유로운 위치 이동을 원하면 Style Panel에서 position을 <code>absolute</code> 또는 <code>relative</code>로 변경하세요.
+    Elements with CSS <code>position: static</code> (the default) will change their DOM order when dragged, not their pixel position. To freely position an element, change its position to <code>absolute</code> or <code>relative</code> in the Style Panel.
 </div>
 
-<h3>키보드로 DOM 순서 이동</h3>
+<h3>Reorder with Keyboard</h3>
 <ul>
-    <li><kbd>Alt</kbd>+<kbd>↑</kbd> — 요소를 DOM 트리에서 위로 이동 (형제 요소와 순서 교환)</li>
-    <li><kbd>Alt</kbd>+<kbd>↓</kbd> — 요소를 DOM 트리에서 아래로 이동</li>
+    <li><kbd>Alt</kbd>+<kbd>↑</kbd> — Move element up in the DOM tree (swap with previous sibling)</li>
+    <li><kbd>Alt</kbd>+<kbd>↓</kbd> — Move element down in the DOM tree (swap with next sibling)</li>
 </ul>
 
 
 <h2 id="resizing-elements">Resizing Elements</h2>
 
-<p>선택한 요소의 8개 핸들을 드래그하여 크기를 조절합니다:</p>
+<p>Drag any of the 8 handles on a selected element to resize it:</p>
 
 <ul>
-    <li><strong>모서리 핸들</strong> (4개) — 너비와 높이를 동시에 조절</li>
-    <li><strong>상/하 변 핸들</strong> (2개) — 높이만 조절</li>
-    <li><strong>좌/우 변 핸들</strong> (2개) — 너비만 조절</li>
+    <li><strong>Corner handles</strong> (4) — Resize both width and height simultaneously</li>
+    <li><strong>Top/bottom edge handles</strong> (2) — Resize height only</li>
+    <li><strong>Left/right edge handles</strong> (2) — Resize width only</li>
 </ul>
 
 <div class="img-placeholder">
     <span class="label">IMAGE: resize-handles.png</span>
-    요소의 8개 리사이즈 핸들 (모서리 + 변)
+    Element showing all 8 resize handles (corners and edges)
 </div>
 
 <div class="callout callout-tip">
-    <div class="callout-title">TIP: 크기 초기화</div>
-    리사이즈 핸들을 <strong>더블클릭</strong>하면 크기가 <code>auto</code>로 리셋됩니다. 모서리 핸들을 더블클릭하면 너비와 높이가 동시에 리셋됩니다.
+    <div class="callout-title">TIP: Reset Size</div>
+    <strong>Double-click</strong> a resize handle to reset the dimension to <code>auto</code>. Double-clicking a corner handle resets both width and height at once.
 </div>
 
 
 <h2 id="rotating-elements">Rotating Elements</h2>
 
-<p>선택한 요소 상단의 원형 핸들을 드래그하면 요소를 회전할 수 있습니다.</p>
+<p>Drag the circular handle above the selected element to rotate it.</p>
 
 <ul>
-    <li>회전 핸들을 클릭한 채 시계 방향 또는 반시계 방향으로 드래그합니다</li>
-    <li>회전 각도는 CSS <code>transform: rotate()</code>로 적용됩니다</li>
-    <li>Style Panel의 Effects 섹션에서 정확한 각도를 숫자로 입력할 수도 있습니다</li>
+    <li>Click and drag the rotation handle clockwise or counter-clockwise.</li>
+    <li>The rotation is applied as CSS <code>transform: rotate()</code>.</li>
+    <li>You can also enter an exact angle in the Style Panel's Effects section.</li>
 </ul>
 
 
 <h2 id="multi-select">Multi-Select</h2>
 
-<p><kbd>Ctrl</kbd> 키를 누른 채 여러 요소를 클릭하면 다중 선택이 가능합니다.</p>
+<p>Hold <kbd>Ctrl</kbd> and click multiple elements to select them all at once.</p>
 
-<h3>다중 선택으로 할 수 있는 작업</h3>
+<h3>What You Can Do with Multi-Select</h3>
 <ul>
-    <li><strong>일괄 스타일 변경</strong> — 선택된 모든 요소에 동일한 스타일을 한번에 적용</li>
-    <li><strong>일괄 이동</strong> — 선택된 요소들을 함께 드래그</li>
-    <li><strong>일괄 삭제</strong> — <kbd>Delete</kbd> 키로 선택된 모든 요소 삭제</li>
-    <li><strong>정렬</strong> — <kbd>Alt</kbd>+<kbd>L</kbd>/<kbd>M</kbd>/<kbd>R</kbd>로 좌/중앙/우 정렬</li>
+    <li><strong>Batch style changes</strong> — Apply the same style to all selected elements at once</li>
+    <li><strong>Batch move</strong> — Drag selected elements together</li>
+    <li><strong>Batch delete</strong> — Press <kbd>Delete</kbd> to remove all selected elements</li>
+    <li><strong>Alignment</strong> — <kbd>Alt</kbd>+<kbd>L</kbd>/<kbd>M</kbd>/<kbd>R</kbd> to align left/center/right</li>
 </ul>
 
 <div class="callout callout-info">
     <div class="callout-title">INFO</div>
-    Layer Panel에서도 <kbd>Ctrl</kbd>+클릭으로 다중 선택이 가능합니다.
+    Multi-select also works in the Layer Panel — <kbd>Ctrl</kbd>+click to select multiple items.
 </div>
 
 
 <h2 id="text-editing">Text Editing</h2>
 
-<p>텍스트 요소를 <strong>더블클릭</strong>하면 텍스트 편집 모드에 진입합니다.</p>
+<p><strong>Double-click</strong> a text element to enter text editing mode.</p>
 
-<h3>텍스트 편집 모드에서 가능한 작업</h3>
+<h3>Available Actions in Text Editing Mode</h3>
 <ul>
-    <li>직접 텍스트 입력 및 수정</li>
-    <li>텍스트 드래그 선택 → 서식 툴바 표시</li>
-    <li><kbd>Ctrl</kbd>+<kbd>C</kbd>/<kbd>V</kbd> — 텍스트 복사/붙여넣기</li>
-    <li><kbd>Ctrl</kbd>+<kbd>Z</kbd> — 텍스트 편집 되돌리기</li>
-    <li><kbd>Enter</kbd> — 줄바꿈 (<code>&lt;br&gt;</code> 삽입)</li>
-    <li><kbd>Esc</kbd> — 텍스트 편집 모드 종료</li>
+    <li>Type directly to modify text content</li>
+    <li>Select text with the mouse to reveal the formatting toolbar</li>
+    <li><kbd>Ctrl</kbd>+<kbd>C</kbd>/<kbd>V</kbd> — Copy/paste text</li>
+    <li><kbd>Ctrl</kbd>+<kbd>Z</kbd> — Undo text changes</li>
+    <li><kbd>Enter</kbd> — Insert a line break (<code>&lt;br&gt;</code>)</li>
+    <li><kbd>Esc</kbd> — Exit text editing mode</li>
 </ul>
 
 <div class="img-placeholder">
     <span class="label">IMAGE: text-editing-toolbar.png</span>
-    텍스트 선택 시 나타나는 인라인 서식 툴바 (Bold, Italic 등)
+    Inline formatting toolbar that appears when text is selected (Bold, Italic, etc.)
 </div>
 
-<h3>텍스트 서식 단축키</h3>
+<h3>Text Formatting Shortcuts</h3>
 <table class="shortcut-table">
-    <thead><tr><th>기능</th><th>단축키</th></tr></thead>
+    <thead><tr><th>Action</th><th>Shortcut</th></tr></thead>
     <tbody>
-        <tr><td>굵게 (Bold)</td><td><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd></td></tr>
-        <tr><td>기울임 (Italic)</td><td><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>I</kbd></td></tr>
-        <tr><td>밑줄 (Underline)</td><td><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>U</kbd></td></tr>
-        <tr><td>글꼴 크기 증가</td><td><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>=</kbd></td></tr>
-        <tr><td>글꼴 크기 감소</td><td><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>-</kbd></td></tr>
-        <tr><td>줄 간격 증가</td><td><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>H</kbd></td></tr>
-        <tr><td>줄 간격 감소</td><td><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>G</kbd></td></tr>
-        <tr><td>자간 증가</td><td><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>K</kbd></td></tr>
-        <tr><td>자간 감소</td><td><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>N</kbd></td></tr>
+        <tr><td>Bold</td><td><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd></td></tr>
+        <tr><td>Italic</td><td><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>I</kbd></td></tr>
+        <tr><td>Underline</td><td><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>U</kbd></td></tr>
+        <tr><td>Increase font size</td><td><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>=</kbd></td></tr>
+        <tr><td>Decrease font size</td><td><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>-</kbd></td></tr>
+        <tr><td>Increase line height</td><td><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>H</kbd></td></tr>
+        <tr><td>Decrease line height</td><td><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>G</kbd></td></tr>
+        <tr><td>Increase letter spacing</td><td><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>K</kbd></td></tr>
+        <tr><td>Decrease letter spacing</td><td><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>N</kbd></td></tr>
     </tbody>
 </table>
 
 
 <h2 id="drag-drop-reorder">Drag &amp; Drop Reorder</h2>
 
-<p>Layer Panel이나 캔버스에서 요소를 드래그하여 DOM 트리의 순서를 변경할 수 있습니다.</p>
+<p>You can reorder elements in the DOM tree by dragging them in the Layer Panel or on the canvas.</p>
 
 <ul>
-    <li><strong>Layer Panel</strong>에서 요소를 다른 위치로 드래그하면 부모/형제 관계가 변경됩니다</li>
-    <li><strong>캔버스</strong>에서 드래그 시, Flex/Grid 컨테이너의 빈 셀에 드롭하면 해당 위치에 요소가 삽입됩니다</li>
-    <li>드래그 중 파란색 가이드 라인이 삽입 위치를 보여줍니다</li>
+    <li><strong>Layer Panel</strong> — Drag an element to a new position to change its parent or sibling order.</li>
+    <li><strong>Canvas</strong> — When dragging over a Flex/Grid container, drop into empty cells to insert at that position.</li>
+    <li>A blue guide line shows the insertion point during drag.</li>
 </ul>
 
 
@@ -339,254 +339,254 @@
 
 <h2 id="style-overview">Style Panel Overview</h2>
 
-<p>우측 Style Panel은 선택한 요소의 모든 CSS 속성을 시각적으로 편집할 수 있는 강력한 도구입니다. 7개의 섹션으로 나뉘어 있습니다.</p>
+<p>The Style Panel on the right side lets you visually edit all CSS properties of the selected element. It's organized into 7 collapsible sections.</p>
 
 <div class="img-placeholder">
     <span class="label">IMAGE: style-panel-full.png</span>
-    Style Panel 전체 모습 (섹션별 접기/펼치기 상태)
+    Full Style Panel with all sections (some collapsed, some expanded)
 </div>
 
 <div class="callout callout-info">
-    <div class="callout-title">INFO: CSS 규칙과 인라인 스타일</div>
-    Zaemit은 가능하면 CSS 규칙(stylesheet)에 스타일을 적용합니다. 인라인 스타일이 이미 있는 경우 인라인을 수정하고, CSS 규칙이 있는 경우 가장 높은 specificity의 규칙을 수정합니다. 이렇게 하면 기존 CSS 구조를 깨뜨리지 않습니다.
+    <div class="callout-title">INFO: CSS Rules vs. Inline Styles</div>
+    Zaemit intelligently applies styles to the appropriate location. If the element already has inline styles, those are modified. If CSS rules exist in a stylesheet, Zaemit finds the rule with the highest specificity and modifies it there. This preserves your existing CSS structure.
 </div>
 
 
 <h2 id="style-layout">Layout</h2>
 
-<p>요소의 레이아웃 관련 속성을 설정합니다.</p>
+<p>Configure how elements are positioned and laid out on the page.</p>
 
 <h3>Display</h3>
-<p>요소의 표시 방식을 선택합니다:</p>
+<p>Choose how the element is rendered:</p>
 <ul>
-    <li><code>block</code> — 블록 레벨 요소 (전체 너비 차지)</li>
-    <li><code>inline</code> — 인라인 요소 (콘텐츠 너비만 차지)</li>
-    <li><code>inline-block</code> — 인라인이지만 블록 속성 사용 가능</li>
-    <li><code>flex</code> — Flexbox 레이아웃 컨테이너</li>
-    <li><code>grid</code> — Grid 레이아웃 컨테이너</li>
-    <li><code>none</code> — 요소를 숨김</li>
+    <li><code>block</code> — Block-level element (takes full width)</li>
+    <li><code>inline</code> — Inline element (takes only content width)</li>
+    <li><code>inline-block</code> — Inline but supports block properties</li>
+    <li><code>flex</code> — Flexbox layout container</li>
+    <li><code>grid</code> — Grid layout container</li>
+    <li><code>none</code> — Hides the element</li>
 </ul>
 
-<h3>Flexbox 속성</h3>
-<p>Display가 <code>flex</code>일 때 추가 속성이 나타납니다:</p>
+<h3>Flexbox Properties</h3>
+<p>When display is set to <code>flex</code>, additional controls appear:</p>
 <ul>
     <li><strong>Direction</strong> — <code>row</code>, <code>column</code>, <code>row-reverse</code>, <code>column-reverse</code></li>
     <li><strong>Wrap</strong> — <code>nowrap</code>, <code>wrap</code>, <code>wrap-reverse</code></li>
-    <li><strong>Justify Content</strong> — 주축 방향 정렬 (start, center, end, space-between, space-around, space-evenly)</li>
-    <li><strong>Align Items</strong> — 교차축 방향 정렬 (start, center, end, stretch, baseline)</li>
-    <li><strong>Gap</strong> — 자식 요소 간 간격</li>
+    <li><strong>Justify Content</strong> — Main-axis alignment (start, center, end, space-between, space-around, space-evenly)</li>
+    <li><strong>Align Items</strong> — Cross-axis alignment (start, center, end, stretch, baseline)</li>
+    <li><strong>Gap</strong> — Spacing between child elements</li>
 </ul>
 
 <div class="img-placeholder">
     <span class="label">IMAGE: style-layout-flex.png</span>
-    Flexbox 레이아웃 설정 UI (Direction, Justify, Align 버튼 그룹)
+    Flexbox layout controls (Direction, Justify, Align button groups)
 </div>
 
 <h3>Position</h3>
-<p>요소의 위치 지정 방식을 선택합니다:</p>
+<p>Choose how the element is positioned:</p>
 <ul>
-    <li><code>static</code> — 기본값, 문서 흐름에 따름</li>
-    <li><code>relative</code> — 원래 위치에서 상대적으로 이동</li>
-    <li><code>absolute</code> — 가장 가까운 positioned 부모 기준으로 절대 위치</li>
-    <li><code>fixed</code> — 뷰포트 기준으로 고정</li>
-    <li><code>sticky</code> — 스크롤 시 고정 위치에 붙음</li>
+    <li><code>static</code> — Default, follows normal document flow</li>
+    <li><code>relative</code> — Offset from its original position</li>
+    <li><code>absolute</code> — Positioned relative to the nearest positioned ancestor</li>
+    <li><code>fixed</code> — Fixed relative to the viewport</li>
+    <li><code>sticky</code> — Sticks to a position when scrolling</li>
 </ul>
-<p>Position이 <code>static</code>이 아닌 경우, <strong>top, right, bottom, left</strong> 값을 입력할 수 있습니다.</p>
+<p>When position is not <code>static</code>, inputs for <strong>top, right, bottom, left</strong> become available.</p>
 
 <h3>Z-Index</h3>
-<p>요소의 쌓임 순서를 제어합니다. 숫자가 높을수록 위에 표시됩니다.</p>
+<p>Controls the stacking order of elements. Higher values appear on top.</p>
 <ul>
-    <li><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>↑</kbd> — z-index 증가</li>
-    <li><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>↓</kbd> — z-index 감소</li>
+    <li><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>↑</kbd> — Increase z-index</li>
+    <li><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>↓</kbd> — Decrease z-index</li>
 </ul>
 
 
 <h2 id="style-size">Size &amp; Spacing</h2>
 
-<p>요소의 크기(너비, 높이)와 간격(마진, 패딩)을 설정합니다.</p>
+<p>Control element dimensions (width, height) and spacing (margin, padding).</p>
 
 <h3>Width / Height</h3>
 <ul>
-    <li>숫자 입력 (px, %, em, rem, vw, vh 등 단위 지원)</li>
-    <li><code>auto</code> — 콘텐츠에 맞게 자동 계산</li>
-    <li><code>fit-content</code> — 콘텐츠에 맞춤</li>
-    <li><code>100%</code> — 부모 요소에 맞춤</li>
+    <li>Enter numeric values with units (px, %, em, rem, vw, vh, etc.)</li>
+    <li><code>auto</code> — Let the browser calculate based on content</li>
+    <li><code>fit-content</code> — Shrink to fit content</li>
+    <li><code>100%</code> — Match parent width/height</li>
 </ul>
 
 <h3>Min/Max Width &amp; Height</h3>
-<p>최소/최대 크기를 설정하여 반응형 디자인에 활용합니다.</p>
+<p>Set minimum and maximum size constraints for responsive design.</p>
 
-<h3>Margin (바깥 여백)</h3>
-<p>요소 바깥의 여백입니다. 상/우/하/좌 각각 개별 설정 가능합니다.</p>
+<h3>Margin (Outer Spacing)</h3>
+<p>Space outside the element. Each side (top, right, bottom, left) can be set independently.</p>
 
 <div class="callout callout-tip">
-    <div class="callout-title">TIP: 스페이싱 드래그</div>
-    캔버스에서 요소를 선택하면, 요소 주변에 연보라색 스페이싱 핸들이 나타납니다. 이 핸들을 드래그하면 마진과 패딩을 시각적으로 조절할 수 있습니다.
+    <div class="callout-title">TIP: Visual Spacing Drag</div>
+    When an element is selected on the canvas, light-purple spacing handles appear around it. Drag these handles to visually adjust margin and padding without using the Style Panel.
 </div>
 
 <div class="img-placeholder">
     <span class="label">IMAGE: spacing-drag-handles.png</span>
-    마진/패딩 스페이싱 핸들 드래그 조절 화면
+    Margin/padding spacing handles being dragged on the canvas
 </div>
 
-<h3>Padding (안쪽 여백)</h3>
-<p>요소 안쪽의 여백입니다. 콘텐츠와 테두리 사이의 공간을 제어합니다.</p>
+<h3>Padding (Inner Spacing)</h3>
+<p>Space inside the element, between the content and the border. Each side can be set independently.</p>
 
 
 <h2 id="style-typography">Typography</h2>
 
-<p>텍스트 관련 모든 CSS 속성을 편집합니다.</p>
+<p>Edit all text-related CSS properties.</p>
 
 <h3>Font Family</h3>
-<p>글꼴을 선택합니다. 시스템 폰트 및 웹폰트(Google Fonts 등)를 지원합니다.</p>
+<p>Select the typeface. System fonts and web fonts (e.g., Google Fonts loaded via CDN) are supported.</p>
 
 <h3>Font Size</h3>
-<p>글꼴 크기를 설정합니다. px, em, rem 등 다양한 단위를 지원합니다.</p>
+<p>Set the text size. Supports px, em, rem, and other CSS units.</p>
 
 <h3>Font Weight</h3>
-<p>글꼴 두께를 선택합니다:</p>
+<p>Choose the thickness of the font:</p>
 <ul>
-    <li><code>100</code> (Thin) ~ <code>900</code> (Black)</li>
+    <li><code>100</code> (Thin) through <code>900</code> (Black)</li>
     <li><code>normal</code> (400), <code>bold</code> (700)</li>
 </ul>
 
 <h3>Text Alignment</h3>
-<p>텍스트 정렬 방식을 선택합니다:</p>
+<p>Choose how text is aligned within the element:</p>
 <ul>
-    <li><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>L</kbd> — 좌측 정렬</li>
-    <li><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>E</kbd> — 중앙 정렬</li>
-    <li><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>R</kbd> — 우측 정렬</li>
-    <li><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>J</kbd> — 양쪽 정렬</li>
+    <li><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>L</kbd> — Align left</li>
+    <li><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>E</kbd> — Align center</li>
+    <li><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>R</kbd> — Align right</li>
+    <li><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>J</kbd> — Justify</li>
 </ul>
 
-<h3>기타 속성</h3>
+<h3>Additional Properties</h3>
 <ul>
-    <li><strong>Line Height</strong> — 줄 간격</li>
-    <li><strong>Letter Spacing</strong> — 글자 간격</li>
-    <li><strong>Text Decoration</strong> — 밑줄, 윗줄, 취소선</li>
-    <li><strong>Text Transform</strong> — 대문자, 소문자, 첫 글자 대문자</li>
-    <li><strong>Color</strong> — 텍스트 색상 (컬러 피커 제공)</li>
+    <li><strong>Line Height</strong> — Spacing between lines of text</li>
+    <li><strong>Letter Spacing</strong> — Spacing between characters</li>
+    <li><strong>Text Decoration</strong> — Underline, overline, line-through</li>
+    <li><strong>Text Transform</strong> — Uppercase, lowercase, capitalize</li>
+    <li><strong>Color</strong> — Text color (with color picker)</li>
 </ul>
 
 
 <h2 id="style-border">Border</h2>
 
-<p>요소의 테두리를 설정합니다. <strong>개별 면(상/우/하/좌)을 각각 다르게 설정</strong>할 수 있습니다.</p>
+<p>Configure element borders. You can set <strong>each side (top, right, bottom, left) independently</strong>.</p>
 
 <div class="img-placeholder">
     <span class="label">IMAGE: style-border-panel.png</span>
-    Border 섹션 UI (면 선택, 스타일/두께/색상/반경 설정)
+    Border section UI showing side selection, style/width/color/radius controls
 </div>
 
-<h3>Border 속성</h3>
+<h3>Border Properties</h3>
 <ul>
-    <li><strong>Width</strong> — 테두리 두께 (px)</li>
-    <li><strong>Style</strong> — solid, dashed, dotted, double, none 등</li>
-    <li><strong>Color</strong> — 테두리 색상 (컬러 피커)</li>
+    <li><strong>Width</strong> — Border thickness in pixels</li>
+    <li><strong>Style</strong> — solid, dashed, dotted, double, none, etc.</li>
+    <li><strong>Color</strong> — Border color (with color picker)</li>
 </ul>
 
 <h3>Border Radius</h3>
-<p>모서리 둥글기를 설정합니다. 4개 모서리를 각각 다르게 설정할 수 있습니다.</p>
+<p>Control corner roundness. Each of the 4 corners can be set independently.</p>
 <ul>
-    <li>숫자 입력 (px, %)</li>
-    <li><code>50%</code>로 설정하면 원형이 됩니다</li>
+    <li>Enter numeric values (px, %)</li>
+    <li>Set to <code>50%</code> to create a circle</li>
 </ul>
 
 
 <h2 id="style-background">Background</h2>
 
-<p>요소의 배경을 설정합니다.</p>
+<p>Configure the element's background.</p>
 
 <h3>Background Color</h3>
-<p>배경 색상을 설정합니다. 컬러 피커에서 직접 선택하거나, HEX/RGB/HSL 값을 입력합니다.</p>
+<p>Set the background color using the color picker, or enter HEX/RGB/HSL values directly.</p>
 
 <h3>Background Image</h3>
 <ul>
-    <li><strong>URL 입력</strong> — 이미지 경로를 직접 입력</li>
-    <li><strong>Size</strong> — cover, contain, auto 또는 직접 입력</li>
-    <li><strong>Position</strong> — center, top, bottom 등</li>
+    <li><strong>URL</strong> — Enter the image path directly</li>
+    <li><strong>Size</strong> — cover, contain, auto, or custom values</li>
+    <li><strong>Position</strong> — center, top, bottom, left, right, etc.</li>
     <li><strong>Repeat</strong> — repeat, no-repeat, repeat-x, repeat-y</li>
 </ul>
 
 
 <h2 id="style-effects">Effects</h2>
 
-<p>시각 효과 관련 속성을 설정합니다.</p>
+<p>Configure visual effect properties.</p>
 
 <h3>Opacity</h3>
-<p>요소의 투명도를 0(완전 투명) ~ 1(완전 불투명) 사이로 설정합니다.</p>
+<p>Set the element's transparency from 0 (fully transparent) to 1 (fully opaque).</p>
 
 <h3>Box Shadow</h3>
-<p>요소에 그림자를 추가합니다:</p>
+<p>Add drop shadows to elements:</p>
 <ul>
-    <li><strong>Offset X/Y</strong> — 그림자 위치</li>
-    <li><strong>Blur</strong> — 흐림 정도</li>
-    <li><strong>Spread</strong> — 그림자 확산</li>
-    <li><strong>Color</strong> — 그림자 색상</li>
-    <li><strong>Inset</strong> — 내부 그림자 여부</li>
+    <li><strong>Offset X/Y</strong> — Shadow position</li>
+    <li><strong>Blur</strong> — Blur radius</li>
+    <li><strong>Spread</strong> — Shadow expansion</li>
+    <li><strong>Color</strong> — Shadow color</li>
+    <li><strong>Inset</strong> — Toggle inner shadow</li>
 </ul>
 
 <h3>Transform</h3>
 <ul>
-    <li><strong>Rotate</strong> — 회전 각도 (deg)</li>
-    <li><strong>Scale</strong> — 크기 배율</li>
-    <li><strong>Translate</strong> — X/Y 이동</li>
-    <li><strong>Skew</strong> — 기울이기</li>
+    <li><strong>Rotate</strong> — Rotation angle in degrees</li>
+    <li><strong>Scale</strong> — Size multiplier</li>
+    <li><strong>Translate</strong> — X/Y offset</li>
+    <li><strong>Skew</strong> — Tilt angle</li>
 </ul>
 
 <h3>Transition</h3>
-<p>CSS 속성 변화에 애니메이션을 추가합니다:</p>
+<p>Add animations to CSS property changes:</p>
 <ul>
-    <li><strong>Property</strong> — 애니메이션할 CSS 속성 (all, opacity, transform 등)</li>
-    <li><strong>Duration</strong> — 지속 시간 (초)</li>
+    <li><strong>Property</strong> — Which CSS property to animate (all, opacity, transform, etc.)</li>
+    <li><strong>Duration</strong> — How long the animation lasts (seconds)</li>
     <li><strong>Timing</strong> — ease, linear, ease-in, ease-out, ease-in-out</li>
 </ul>
 
 <h3>Cursor</h3>
-<p>마우스 커서 모양을 변경합니다: pointer, crosshair, grab, text 등</p>
+<p>Change the mouse cursor appearance: pointer, crosshair, grab, text, etc.</p>
 
 
 <h2 id="style-overflow">Overflow</h2>
 
-<p>요소의 콘텐츠가 크기를 초과할 때의 동작을 설정합니다.</p>
+<p>Control what happens when content overflows the element's boundaries.</p>
 
 <ul>
-    <li><code>visible</code> — 넘치는 콘텐츠를 그대로 표시</li>
-    <li><code>hidden</code> — 넘치는 콘텐츠를 숨김</li>
-    <li><code>scroll</code> — 항상 스크롤바 표시</li>
-    <li><code>auto</code> — 필요할 때만 스크롤바 표시</li>
+    <li><code>visible</code> — Overflowing content is displayed as-is</li>
+    <li><code>hidden</code> — Overflowing content is clipped</li>
+    <li><code>scroll</code> — Always show scrollbars</li>
+    <li><code>auto</code> — Show scrollbars only when needed</li>
 </ul>
-<p>X축(수평)과 Y축(수직)을 개별적으로 설정할 수 있습니다.</p>
+<p>The X-axis (horizontal) and Y-axis (vertical) can be configured independently.</p>
 
 
 <h2 id="style-pseudo">Pseudo-Class States</h2>
 
-<p>Zaemit은 요소의 다양한 상태에 대한 스타일을 편집할 수 있습니다.</p>
+<p>Zaemit lets you edit styles for different interactive states of an element.</p>
 
-<h3>지원하는 상태</h3>
+<h3>Supported States</h3>
 <ul>
-    <li><strong>Default</strong> — 기본 상태</li>
-    <li><strong>:hover</strong> — 마우스를 올렸을 때</li>
-    <li><strong>:focus</strong> — 요소에 포커스가 갔을 때</li>
-    <li><strong>:active</strong> — 클릭 중일 때</li>
+    <li><strong>Default</strong> — Normal state</li>
+    <li><strong>:hover</strong> — When the mouse is over the element</li>
+    <li><strong>:focus</strong> — When the element has keyboard focus</li>
+    <li><strong>:active</strong> — When the element is being clicked</li>
 </ul>
 
 <div class="img-placeholder">
     <span class="label">IMAGE: pseudo-class-selector.png</span>
-    Style Panel 상단의 상태 선택 UI (Default / :hover / :focus / :active)
+    State selector at the top of the Style Panel (Default / :hover / :focus / :active)
 </div>
 
 <div class="callout callout-info">
     <div class="callout-title">INFO</div>
-    Pseudo-class 스타일은 인라인 스타일이 아닌 CSS 규칙(stylesheet)으로 저장됩니다. CSS에서 pseudo-class는 인라인으로 적용할 수 없기 때문입니다.
+    Pseudo-class styles are saved as CSS rules in the stylesheet, not as inline styles. This is because CSS pseudo-classes cannot be applied inline.
 </div>
 
-<h3>사용 예시</h3>
+<h3>Example Workflow</h3>
 <ol>
-    <li>버튼 요소를 선택합니다</li>
-    <li>Style Panel 상단에서 <strong>:hover</strong>를 선택합니다</li>
-    <li>배경 색상을 더 밝은 색으로 변경합니다</li>
-    <li>이제 실제 브라우저에서 마우스를 올리면 색상이 변합니다</li>
+    <li>Select a button element</li>
+    <li>Choose <strong>:hover</strong> from the state selector at the top of the Style Panel</li>
+    <li>Change the background color to a lighter shade</li>
+    <li>Now when you hover over the button in a browser, the color changes</li>
 </ol>
 
 
@@ -596,55 +596,55 @@
 
 <h2 id="layer-panel">Layer Panel</h2>
 
-<p>좌측의 Layer Panel은 페이지의 DOM 트리를 시각적으로 표시합니다.</p>
+<p>The Layer Panel on the left displays the page's DOM tree in a visual hierarchy.</p>
 
 <div class="img-placeholder">
     <span class="label">IMAGE: layer-panel.png</span>
-    Layer Panel 전체 모습 (DOM 트리, 접기/펼치기, 선택 상태)
+    Layer Panel showing DOM tree with expand/collapse, selection state
 </div>
 
-<h3>기능</h3>
+<h3>Features</h3>
 <ul>
-    <li><strong>요소 탐색</strong> — 트리를 펼치거나 접어 원하는 요소를 찾습니다</li>
-    <li><strong>요소 선택</strong> — 요소 이름을 클릭하면 캔버스에서도 선택됩니다</li>
-    <li><strong>다중 선택</strong> — <kbd>Ctrl</kbd>+클릭으로 여러 요소를 선택합니다</li>
-    <li><strong>이름 변경</strong> — <kbd>F2</kbd>를 누르거나 더블클릭하면 요소 이름을 변경합니다 (data-label 속성)</li>
-    <li><strong>순서 변경</strong> — 요소를 드래그하여 다른 위치로 이동합니다</li>
+    <li><strong>Browse elements</strong> — Expand or collapse tree nodes to find elements</li>
+    <li><strong>Select elements</strong> — Click an element name to select it on the canvas</li>
+    <li><strong>Multi-select</strong> — <kbd>Ctrl</kbd>+click to select multiple elements</li>
+    <li><strong>Rename</strong> — Press <kbd>F2</kbd> or double-click to rename an element (sets a data-label attribute)</li>
+    <li><strong>Reorder</strong> — Drag elements to move them to a different position in the tree</li>
 </ul>
 
-<h3>토글</h3>
-<p><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>L</kbd>로 Layer Panel을 열거나 닫을 수 있습니다.</p>
+<h3>Toggle</h3>
+<p>Press <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>L</kbd> to show or hide the Layer Panel.</p>
 
 
 <h2 id="property-panel">Property Panel</h2>
 
-<p>Property Panel은 선택한 요소의 HTML 속성을 편집합니다.</p>
+<p>The Property Panel lets you edit HTML attributes of the selected element.</p>
 
-<h3>편집 가능한 속성</h3>
+<h3>Editable Properties</h3>
 <ul>
-    <li><strong>Tag</strong> — HTML 태그명 변경 (예: div → section)</li>
-    <li><strong>ID</strong> — 요소의 고유 식별자</li>
-    <li><strong>Class</strong> — CSS 클래스 목록</li>
-    <li><strong>Custom Attributes</strong> — data-*, aria-* 등 사용자 정의 속성</li>
-    <li><strong>Link (href)</strong> — a 태그의 링크 주소</li>
-    <li><strong>Image (src, alt)</strong> — img 태그의 이미지 경로와 대체 텍스트</li>
+    <li><strong>Tag</strong> — Change the HTML tag (e.g., div → section)</li>
+    <li><strong>ID</strong> — The element's unique identifier</li>
+    <li><strong>Class</strong> — CSS class list</li>
+    <li><strong>Custom Attributes</strong> — data-*, aria-*, and other custom attributes</li>
+    <li><strong>Link (href)</strong> — URL for anchor tags</li>
+    <li><strong>Image (src, alt)</strong> — Image source and alternative text for img tags</li>
 </ul>
 
 
 <h2 id="code-editor">Code Editor</h2>
 
-<p>하단 또는 우측의 Code Editor 탭에서 HTML/CSS/JS 코드를 직접 편집할 수 있습니다.</p>
+<p>The built-in Code Editor lets you view and edit the raw HTML/CSS/JS code alongside the visual canvas.</p>
 
-<h3>특징</h3>
+<h3>Features</h3>
 <ul>
-    <li><strong>구문 강조</strong> — CodeMirror 기반의 HTML/CSS/JS 구문 하이라이팅</li>
-    <li><strong>양방향 동기화</strong> — 코드 수정 시 캔버스가 즉시 업데이트되고, 캔버스 수정 시 코드도 업데이트됩니다</li>
-    <li><strong>파일 전환</strong> — index.html, style.css, script.js 파일 간 전환 가능</li>
+    <li><strong>Syntax highlighting</strong> — Powered by CodeMirror with HTML/CSS/JS support</li>
+    <li><strong>Two-way sync</strong> — Code changes instantly update the canvas, and canvas changes update the code</li>
+    <li><strong>File switching</strong> — Switch between index.html, style.css, and script.js tabs</li>
 </ul>
 
 <div class="img-placeholder">
     <span class="label">IMAGE: code-editor.png</span>
-    코드 에디터 화면 (구문 강조, 탭 전환)
+    Code editor with syntax highlighting and file tabs
 </div>
 
 
@@ -654,13 +654,13 @@
 
 <h2 id="responsive-design">Responsive Design</h2>
 
-<p>다양한 화면 크기에서 페이지가 어떻게 보이는지 확인하고, 반응형 스타일을 편집할 수 있습니다.</p>
+<p>Preview how your page looks at different screen sizes and edit responsive styles.</p>
 
-<h3>뷰 모드 전환</h3>
-<p>상단 툴바에서 뷰 모드를 전환합니다:</p>
+<h3>View Mode Switching</h3>
+<p>Switch between view modes using the toolbar or keyboard shortcuts:</p>
 
 <table class="shortcut-table">
-    <thead><tr><th>뷰 모드</th><th>너비</th><th>단축키</th></tr></thead>
+    <thead><tr><th>View Mode</th><th>Width</th><th>Shortcut</th></tr></thead>
     <tbody>
         <tr><td>Desktop (Full)</td><td>100%</td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>1</kbd></td></tr>
         <tr><td>Desktop</td><td>1440px</td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>2</kbd></td></tr>
@@ -675,111 +675,111 @@
 
 <div class="img-placeholder">
     <span class="label">IMAGE: responsive-view-modes.png</span>
-    다양한 뷰 모드에서의 캔버스 표시 (Desktop vs Mobile 비교)
+    Side-by-side comparison of Desktop vs. Mobile view modes
 </div>
 
 <div class="callout callout-info">
-    <div class="callout-title">INFO: 미디어쿼리</div>
-    뷰 모드를 변경하면 해당 화면 크기에 맞는 미디어쿼리 스타일이 자동으로 적용됩니다. Style Panel에서 스타일을 수정하면 현재 뷰 모드에 해당하는 미디어쿼리에 스타일이 저장됩니다.
+    <div class="callout-title">INFO: Media Queries</div>
+    When you change the view mode, the corresponding media query styles are automatically applied. Any style changes you make in the Style Panel are saved to the appropriate media query for the current viewport width.
 </div>
 
 
 <h2 id="zoom-pan">Zoom &amp; Pan</h2>
 
-<h3>줌</h3>
+<h3>Zoom</h3>
 <ul>
-    <li><kbd>Ctrl</kbd>+<kbd>스크롤 ↑</kbd> — 줌 인 (확대)</li>
-    <li><kbd>Ctrl</kbd>+<kbd>스크롤 ↓</kbd> — 줌 아웃 (축소)</li>
-    <li><kbd>Ctrl</kbd>+<kbd>0</kbd> — 줌 100%로 리셋</li>
+    <li><kbd>Ctrl</kbd>+<kbd>Scroll Up</kbd> — Zoom in</li>
+    <li><kbd>Ctrl</kbd>+<kbd>Scroll Down</kbd> — Zoom out</li>
+    <li><kbd>Ctrl</kbd>+<kbd>0</kbd> — Reset zoom to 100%</li>
 </ul>
 
-<h3>패닝 (이동)</h3>
+<h3>Pan (Move the Canvas)</h3>
 <ul>
-    <li><kbd>Space</kbd> + 마우스 드래그 — 캔버스를 자유롭게 이동</li>
-    <li>터치패드에서는 두 손가락 스크롤로도 이동 가능</li>
+    <li><kbd>Space</kbd> + mouse drag — Freely move the canvas</li>
+    <li>On trackpads, two-finger scroll also works for panning</li>
 </ul>
 
 <div class="callout callout-tip">
     <div class="callout-title">TIP</div>
-    Zaemit은 PC 마우스 휠과 터치패드 제스처를 자동으로 구분합니다. 터치패드에서는 핀치 투 줌이 지원됩니다.
+    Zaemit automatically distinguishes between PC mouse wheels and trackpad gestures. Pinch-to-zoom is supported on trackpads.
 </div>
 
 
 <h2 id="undo-redo">Undo / Redo</h2>
 
-<p>Zaemit은 모든 작업을 기록하며, 언제든 되돌리거나 다시 실행할 수 있습니다.</p>
+<p>Every action is recorded in the change history and can be undone or redone at any time.</p>
 
 <ul>
-    <li><kbd>Ctrl</kbd>+<kbd>Z</kbd> — 실행 취소 (Undo)</li>
-    <li><kbd>Ctrl</kbd>+<kbd>Y</kbd> 또는 <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Z</kbd> — 다시 실행 (Redo)</li>
+    <li><kbd>Ctrl</kbd>+<kbd>Z</kbd> — Undo</li>
+    <li><kbd>Ctrl</kbd>+<kbd>Y</kbd> or <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Z</kbd> — Redo</li>
 </ul>
 
-<h3>기록되는 변경 사항</h3>
+<h3>Tracked Changes</h3>
 <ul>
-    <li>CSS 스타일 변경</li>
-    <li>요소 이동, 크기 변경, 회전</li>
-    <li>텍스트 콘텐츠 수정</li>
-    <li>요소 추가, 삭제, 순서 변경</li>
-    <li>HTML 속성 변경</li>
-    <li>태그 변경</li>
+    <li>CSS style modifications</li>
+    <li>Element moves, resizes, and rotations</li>
+    <li>Text content edits</li>
+    <li>Element additions, deletions, and reordering</li>
+    <li>HTML attribute changes</li>
+    <li>Tag changes</li>
 </ul>
 
 <div class="callout callout-info">
     <div class="callout-title">INFO</div>
-    텍스트 편집 중에 <kbd>Ctrl</kbd>+<kbd>Z</kbd>를 누르면 텍스트 편집 범위 내에서만 되돌립니다. 텍스트 편집을 종료한 후 <kbd>Ctrl</kbd>+<kbd>Z</kbd>를 누르면 이전 작업(요소 이동, 스타일 변경 등)을 되돌립니다.
+    While in text editing mode, <kbd>Ctrl</kbd>+<kbd>Z</kbd> undoes text changes only. After exiting text editing mode, <kbd>Ctrl</kbd>+<kbd>Z</kbd> undoes previous actions (element moves, style changes, etc.).
 </div>
 
 
 <h2 id="copy-paste">Copy / Paste</h2>
 
-<h3>요소 복사/붙여넣기</h3>
+<h3>Element Copy/Paste</h3>
 <table class="shortcut-table">
-    <thead><tr><th>기능</th><th>단축키</th></tr></thead>
+    <thead><tr><th>Action</th><th>Shortcut</th></tr></thead>
     <tbody>
-        <tr><td>복사 (Copy)</td><td><kbd>Alt</kbd>+<kbd>C</kbd></td></tr>
-        <tr><td>잘라내기 (Cut)</td><td><kbd>Alt</kbd>+<kbd>X</kbd></td></tr>
-        <tr><td>붙여넣기 (Paste)</td><td><kbd>Alt</kbd>+<kbd>V</kbd></td></tr>
-        <tr><td>복제 (Duplicate)</td><td><kbd>Alt</kbd>+<kbd>D</kbd></td></tr>
+        <tr><td>Copy</td><td><kbd>Alt</kbd>+<kbd>C</kbd></td></tr>
+        <tr><td>Cut</td><td><kbd>Alt</kbd>+<kbd>X</kbd></td></tr>
+        <tr><td>Paste</td><td><kbd>Alt</kbd>+<kbd>V</kbd></td></tr>
+        <tr><td>Duplicate</td><td><kbd>Alt</kbd>+<kbd>D</kbd></td></tr>
     </tbody>
 </table>
 
 <div class="callout callout-warning">
-    <div class="callout-title">NOTE</div>
-    요소 복사/붙여넣기는 <kbd>Alt</kbd>+<kbd>C</kbd>/<kbd>V</kbd>를 사용합니다 (<kbd>Ctrl</kbd>이 아님). <kbd>Ctrl</kbd>+<kbd>C</kbd>/<kbd>V</kbd>는 텍스트 편집 모드에서 텍스트 복사/붙여넣기에 사용됩니다.
+    <div class="callout-title">IMPORTANT</div>
+    Element copy/paste uses <kbd>Alt</kbd>+<kbd>C</kbd>/<kbd>V</kbd> (not <kbd>Ctrl</kbd>). The standard <kbd>Ctrl</kbd>+<kbd>C</kbd>/<kbd>V</kbd> shortcuts are reserved for text copy/paste when in text editing mode.
 </div>
 
 
 <h2 id="context-menu">Context Menu</h2>
 
-<p>캔버스에서 요소를 마우스 오른쪽 버튼으로 클릭하면 컨텍스트 메뉴가 나타납니다.</p>
+<p>Right-click on any element in the canvas to open the context menu.</p>
 
-<h3>메뉴 항목</h3>
+<h3>Menu Items</h3>
 <ul>
-    <li><strong>복사</strong> — 선택한 요소를 클립보드에 복사</li>
-    <li><strong>잘라내기</strong> — 선택한 요소를 잘라냄</li>
-    <li><strong>붙여넣기</strong> — 클립보드의 요소를 현재 위치에 삽입</li>
-    <li><strong>복제</strong> — 선택한 요소를 바로 아래에 복제</li>
-    <li><strong>삭제</strong> — 선택한 요소를 삭제</li>
-    <li><strong>위로 이동 / 아래로 이동</strong> — DOM 순서 변경</li>
-    <li><strong>요소 추가</strong> — 자식 요소 추가 (div, p, span 등)</li>
+    <li><strong>Copy</strong> — Copy the selected element to clipboard</li>
+    <li><strong>Cut</strong> — Cut the selected element</li>
+    <li><strong>Paste</strong> — Paste element from clipboard</li>
+    <li><strong>Duplicate</strong> — Create a copy directly below</li>
+    <li><strong>Delete</strong> — Remove the selected element</li>
+    <li><strong>Move Up / Move Down</strong> — Change DOM order</li>
+    <li><strong>Add Element</strong> — Insert a child element (div, p, span, etc.)</li>
 </ul>
 
 
 <h2 id="image-management">Image Management</h2>
 
-<p>VS Code 확장 프로그램 버전에서는 프로젝트 폴더의 이미지를 탐색하고 관리할 수 있습니다.</p>
+<p>In the VS Code extension version, you can browse and manage images from your project folder.</p>
 
-<h3>사용 방법</h3>
+<h3>How to Use</h3>
 <ol>
-    <li>이미지 패널에서 <strong>"폴더 선택"</strong> 버튼을 클릭합니다</li>
-    <li>프로젝트 내 이미지가 있는 폴더를 선택합니다</li>
-    <li>폴더 내 이미지 목록이 표시됩니다</li>
-    <li>이미지를 클릭하면 선택한 요소의 배경 이미지 또는 img src가 변경됩니다</li>
+    <li>Open the Image Panel and click the <strong>"Select Folder"</strong> button.</li>
+    <li>Choose a folder containing images in your project.</li>
+    <li>The folder's images are displayed as a grid.</li>
+    <li>Click an image to set it as the selected element's background image or img src.</li>
 </ol>
 
 <div class="img-placeholder">
     <span class="label">IMAGE: image-management.png</span>
-    이미지 관리 패널 (폴더 선택, 이미지 목록, 파일 추가)
+    Image management panel showing folder selection, image grid, and file picker
 </div>
 
 
@@ -789,73 +789,73 @@
 
 <h2 id="keyboard-shortcuts">Keyboard Shortcuts</h2>
 
-<h3>요소 조작</h3>
+<h3>Element Operations</h3>
 <table class="shortcut-table">
-    <thead><tr><th>기능</th><th>단축키</th><th>설명</th></tr></thead>
+    <thead><tr><th>Action</th><th>Shortcut</th><th>Description</th></tr></thead>
     <tbody>
-        <tr><td>복사</td><td><kbd>Alt</kbd>+<kbd>C</kbd></td><td>선택한 요소를 클립보드에 복사</td></tr>
-        <tr><td>잘라내기</td><td><kbd>Alt</kbd>+<kbd>X</kbd></td><td>선택한 요소를 잘라냄</td></tr>
-        <tr><td>붙여넣기</td><td><kbd>Alt</kbd>+<kbd>V</kbd></td><td>클립보드 요소를 삽입</td></tr>
-        <tr><td>복제</td><td><kbd>Alt</kbd>+<kbd>D</kbd></td><td>선택한 요소를 바로 복제</td></tr>
-        <tr><td>삭제</td><td><kbd>Delete</kbd> / <kbd>Backspace</kbd></td><td>선택한 요소 삭제</td></tr>
-        <tr><td>위로 이동</td><td><kbd>Alt</kbd>+<kbd>↑</kbd></td><td>DOM 트리에서 위로 이동</td></tr>
-        <tr><td>아래로 이동</td><td><kbd>Alt</kbd>+<kbd>↓</kbd></td><td>DOM 트리에서 아래로 이동</td></tr>
-        <tr><td>좌측 정렬</td><td><kbd>Alt</kbd>+<kbd>L</kbd></td><td>요소를 좌측에 정렬</td></tr>
-        <tr><td>중앙 정렬</td><td><kbd>Alt</kbd>+<kbd>M</kbd></td><td>요소를 중앙에 정렬</td></tr>
-        <tr><td>우측 정렬</td><td><kbd>Alt</kbd>+<kbd>R</kbd></td><td>요소를 우측에 정렬</td></tr>
+        <tr><td>Copy</td><td><kbd>Alt</kbd>+<kbd>C</kbd></td><td>Copy selected element to clipboard</td></tr>
+        <tr><td>Cut</td><td><kbd>Alt</kbd>+<kbd>X</kbd></td><td>Cut selected element</td></tr>
+        <tr><td>Paste</td><td><kbd>Alt</kbd>+<kbd>V</kbd></td><td>Paste element from clipboard</td></tr>
+        <tr><td>Duplicate</td><td><kbd>Alt</kbd>+<kbd>D</kbd></td><td>Duplicate selected element</td></tr>
+        <tr><td>Delete</td><td><kbd>Delete</kbd> / <kbd>Backspace</kbd></td><td>Delete selected element</td></tr>
+        <tr><td>Move Up</td><td><kbd>Alt</kbd>+<kbd>↑</kbd></td><td>Move element up in DOM tree</td></tr>
+        <tr><td>Move Down</td><td><kbd>Alt</kbd>+<kbd>↓</kbd></td><td>Move element down in DOM tree</td></tr>
+        <tr><td>Align Left</td><td><kbd>Alt</kbd>+<kbd>L</kbd></td><td>Align element to the left</td></tr>
+        <tr><td>Align Center</td><td><kbd>Alt</kbd>+<kbd>M</kbd></td><td>Align element to center</td></tr>
+        <tr><td>Align Right</td><td><kbd>Alt</kbd>+<kbd>R</kbd></td><td>Align element to the right</td></tr>
     </tbody>
 </table>
 
-<h3>편집 &amp; 보기</h3>
+<h3>Edit &amp; View</h3>
 <table class="shortcut-table">
-    <thead><tr><th>기능</th><th>단축키</th><th>설명</th></tr></thead>
+    <thead><tr><th>Action</th><th>Shortcut</th><th>Description</th></tr></thead>
     <tbody>
-        <tr><td>실행 취소</td><td><kbd>Ctrl</kbd>+<kbd>Z</kbd></td><td>마지막 작업 되돌리기</td></tr>
-        <tr><td>다시 실행</td><td><kbd>Ctrl</kbd>+<kbd>Y</kbd></td><td>되돌린 작업 다시 실행</td></tr>
-        <tr><td>저장</td><td><kbd>Ctrl</kbd>+<kbd>S</kbd></td><td>현재 파일 저장</td></tr>
-        <tr><td>줌 인</td><td><kbd>Ctrl</kbd>+<kbd>스크롤 ↑</kbd></td><td>캔버스 확대</td></tr>
-        <tr><td>줌 아웃</td><td><kbd>Ctrl</kbd>+<kbd>스크롤 ↓</kbd></td><td>캔버스 축소</td></tr>
-        <tr><td>줌 리셋</td><td><kbd>Ctrl</kbd>+<kbd>0</kbd></td><td>100%로 복원</td></tr>
-        <tr><td>패닝</td><td><kbd>Space</kbd>+드래그</td><td>캔버스 이동</td></tr>
-        <tr><td>선택 해제</td><td><kbd>Esc</kbd></td><td>현재 선택 해제</td></tr>
+        <tr><td>Undo</td><td><kbd>Ctrl</kbd>+<kbd>Z</kbd></td><td>Undo last action</td></tr>
+        <tr><td>Redo</td><td><kbd>Ctrl</kbd>+<kbd>Y</kbd></td><td>Redo last undone action</td></tr>
+        <tr><td>Save</td><td><kbd>Ctrl</kbd>+<kbd>S</kbd></td><td>Save current file</td></tr>
+        <tr><td>Zoom In</td><td><kbd>Ctrl</kbd>+<kbd>Scroll Up</kbd></td><td>Zoom into canvas</td></tr>
+        <tr><td>Zoom Out</td><td><kbd>Ctrl</kbd>+<kbd>Scroll Down</kbd></td><td>Zoom out of canvas</td></tr>
+        <tr><td>Reset Zoom</td><td><kbd>Ctrl</kbd>+<kbd>0</kbd></td><td>Reset to 100%</td></tr>
+        <tr><td>Pan</td><td><kbd>Space</kbd>+Drag</td><td>Move canvas view</td></tr>
+        <tr><td>Deselect</td><td><kbd>Esc</kbd></td><td>Clear current selection</td></tr>
     </tbody>
 </table>
 
-<h3>패널 토글</h3>
+<h3>Panel Toggles</h3>
 <table class="shortcut-table">
-    <thead><tr><th>기능</th><th>단축키</th></tr></thead>
+    <thead><tr><th>Action</th><th>Shortcut</th></tr></thead>
     <tbody>
-        <tr><td>Layer Panel 토글</td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>L</kbd></td></tr>
-        <tr><td>Property Panel 토글</td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd></td></tr>
-        <tr><td>단축키 도움말</td><td><kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>K</kbd></td></tr>
+        <tr><td>Toggle Layer Panel</td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>L</kbd></td></tr>
+        <tr><td>Toggle Property Panel</td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd></td></tr>
+        <tr><td>Shortcuts Help</td><td><kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>K</kbd></td></tr>
     </tbody>
 </table>
 
-<h3>텍스트 서식</h3>
+<h3>Text Formatting</h3>
 <table class="shortcut-table">
-    <thead><tr><th>기능</th><th>단축키</th></tr></thead>
+    <thead><tr><th>Action</th><th>Shortcut</th></tr></thead>
     <tbody>
-        <tr><td>굵게</td><td><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd></td></tr>
-        <tr><td>기울임</td><td><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>I</kbd></td></tr>
-        <tr><td>밑줄</td><td><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>U</kbd></td></tr>
-        <tr><td>글꼴 크기 ↑</td><td><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>=</kbd></td></tr>
-        <tr><td>글꼴 크기 ↓</td><td><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>-</kbd></td></tr>
-        <tr><td>좌측 정렬</td><td><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>L</kbd></td></tr>
-        <tr><td>중앙 정렬</td><td><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>E</kbd></td></tr>
-        <tr><td>우측 정렬</td><td><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>R</kbd></td></tr>
-        <tr><td>양쪽 정렬</td><td><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>J</kbd></td></tr>
-        <tr><td>줄 간격 ↑</td><td><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>H</kbd></td></tr>
-        <tr><td>줄 간격 ↓</td><td><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>G</kbd></td></tr>
-        <tr><td>자간 ↑</td><td><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>K</kbd></td></tr>
-        <tr><td>자간 ↓</td><td><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>N</kbd></td></tr>
-        <tr><td>z-index ↑</td><td><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>↑</kbd></td></tr>
-        <tr><td>z-index ↓</td><td><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>↓</kbd></td></tr>
+        <tr><td>Bold</td><td><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd></td></tr>
+        <tr><td>Italic</td><td><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>I</kbd></td></tr>
+        <tr><td>Underline</td><td><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>U</kbd></td></tr>
+        <tr><td>Font Size +</td><td><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>=</kbd></td></tr>
+        <tr><td>Font Size -</td><td><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>-</kbd></td></tr>
+        <tr><td>Align Left</td><td><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>L</kbd></td></tr>
+        <tr><td>Align Center</td><td><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>E</kbd></td></tr>
+        <tr><td>Align Right</td><td><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>R</kbd></td></tr>
+        <tr><td>Justify</td><td><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>J</kbd></td></tr>
+        <tr><td>Line Height +</td><td><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>H</kbd></td></tr>
+        <tr><td>Line Height -</td><td><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>G</kbd></td></tr>
+        <tr><td>Letter Spacing +</td><td><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>K</kbd></td></tr>
+        <tr><td>Letter Spacing -</td><td><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>N</kbd></td></tr>
+        <tr><td>Z-Index +</td><td><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>↑</kbd></td></tr>
+        <tr><td>Z-Index -</td><td><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>↓</kbd></td></tr>
     </tbody>
 </table>
 
-<h3>뷰 모드</h3>
+<h3>View Modes</h3>
 <table class="shortcut-table">
-    <thead><tr><th>뷰 모드</th><th>단축키</th></tr></thead>
+    <thead><tr><th>View Mode</th><th>Shortcut</th></tr></thead>
     <tbody>
         <tr><td>Desktop (Full)</td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>1</kbd></td></tr>
         <tr><td>Desktop 1440px</td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>2</kbd></td></tr>
@@ -871,53 +871,62 @@
 
 <h2 id="faq">FAQ</h2>
 
-<h3>Q: 어떤 파일 형식을 지원하나요?</h3>
-<p><code>.html</code> 파일만 지원합니다. CSS와 JavaScript는 HTML 파일과 함께 자동으로 로드됩니다.</p>
+<h3>Q: What file types are supported?</h3>
+<p>Only <code>.html</code> files are supported. CSS and JavaScript files referenced by the HTML are loaded automatically.</p>
 
-<h3>Q: 기존 프로젝트에서도 사용할 수 있나요?</h3>
-<p>네, 어떤 HTML 파일이든 열 수 있습니다. 기존 CSS 규칙을 인식하고 수정하므로, 프로젝트의 기존 구조를 깨뜨리지 않습니다.</p>
+<h3>Q: Can I use it with existing projects?</h3>
+<p>Yes! You can open any HTML file. Zaemit recognizes and modifies existing CSS rules without breaking your project's CSS structure.</p>
 
-<h3>Q: 변경사항은 어디에 저장되나요?</h3>
-<p>원본 HTML 파일에 직접 저장됩니다. CSS 스타일 변경은 HTML 내의 <code>&lt;style&gt;</code> 태그 또는 연결된 CSS 파일에 적용됩니다.</p>
+<h3>Q: Where are changes saved?</h3>
+<p>Changes are saved directly to the original HTML file. CSS style changes are applied to <code>&lt;style&gt;</code> tags within the HTML or to linked CSS files.</p>
 
-<h3>Q: 외부 CSS 프레임워크(Bootstrap, Tailwind)와 호환되나요?</h3>
-<p>네, 외부 CSS를 사용하는 페이지에서도 정상 작동합니다. Zaemit은 기존 CSS 규칙의 specificity를 인식하고, 가장 적절한 위치에 스타일을 적용합니다.</p>
+<h3>Q: Does it work with CSS frameworks (Bootstrap, Tailwind)?</h3>
+<p>Yes. Zaemit respects existing CSS rules and their specificity. It applies your style changes to the most appropriate location without conflicting with framework styles.</p>
 
-<h3>Q: 여러 HTML 파일을 동시에 편집할 수 있나요?</h3>
-<p>네, 여러 HTML 파일을 각각 다른 탭에서 열어 편집할 수 있습니다.</p>
+<h3>Q: Can I edit multiple HTML files at once?</h3>
+<p>Yes. You can open multiple HTML files in separate editor tabs, each with its own visual editor instance.</p>
 
-<h3>Q: 자동 저장이 되나요?</h3>
-<p>스타일이나 요소를 변경하면 자동으로 파일에 반영됩니다. VS Code의 파일 저장(<kbd>Ctrl</kbd>+<kbd>S</kbd>)을 별도로 할 필요가 없습니다.</p>
+<h3>Q: Is auto-save supported?</h3>
+<p>Yes. Style and element changes are automatically reflected in the file. You don't need to manually save with <kbd>Ctrl</kbd>+<kbd>S</kbd> after each visual edit.</p>
+
+<h3>Q: Does it support macOS and Linux?</h3>
+<p>Yes. Zaemit Visual Editor works on Windows, macOS, and Linux — anywhere VS Code runs.</p>
 
 
 <h2 id="troubleshooting">Troubleshooting</h2>
 
-<h3>에디터가 빈 화면으로 표시됩니다</h3>
+<h3>The editor shows a blank screen</h3>
 <ul>
-    <li>HTML 파일의 문법이 올바른지 확인하세요</li>
-    <li>VS Code를 재시작해보세요</li>
-    <li>확장 프로그램을 재설치해보세요</li>
+    <li>Make sure the HTML file has valid syntax.</li>
+    <li>Try restarting VS Code.</li>
+    <li>Reinstall the extension.</li>
 </ul>
 
-<h3>스타일 변경이 적용되지 않습니다</h3>
+<h3>Style changes are not being applied</h3>
 <ul>
-    <li>다른 CSS 규칙이 더 높은 specificity로 스타일을 덮어쓸 수 있습니다</li>
-    <li><code>!important</code>가 사용된 규칙은 우선순위가 높아 변경이 어려울 수 있습니다</li>
-    <li>Code Editor 탭에서 직접 CSS를 확인해보세요</li>
+    <li>Another CSS rule with higher specificity might be overriding your change.</li>
+    <li>Rules with <code>!important</code> have the highest priority and are harder to override.</li>
+    <li>Check the Code Editor tab to inspect the CSS directly.</li>
 </ul>
 
-<h3>외부 리소스(이미지, 폰트)가 표시되지 않습니다</h3>
+<h3>External resources (images, fonts) are not loading</h3>
 <ul>
-    <li>VS Code WebView의 보안 정책(CSP)으로 인해, 일부 외부 URL이 차단될 수 있습니다</li>
-    <li>가능하면 로컬 파일을 사용하세요</li>
-    <li>CDN URL(예: Google Fonts, cdnjs)은 대부분 허용됩니다</li>
+    <li>VS Code WebView's Content Security Policy (CSP) may block some external URLs.</li>
+    <li>Use local files when possible.</li>
+    <li>Most CDN URLs (e.g., Google Fonts, cdnjs) are allowed by default.</li>
 </ul>
 
-<h3>캔버스가 응답하지 않습니다</h3>
+<h3>The canvas is unresponsive</h3>
 <ul>
-    <li>JavaScript 에러로 인해 페이지가 멈출 수 있습니다</li>
-    <li>VS Code 개발자 도구(<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>I</kbd>)에서 콘솔 에러를 확인하세요</li>
-    <li>HTML 파일을 다시 열어보세요</li>
+    <li>A JavaScript error in your page might be freezing the iframe.</li>
+    <li>Open VS Code Developer Tools (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>I</kbd>) and check the console for errors.</li>
+    <li>Try reopening the HTML file.</li>
+</ul>
+
+<h3>Changes don't sync to the code editor</h3>
+<ul>
+    <li>Make sure you're viewing the correct file tab (index.html, style.css, etc.).</li>
+    <li>Try clicking on a different element and back to refresh the panel.</li>
 </ul>
 
 <!-- Footer -->
