@@ -243,20 +243,20 @@ kbd {
     border: 1px solid;
 }
 .callout-tip {
-    background: #14532d15;
-    border-color: #22c55e30;
+    background: #14532d20;
+    border-color: #22c55e80;
 }
 .callout-tip .callout-title { color: #22c55e; }
 .callout-tip .callout-title::before { content: "✦ "; }
 .callout-warning {
-    background: #78350f15;
-    border-color: #f59e0b30;
+    background: #78350f20;
+    border-color: #f59e0b80;
 }
 .callout-warning .callout-title { color: #f59e0b; }
 .callout-warning .callout-title::before { content: "▲ "; }
 .callout-info {
-    background: #1e3a5f15;
-    border-color: #3b82f630;
+    background: #1e3a5f20;
+    border-color: #3b82f680;
 }
 .callout-info .callout-title { color: #3b82f6; }
 .callout-info .callout-title::before { content: "● "; }
