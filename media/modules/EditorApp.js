@@ -789,16 +789,16 @@ class EditorApp extends EventEmitter {
                         type: 'style',
                         element,
                         property: property.substring(6), // 'style.objectFit' → 'objectFit'
-                        oldValue: oldValue || '',
-                        newValue: newValue || ''
+                        oldValue: oldValue ?? null,
+                        newValue: newValue ?? null
                     });
                 } else {
                     this.modules.undoRedo.recordChange({
                         type: 'attribute',
                         element,
                         property,
-                        oldValue: oldValue || '',
-                        newValue: newValue || ''
+                        oldValue: oldValue ?? null,
+                        newValue: newValue ?? null
                     });
                 }
             }
@@ -906,14 +906,15 @@ class EditorApp extends EventEmitter {
         });
 
         this.modules.stylePanel.on('style:changed', ({ element, property, oldValue, newValue, cssMode }) => {
-            // 스타일 변경 기록 (CSS 모드 여부와 관계없이)
-            if (element && property && (oldValue !== undefined || newValue !== undefined)) {
+            // ★ cssMode=true면 BaseStyleSection에서 recordCSSRuleSnapshot으로 이미 기록됨
+            // inline 스타일 변경만 recordChange로 기록 (이중 기록 방지)
+            if (!cssMode && element && property && (oldValue !== undefined || newValue !== undefined)) {
                 this.modules.undoRedo.recordChange({
                     type: 'style',
                     element,
                     property,
-                    oldValue: oldValue || '',
-                    newValue: newValue || ''
+                    oldValue: oldValue ?? null,
+                    newValue: newValue ?? null
                 });
             }
             this.saveHTML();
@@ -1091,12 +1092,13 @@ class EditorApp extends EventEmitter {
             this.saveHTML();
         });
 
-        this.modules.layerPanel.on('element:renamed', ({ element, name }) => {
+        this.modules.layerPanel.on('element:renamed', ({ element, name, oldName }) => {
             // Record attribute change for undo
+            // ★ oldName은 LayerPanel에서 DOM 변경 전에 캡처된 값 사용
             this.modules.undoRedo.recordAttributeChange(
                 element,
                 'data-layer-name',
-                element.dataset.layerName,
+                oldName,
                 name
             );
             this.saveHTML();

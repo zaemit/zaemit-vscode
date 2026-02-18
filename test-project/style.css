@@ -1352,17 +1352,17 @@ img { max-width: 100%; display: block; }
 }
 
 .section-title.h2-131jn1 {
-  border-top-width: 0px;
-  border-top-style: none;
+  border-top-width: 1px;
+  border-top-style: solid;
   color: rgb(255, 255, 255);
   margin-top: 50px;
   margin-right: 50px;
   margin-bottom: 50px;
   margin: 0px;
-  padding-top: 20px;
-  padding-right: 20px;
-  padding-bottom: 20px;
-  padding: 20px;
+  padding-top: 50px;
+  padding-right: 50px;
+  padding-bottom: 50px;
+  padding: 40px;
 }
 
 .showcase-img.div-oqpfcr {
