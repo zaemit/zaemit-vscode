@@ -2,7 +2,7 @@
   "name": "zaemit-visual-editor",
   "displayName": "Zaemit Visual Editor",
   "description": "Visual HTML/CSS editor for VS Code - edit web pages visually with drag & drop, style editing, and live preview",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "publisher": "zaemit",
   "license": "SEE LICENSE IN LICENSE",
   "homepage": "https://zaemit.github.io/zaemit-vscode/docs/",

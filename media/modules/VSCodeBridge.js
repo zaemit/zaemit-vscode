@@ -59,6 +59,12 @@ class VSCodeBridge {
                     this.projectName = msg.payload.projectName || '';
                     this.projectDir = msg.payload.projectDir || '';
                     this.projectBaseUri = msg.payload.projectBaseUri || '';
+                    // ★ 파일명 매핑 정보 저장 (실제 HTML/CSS/JS 파일명)
+                    this.fileNames = msg.payload.fileNames || {
+                        html: 'index.html',
+                        css: 'style.css',
+                        js: 'script.js'
+                    };
                     this._ready = true;
                     for (const cb of this._readyCallbacks) cb();
                     this._readyCallbacks = [];
@@ -195,6 +201,39 @@ class VSCodeBridge {
         } else {
             this._readyCallbacks.push(callback);
         }
+    }
+
+    /**
+     * 파일 유형별 실제 파일명 반환
+     * @param {string} type - 'html', 'css', 'js'
+     * @returns {string|null}
+     */
+    getFileName(type) {
+        return this.fileNames?.[type] || null;
+    }
+
+    /**
+     * HTML 파일 내용 가져오기 (실제 파일명 사용)
+     */
+    getHtmlFile() {
+        const name = this.fileNames?.html || 'index.html';
+        return this.projectFiles[name] || '';
+    }
+
+    /**
+     * CSS 파일 내용 가져오기 (실제 파일명 사용)
+     */
+    getCssFile() {
+        const name = this.fileNames?.css || 'style.css';
+        return this.projectFiles[name] || '';
+    }
+
+    /**
+     * JS 파일 내용 가져오기 (실제 파일명 사용)
+     */
+    getJsFile() {
+        const name = this.fileNames?.js || 'script.js';
+        return this.projectFiles[name] || '';
     }
 
     /**

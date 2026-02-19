@@ -66,7 +66,7 @@ export class ZaemitEditorProvider implements vscode.CustomTextEditorProvider {
             if (e.document.uri.toString() === document.uri.toString() && e.contentChanges.length > 0) {
                 webviewPanel.webview.postMessage({
                     type: 'file:externalChange',
-                    payload: { filename: 'index.html', content: document.getText() }
+                    payload: { filename: messageHandler.htmlFilename, content: document.getText() }
                 });
             }
         });

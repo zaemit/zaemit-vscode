@@ -15,6 +15,15 @@ export class MessageHandler {
     /** 내부 applyEdit 중일 때 true → onDidChangeTextDocument에서 무시용 */
     public isApplyingEdit = false;
 
+    /** 열린 HTML 파일명 (VS Code가 열어준 파일) */
+    public htmlFilename: string;
+
+    /** HTML에서 감지된 CSS 파일명 (없으면 null) */
+    public cssFilename: string | null;
+
+    /** HTML에서 감지된 JS 파일명 (없으면 null) */
+    public jsFilename: string | null;
+
     constructor(
         private webview: vscode.Webview,
         private document: vscode.TextDocument,
@@ -24,6 +33,61 @@ export class MessageHandler {
         this.projectDir = projectDir;
         this.extensionUri = extensionUri;
         this.fileService = new FileService(projectDir);
+
+        // 열린 HTML 파일명 추출
+        this.htmlFilename = path.basename(document.uri.fsPath);
+
+        // HTML에서 CSS/JS 참조 파일명 감지
+        const detected = this.detectLinkedFiles(document.getText());
+        this.cssFilename = detected.cssFilename;
+        this.jsFilename = detected.jsFilename;
+    }
+
+    /**
+     * HTML 내용에서 로컬 CSS/JS 참조 파일명 감지
+     */
+    private detectLinkedFiles(htmlContent: string): { cssFilename: string | null; jsFilename: string | null } {
+        let cssFilename: string | null = null;
+        let jsFilename: string | null = null;
+
+        // CSS: <link rel="stylesheet" href="xxx"> (rel과 href 순서 무관)
+        const linkRegex = /<link[^>]*(?:rel=["']stylesheet["'][^>]*href=["']([^"']+)["']|href=["']([^"']+)["'][^>]*rel=["']stylesheet["'])[^>]*>/gi;
+        let match;
+        while ((match = linkRegex.exec(htmlContent)) !== null) {
+            const href = match[1] || match[2];
+            if (href && this.isLocalFile(href)) {
+                cssFilename = href;
+                break;
+            }
+        }
+
+        // JS: <script src="xxx">
+        const scriptRegex = /<script[^>]*src=["']([^"']+)["'][^>]*>/gi;
+        while ((match = scriptRegex.exec(htmlContent)) !== null) {
+            const src = match[1];
+            if (src && this.isLocalFile(src)) {
+                jsFilename = src;
+                break;
+            }
+        }
+
+        return { cssFilename, jsFilename };
+    }
+
+    /**
+     * URL이 로컬 파일인지 판별 (외부 URL, CDN 제외)
+     */
+    private isLocalFile(url: string): boolean {
+        if (!url) return false;
+        // 외부 URL 제외
+        if (/^(https?:|\/\/|data:|blob:)/i.test(url)) return false;
+        // CDN 도메인 패턴 제외
+        if (url.includes('cdn.') || url.includes('cdnjs.') || url.includes('googleapis.com')) return false;
+        // node_modules 제외
+        if (url.includes('node_modules/')) return false;
+        // zaemit 에디터 내부 ID 제외
+        if (url.includes('zaemit-')) return false;
+        return true;
     }
 
     async handleMessage(msg: any): Promise<void> {
@@ -55,16 +119,23 @@ export class MessageHandler {
         const files: Record<string, string> = {};
 
         try {
-            files['index.html'] = this.document.getText();
+            // ★ 실제 HTML 파일명을 키로 사용
+            files[this.htmlFilename] = this.document.getText();
         } catch { /* ignore */ }
 
+        // CSS: 감지된 파일명 사용, 없으면 style.css 폴백 시도
+        const cssName = this.cssFilename || 'style.css';
         try {
-            files['style.css'] = await this.fileService.readFile('style.css');
-        } catch { /* no style.css */ }
+            const cssContent = await this.fileService.readFile(cssName);
+            files[cssName] = cssContent;
+        } catch { /* no css file */ }
 
+        // JS: 감지된 파일명 사용, 없으면 script.js 폴백 시도
+        const jsName = this.jsFilename || 'script.js';
         try {
-            files['script.js'] = await this.fileService.readFile('script.js');
-        } catch { /* no script.js */ }
+            const jsContent = await this.fileService.readFile(jsName);
+            files[jsName] = jsContent;
+        } catch { /* no js file */ }
 
         const projectName = path.basename(this.projectDir);
 
@@ -79,7 +150,13 @@ export class MessageHandler {
                 files,
                 projectName,
                 projectDir: this.projectDir,
-                projectBaseUri: projectBaseUri.toString()
+                projectBaseUri: projectBaseUri.toString(),
+                // ★ 파일명 매핑 정보 추가 전달
+                fileNames: {
+                    html: this.htmlFilename,
+                    css: this.cssFilename,  // null이면 CSS 파일 없음 → style.css 폴백
+                    js: this.jsFilename     // null이면 JS 파일 없음 → script.js 폴백
+                }
             }
         });
     }
@@ -120,19 +197,14 @@ export class MessageHandler {
         if (url.match(/\/api\/projects\/[^/]+\/files\//) && method === 'POST') {
             const filename = url.split('/files/')[1];
             if (filename && body?.content !== undefined) {
-                // index.html 저장 시: 에디터가 주입한 인라인 태그 정리
-                const content = filename === 'index.html'
+                // ★ 열린 HTML 파일 저장 시: 에디터가 주입한 인라인 태그 정리
+                const content = filename === this.htmlFilename
                     ? this.cleanInjectedTags(body.content)
                     : body.content;
 
-                await this.fileService.writeFile(filename, content);
-
-                // VS Code에서 열린 문서가 있으면 동기화
-                const filePath = path.join(this.projectDir, filename);
-                const fileUri = vscode.Uri.file(filePath);
-
-                if (filename === 'index.html') {
-                    // CustomTextEditor의 document 업데이트 + 저장 (dirty 상태 해소)
+                if (filename === this.htmlFilename) {
+                    // HTML 파일: VS Code document API를 통해서만 저장
+                    // (fileService.writeFile + document.save 이중 쓰기 → "file is newer" 충돌 방지)
                     this.isApplyingEdit = true;
                     try {
                         const edit = new vscode.WorkspaceEdit();
@@ -147,7 +219,12 @@ export class MessageHandler {
                         this.isApplyingEdit = false;
                     }
                 } else {
-                    // CSS/JS 등 다른 파일: 열려있으면 동기화
+                    // CSS/JS 등 다른 파일: fileService로 디스크 직접 저장
+                    await this.fileService.writeFile(filename, content);
+
+                    // 열려있으면 VS Code 문서도 동기화
+                    const filePath = path.join(this.projectDir, filename);
+                    const fileUri = vscode.Uri.file(filePath);
                     const openDoc = vscode.workspace.textDocuments.find(
                         doc => doc.uri.fsPath === fileUri.fsPath
                     );
@@ -156,7 +233,7 @@ export class MessageHandler {
                         edit.replace(
                             openDoc.uri,
                             new vscode.Range(0, 0, openDoc.lineCount, 0),
-                            body.content
+                            content
                         );
                         await vscode.workspace.applyEdit(edit);
                     }
@@ -564,34 +641,34 @@ export class MessageHandler {
 
     /**
      * 에디터가 srcdoc 프리뷰용으로 주입한 인라인 태그 정리
-     * - <style id="zaemit-injected-css"> → <link href="style.css"> 복원
-     * - <style id="zaemit-temp-styles"> 제거 (이미 style.css에 병합됨)
-     * - <script id="zaemit-injected-js"> → <script src="script.js"> 복원
+     * - <style id="zaemit-injected-css"> → <link href="실제CSS파일명"> 복원
+     * - <style id="zaemit-temp-styles"> 제거 (이미 CSS 파일에 병합됨)
+     * - <script id="zaemit-injected-js"> → <script src="실제JS파일명"> 복원
      * - <script id="zaemit-link-interceptor"> 제거 (에디터 전용)
      */
     private cleanInjectedTags(html: string): string {
         let result = html;
 
-        // 1. <style id="zaemit-injected-css">...</style> → <link href="style.css">
+        // 1. <style id="zaemit-injected-css">...</style> → <link href="실제CSS파일명"> 복원
         const beforeCss = result;
         result = result.replace(/<style\s+id=["']zaemit-injected-css["'][^>]*>[\s\S]*?<\/style>/gi, '');
-        if (result !== beforeCss) {
-            // </head> 앞에 <link href="style.css"> 복원
+        if (result !== beforeCss && this.cssFilename) {
+            // </head> 앞에 <link href="실제CSS파일명"> 복원
             if (result.includes('</head>')) {
-                result = result.replace('</head>', '  <link rel="stylesheet" href="style.css">\n</head>');
+                result = result.replace('</head>', `  <link rel="stylesheet" href="${this.cssFilename}">\n</head>`);
             }
         }
 
         // 2. <style id="zaemit-temp-styles">...</style> 제거
         result = result.replace(/<style\s+id=["']zaemit-temp-styles["'][^>]*>[\s\S]*?<\/style>/gi, '');
 
-        // 3. <script id="zaemit-injected-js">...</script> → <script src="script.js">
+        // 3. <script id="zaemit-injected-js">...</script> → <script src="실제JS파일명"> 복원
         const beforeJs = result;
         result = result.replace(/<script\s+id=["']zaemit-injected-js["'][^>]*>[\s\S]*?<\/script>/gi, '');
-        if (result !== beforeJs) {
-            // </body> 앞에 <script src="script.js"> 복원
+        if (result !== beforeJs && this.jsFilename) {
+            // </body> 앞에 <script src="실제JS파일명"> 복원
             if (result.includes('</body>')) {
-                result = result.replace('</body>', '  <script src="script.js"></script>\n</body>');
+                result = result.replace('</body>', `  <script src="${this.jsFilename}"></script>\n</body>`);
             }
         }
 

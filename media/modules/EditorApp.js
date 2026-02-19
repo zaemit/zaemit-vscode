@@ -972,7 +972,7 @@ class EditorApp extends EventEmitter {
             this.modules.ui.setSaved();
 
             // Capture screenshot when HTML is saved (debounced)
-            if (filename === 'index.html') {
+            if (filename === this._fileNames?.html) {
                 this.captureScreenshotDebounced();
             }
         });
@@ -2486,7 +2486,8 @@ class EditorApp extends EventEmitter {
         }
 
         // CSS 규칙 찾기/생성
-        const styleSheet = mainDoc?.querySelector('link[href*="style.css"]')?.sheet
+        const cssName = this._fileNames?.css || 'style.css';
+        const styleSheet = mainDoc?.querySelector(`link[href*="${cssName}"]`)?.sheet
             || mainDoc?.querySelector('style#zaemit-temp-styles')?.sheet;
 
         if (styleSheet) {
@@ -2812,8 +2813,9 @@ class EditorApp extends EventEmitter {
             // 항상 메인(PC) iframe의 CSS를 저장
             const doc = this.modules.preview.getMainDocument();
 
-            // 원본 style.css 파일 내용 가져오기 (CSSOM이 아닌 파일 직접)
-            let cssContent = this.modules.fileManager.getFileContent('style.css') || '';
+            // 원본 CSS 파일 내용 가져오기 (CSSOM이 아닌 파일 직접)
+            const cssFileName = this._fileNames?.css || 'style.css';
+            let cssContent = this.modules.fileManager.getFileContent(cssFileName) || '';
 
             // 에디터 내부 선택자 목록 (저장에서 제외)
             const editorSelectors = [
@@ -2862,7 +2864,7 @@ class EditorApp extends EventEmitter {
             cssContent = cssContent.replace(/\n{3,}/g, '\n\n').trim();
 
             if (cssContent) {
-                await this.modules.fileManager.saveFile('style.css', cssContent);
+                await this.modules.fileManager.saveFile(cssFileName, cssContent);
             }
 
             // 멀티캔버스 CSS 동기화
@@ -2919,7 +2921,7 @@ class EditorApp extends EventEmitter {
         }
 
         // ★ 3단계: CSS 원본 파일에서 원래 URL 찾기
-        const originalCss = this.modules.fileManager.getFileContent('style.css') || '';
+        const originalCss = this.modules.fileManager.getFileContent(this._fileNames?.css || 'style.css') || '';
         const originalUrl = this._findOriginalUrlInCss(originalCss, selector);
         if (originalUrl) {
             cssText = cssText.replace(
@@ -3145,6 +3147,13 @@ class EditorApp extends EventEmitter {
             const bridge = window.vscBridge;
             const projectId = bridge?.projectId || 'vscode-project';
 
+            // ★ 파일명 매핑 캐싱 (실제 HTML/CSS/JS 파일명)
+            this._fileNames = {
+                html: bridge?.getFileName?.('html') || 'index.html',
+                css: bridge?.getFileName?.('css') || 'style.css',
+                js: bridge?.getFileName?.('js') || 'script.js'
+            };
+
             // VS Code Extension: projectLoader를 통해 서버 대신 bridge에서 데이터 로드
             // ProjectLoader.getProjectIdFromUrl() → bridge에서 직접 가져옴
             this.modules.projectLoader._projectId = projectId;
@@ -3173,9 +3182,9 @@ class EditorApp extends EventEmitter {
             // VS Code Extension: srcdoc 방식으로 프리뷰 로드
             const previewFrame = document.getElementById('previewFrame');
             if (previewFrame && bridge) {
-                const htmlContent = bridge.getFile('index.html');
-                let cssContent = bridge.getFile('style.css');
-                const jsContent = bridge.getFile('script.js');
+                const htmlContent = bridge.getHtmlFile();
+                let cssContent = bridge.getCssFile();
+                const jsContent = bridge.getJsFile();
 
                 let fullHtml = htmlContent;
 
@@ -3220,8 +3229,11 @@ class EditorApp extends EventEmitter {
                     }
                 }
 
-                // 외부 style.css 링크 제거 (이미 인라인 주입)
-                fullHtml = fullHtml.replace(/<link[^>]*href=["'][^"']*style\.css["'][^>]*>/gi, '');
+                // 외부 CSS 링크 제거 (이미 인라인 주입)
+                if (this._fileNames.css) {
+                    const escapedCss = this._fileNames.css.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                    fullHtml = fullHtml.replace(new RegExp(`<link[^>]*href=["'][^"']*${escapedCss}["'][^>]*>`, 'gi'), '');
+                }
 
                 // JS 인라인 주입 (ID로 식별 가능하게)
                 if (jsContent) {
@@ -3233,8 +3245,11 @@ class EditorApp extends EventEmitter {
                     }
                 }
 
-                // 외부 script.js 링크 제거
-                fullHtml = fullHtml.replace(/<script[^>]*src=["'][^"']*script\.js["'][^>]*><\/script>/gi, '');
+                // 외부 JS 스크립트 링크 제거
+                if (this._fileNames.js) {
+                    const escapedJs = this._fileNames.js.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                    fullHtml = fullHtml.replace(new RegExp(`<script[^>]*src=["'][^"']*${escapedJs}["'][^>]*><\\/script>`, 'gi'), '');
+                }
 
                 // 링크 클릭 차단 스크립트 주입 (ID로 식별 가능하게)
                 const interceptScript = '<script id="zaemit-link-interceptor">document.addEventListener("click",function(e){var a=e.target.closest("a");if(a&&a.href){e.preventDefault();}});<\/script>';
@@ -4045,7 +4060,8 @@ class EditorApp extends EventEmitter {
         try {
             const html = this._getCleanHTML();
             if (html) {
-                await this.modules.fileManager.saveHTML(html);
+                // ★ 실제 HTML 파일명으로 저장 (saveHTML()은 'index.html' 하드코딩이므로 우회)
+                await this.modules.fileManager.saveFile(this._fileNames?.html || 'index.html', html);
                 this._hasUnsavedChanges = false;
                 this.modules.ui.setSaved();
             }
@@ -5646,14 +5662,14 @@ class EditorApp extends EventEmitter {
                 const head = clonedDoc.querySelector('head');
                 const body = clonedDoc.querySelector('body');
 
-                // 1. <style id="zaemit-injected-css"> 모두 제거 → <link href="style.css"> 복원
+                // 1. <style id="zaemit-injected-css"> 모두 제거 → <link href="실제CSS파일명"> 복원
                 const injectedCssList = clonedDoc.querySelectorAll('#zaemit-injected-css');
                 if (injectedCssList.length > 0) {
                     injectedCssList.forEach(el => el.remove());
-                    if (head) {
+                    if (head && this._fileNames?.css) {
                         const link = doc.createElement('link');
                         link.rel = 'stylesheet';
-                        link.href = 'style.css';
+                        link.href = this._fileNames.css;
                         head.appendChild(link);
                     }
                 }
@@ -5661,13 +5677,13 @@ class EditorApp extends EventEmitter {
                 // 2. <style id="zaemit-temp-styles"> 모두 제거 (saveCSS()에서 이미 style.css에 병합됨)
                 clonedDoc.querySelectorAll('#zaemit-temp-styles').forEach(el => el.remove());
 
-                // 3. <script id="zaemit-injected-js"> 모두 제거 → <script src="script.js"> 복원
+                // 3. <script id="zaemit-injected-js"> 모두 제거 → <script src="실제JS파일명"> 복원
                 const injectedJsList = clonedDoc.querySelectorAll('#zaemit-injected-js');
                 if (injectedJsList.length > 0) {
                     injectedJsList.forEach(el => el.remove());
-                    if (body) {
+                    if (body && this._fileNames?.js) {
                         const script = doc.createElement('script');
-                        script.src = 'script.js';
+                        script.src = this._fileNames.js;
                         body.appendChild(script);
                     }
                 }
@@ -5740,7 +5756,7 @@ class EditorApp extends EventEmitter {
                 }
 
                 // 7. bare 링크 인터셉터 + script.js 중복 제거 (ID 없이 저장된 이전 버그 잔재)
-                const jsFileContent = window.vscBridge?.getFile?.('script.js');
+                const jsFileContent = window.vscBridge?.getJsFile?.();
                 const trimmedJsContent = jsFileContent?.trim();
                 clonedDoc.querySelectorAll('script').forEach(script => {
                     // src나 id가 있으면 건드리지 않음 (외부 참조 또는 이미 처리됨)
