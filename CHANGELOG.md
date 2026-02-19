@@ -1,5 +1,15 @@
 # Change Log
 
+## [0.0.10] - 2026-02-19
+
+### Improved
+- Text editing now works on any element with text nodes (not just whitelisted tags)
+  - `<div>`, `<section>`, etc. with direct text content can now be double-click edited
+  - Previously only `P`, `H1-H6`, `SPAN`, `A`, `BUTTON` etc. were editable
+- Double-click precision: editing only activates when clicking on actual text
+  - Clicking non-text areas (e.g. icon spans, decorative elements) no longer triggers edit mode
+  - Uses `caretRangeFromPoint` to verify click lands on a text node
+
 ## [0.0.9] - 2026-02-19
 
 ### Fixed

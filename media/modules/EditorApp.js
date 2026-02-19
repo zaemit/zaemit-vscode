@@ -3295,28 +3295,24 @@ class EditorApp extends EventEmitter {
     isTextContentElement(element) {
         if (!element) return false;
 
-        // Check tag name for typical text elements
-        const textTags = ['P', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'SPAN', 'A', 'LABEL', 'LI', 'TD', 'TH', 'BUTTON', 'STRONG', 'EM', 'B', 'I', 'U'];
-        if (!textTags.includes(element.tagName)) return false;
-
-        // Check if element contains mostly text (not complex nested elements)
+        // 텍스트 노드 존재 여부 + 블록 자식 없음으로 판단 (태그 무관)
         const childNodes = element.childNodes;
         let textLength = 0;
         let hasBlockElements = false;
 
-        for (const node of childNodes) {
+        const blockTags = ['DIV', 'SECTION', 'ARTICLE', 'NAV', 'HEADER', 'FOOTER', 'MAIN', 'ASIDE', 'TABLE', 'UL', 'OL', 'FORM', 'FIELDSET', 'FIGURE', 'BLOCKQUOTE', 'PRE', 'HR'];
+        for (let i = 0; i < childNodes.length; i++) {
+            const node = childNodes[i];
             if (node.nodeType === Node.TEXT_NODE) {
                 textLength += node.textContent.trim().length;
             } else if (node.nodeType === Node.ELEMENT_NODE) {
-                // Allow inline elements like span, a, strong, em
-                const inlineTags = ['SPAN', 'A', 'STRONG', 'EM', 'B', 'I', 'U', 'BR'];
-                if (!inlineTags.includes(node.tagName)) {
+                if (blockTags.includes(node.tagName)) {
                     hasBlockElements = true;
                 }
             }
         }
 
-        // Element should have text and no block elements
+        // 직접 텍스트 노드가 있고, 블록 자식이 없어야 함
         return textLength > 0 && !hasBlockElements;
     }
 
@@ -3333,39 +3329,61 @@ class EditorApp extends EventEmitter {
             return;
         }
 
+        // 더블클릭 위치가 실제 텍스트 노드 위인지 검증
+        let caretRange = null;
+        if (clickInfo?.clientX !== undefined && clickInfo?.clientY !== undefined) {
+            const doc = this.modules.preview.getDocument();
+            if (doc) {
+                const x = clickInfo.clientX;
+                const y = clickInfo.clientY;
+
+                if (doc.caretRangeFromPoint) {
+                    caretRange = doc.caretRangeFromPoint(x, y);
+                } else if (doc.caretPositionFromPoint) {
+                    const pos = doc.caretPositionFromPoint(x, y);
+                    if (pos && pos.offsetNode) {
+                        caretRange = doc.createRange();
+                        caretRange.setStart(pos.offsetNode, pos.offset);
+                        caretRange.collapse(true);
+                    }
+                }
+
+                // 텍스트 노드 위가 아니면 편집 모드 진입 안 함
+                if (!caretRange || !caretRange.startContainer ||
+                    caretRange.startContainer.nodeType !== Node.TEXT_NODE ||
+                    !element.contains(caretRange.startContainer)) {
+                    return;
+                }
+
+                // 클릭 좌표가 텍스트 노드의 실제 바운딩 박스 안인지 확인
+                const textNode = caretRange.startContainer;
+                const textRange = doc.createRange();
+                textRange.selectNodeContents(textNode);
+                const textRects = textRange.getClientRects();
+                let isClickOnText = false;
+                for (let i = 0; i < textRects.length; i++) {
+                    const rect = textRects[i];
+                    if (x >= rect.left - 2 && x <= rect.right + 2 &&
+                        y >= rect.top - 2 && y <= rect.bottom + 2) {
+                        isClickOnText = true;
+                        break;
+                    }
+                }
+                if (!isClickOnText) return;
+            }
+        }
+
         // Enable editing without selecting all text
         const editSession = this.modules.textEditing.enableEditing(element, { selectAll: false });
         if (!editSession) return;
 
-        // Place cursor at click position
-        if (clickInfo?.clientX !== undefined && clickInfo?.clientY !== undefined) {
-            const doc = this.modules.preview.getDocument();
+        // Place cursor at click position (재사용)
+        if (caretRange) {
             const win = this.modules.preview.getWindow();
-            if (doc && win) {
-                let range = null;
-                const x = clickInfo.clientX;
-                const y = clickInfo.clientY;
-
-                // Try caretRangeFromPoint (Chrome, Safari)
-                if (doc.caretRangeFromPoint) {
-                    range = doc.caretRangeFromPoint(x, y);
-                }
-                // Try caretPositionFromPoint (Firefox)
-                else if (doc.caretPositionFromPoint) {
-                    const pos = doc.caretPositionFromPoint(x, y);
-                    if (pos && pos.offsetNode) {
-                        range = doc.createRange();
-                        range.setStart(pos.offsetNode, pos.offset);
-                        range.collapse(true);
-                    }
-                }
-
-                // Set cursor at click position
-                if (range && element.contains(range.startContainer)) {
-                    const sel = win.getSelection();
-                    sel.removeAllRanges();
-                    sel.addRange(range);
-                }
+            if (win && element.contains(caretRange.startContainer)) {
+                const sel = win.getSelection();
+                sel.removeAllRanges();
+                sel.addRange(caretRange);
             }
         }
 
