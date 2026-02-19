@@ -1,5 +1,16 @@
 # Change Log
 
+## [0.0.9] - 2026-02-19
+
+### Fixed
+- Non-standard HTML filenames (e.g. `landing.html`, `etc.html`) now save correctly
+  - Previously, opening any HTML file always saved as `index.html`
+  - The editor now detects the actual opened filename and preserves it on save
+- CSS/JS filenames are auto-detected from HTML `<link>` and `<script>` references
+  - Custom filenames (e.g. `main.css`, `app.js`) are preserved instead of defaulting to `style.css`/`script.js`
+- Fixed "The content of the file is newer" save conflict
+  - HTML saves now use VS Code document API exclusively, avoiding double-write conflicts
+
 ## [0.0.7] - 2026-02-17
 
 ### Fixed

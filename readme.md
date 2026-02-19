@@ -59,10 +59,10 @@ Hold `Ctrl` and click to select multiple elements. Apply styles, move, or delete
 Search **"Zaemit"** in the VS Code Marketplace and click Install. No additional configuration needed.
 
 ### 2. Open Your Project
-Right-click any `.html` file in the Explorer panel and select **"Open with Zaemit Visual Editor"**. Your page renders instantly in the visual editor.
+Right-click any `.html` file in the Explorer panel and select **"Open with Zaemit Visual Editor"**. Your page renders instantly in the visual editor. Works with any HTML filename — `index.html`, `landing.html`, `about.html`, and more.
 
 ### 3. Design & Ship
-Edit visually, see code update live. Commit clean, production-ready code directly from your editor.
+Edit visually, see code update live. Commit clean, production-ready code directly from your editor. CSS and JS file references in your HTML are auto-detected and preserved.
 
 You can also click the **Zaemit** button in the bottom status bar to open the current HTML file.
 
