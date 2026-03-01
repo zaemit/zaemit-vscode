@@ -71,8 +71,41 @@ export class ZaemitEditorProvider implements vscode.CustomTextEditorProvider {
             }
         });
 
+        // ★ CSS/JS 파일 외부 변경 감지 (FileSystemWatcher)
+        // 사용자가 VS Code 텍스트 에디터에서 CSS/JS를 수정하면 비주얼 에디터에 반영
+        const cssJsWatcher = vscode.workspace.createFileSystemWatcher(
+            new vscode.RelativePattern(projectDir, '**/*.{css,js}')
+        );
+
+        // 내부 저장 중복 방지 (파일명 기반 추적)
+        const pendingSaves = new Set<string>();
+        messageHandler.onInternalSave = (filename: string) => {
+            pendingSaves.add(filename);
+            setTimeout(() => pendingSaves.delete(filename), 1000);
+        };
+
+        const handleCssJsChange = async (uri: vscode.Uri) => {
+            const filename = path.relative(projectDir, uri.fsPath).replace(/\\/g, '/');
+            if (pendingSaves.has(filename) || pendingSaves.has(path.basename(uri.fsPath))) return;
+            try {
+                const content = Buffer.from(
+                    await vscode.workspace.fs.readFile(uri)
+                ).toString('utf-8');
+                webviewPanel.webview.postMessage({
+                    type: 'file:externalChange',
+                    payload: { filename, content }
+                });
+            } catch (e) {
+                // 파일 삭제된 경우 무시
+            }
+        };
+
+        cssJsWatcher.onDidChange(handleCssJsChange);
+        cssJsWatcher.onDidCreate(handleCssJsChange);
+
         webviewPanel.onDidDispose(() => {
             changeDocumentSubscription.dispose();
+            cssJsWatcher.dispose();
         });
     }
 

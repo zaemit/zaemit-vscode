@@ -361,7 +361,7 @@ class EditorApp extends EventEmitter {
                 this.modules.motionManager?.reinjectAssets(previewDoc);
             }
 
-            // VS Code: 멀티캔버스 첫 번째 iframe 로드 후 상대 경로 이미지 → data URL 변환
+            // VS Code: 멀티캔버스 iframe 로드 후 상대 경로 이미지 → data URL 변환
             // (autoEnable()로 새 iframe 생성 → onload 완료 후 document에 접근 가능)
             if (window.vscBridge) {
                 const onMainIframeLoaded = (iframe) => {
@@ -369,11 +369,38 @@ class EditorApp extends EventEmitter {
                     const iframeDoc = iframe.contentDocument;
                     if (iframeDoc) {
                         this._resolveIframeImages(iframeDoc).catch(err =>
-                            console.error('[resolveImages] Error:', err)
+                            console.error('[resolveImages] Main iframe error:', err)
                         );
                     }
+                    // ★ 모든 서브 iframe에도 이미지 resolve 적용
+                    const allIframes = this.modules.multiCanvas.iframes || [];
+                    allIframes.forEach(f => {
+                        if (f !== iframe && f.contentDocument) {
+                            this._resolveIframeImages(f.contentDocument).catch(err =>
+                                console.error('[resolveImages] Sub iframe error:', err)
+                            );
+                        }
+                    });
                 };
                 this.modules.multiCanvas.on('multiview:mainIframeLoaded', onMainIframeLoaded);
+
+                // ★ 나중에 추가되는 디바이스의 iframe에도 이미지 resolve 적용
+                this.modules.multiCanvas.on('iframe:added', (iframe) => {
+                    if (iframe.contentDocument) {
+                        this._resolveIframeImages(iframe.contentDocument).catch(err =>
+                            console.error('[resolveImages] Added iframe error:', err)
+                        );
+                    }
+                });
+            }
+
+            // ★ CSS/JS 외부 변경 감지 → CSSOM 업데이트
+            if (window.vscBridge) {
+                window.vscBridge.onExternalFileChange = (filename, content) => {
+                    if (filename.endsWith('.css')) {
+                        this._handleExternalCSSChange(filename, content);
+                    }
+                };
             }
         });
 
@@ -2814,7 +2841,12 @@ class EditorApp extends EventEmitter {
             const doc = this.modules.preview.getMainDocument();
 
             // 원본 CSS 파일 내용 가져오기 (CSSOM이 아닌 파일 직접)
-            const cssFileName = this._fileNames?.css || 'style.css';
+            // CSS 최초 저장 시 _fileNames.css 동적 설정 (null → 'style.css')
+            if (!this._fileNames?.css) {
+                if (!this._fileNames) this._fileNames = {};
+                this._fileNames.css = 'style.css';
+            }
+            const cssFileName = this._fileNames.css;
             let cssContent = this.modules.fileManager.getFileContent(cssFileName) || '';
 
             // 에디터 내부 선택자 목록 (저장에서 제외)
@@ -3148,10 +3180,12 @@ class EditorApp extends EventEmitter {
             const projectId = bridge?.projectId || 'vscode-project';
 
             // ★ 파일명 매핑 캐싱 (실제 HTML/CSS/JS 파일명)
+            // CSS/JS가 null이면 원본 HTML에 해당 파일 참조가 없는 것 (fallback 하지 않음)
+            // saveCSS()에서 CSS 최초 저장 시 동적으로 설정됨
             this._fileNames = {
                 html: bridge?.getFileName?.('html') || 'index.html',
-                css: bridge?.getFileName?.('css') || 'style.css',
-                js: bridge?.getFileName?.('js') || 'script.js'
+                css: bridge?.getFileName?.('css') || null,
+                js: bridge?.getFileName?.('js') || null
             };
 
             // VS Code Extension: projectLoader를 통해 서버 대신 bridge에서 데이터 로드
@@ -4063,12 +4097,27 @@ class EditorApp extends EventEmitter {
     }
 
     saveHTML() {
-        // Mark as unsaved (no server save)
+        // Mark as unsaved
         this.modules.ui.setUnsaved();
         this._hasUnsavedChanges = true;
-        // AutoSave disabled in VS Code (manual save only)
         this.modules.autoSave?.markChanged();
         // 멀티캔버스 동기화는 UndoRedoManager의 change:recorded 이벤트에서 처리
+
+        // ★ VS Code: 디바운스된 자동 저장 (1초 후 파일에 기록)
+        // 웹 버전은 AutoSaveManager가 처리하지만 VS Code에서는 비활성화되어 있으므로
+        // saveHTML() 호출 시마다 디바운스로 실제 파일 저장을 트리거
+        if (window.vscBridge) {
+            clearTimeout(this._saveHTMLDebounceTimer);
+            this._saveHTMLDebounceTimer = setTimeout(async () => {
+                // CSS와 HTML 저장을 독립적으로 처리 (하나가 실패해도 다른 하나 진행)
+                try { await this.saveCSS(); } catch (err) {
+                    console.error('[saveHTML debounce] saveCSS error:', err);
+                }
+                try { await this.saveToServer(); } catch (err) {
+                    console.error('[saveHTML debounce] saveToServer error:', err);
+                }
+            }, 1000);
+        }
     }
 
     /**
@@ -4809,6 +4858,42 @@ class EditorApp extends EventEmitter {
         }
 
         return url;
+    }
+
+    /**
+     * VS Code: CSS 파일 외부 변경 시 CSSOM 업데이트
+     * 사용자가 VS Code 텍스트 에디터에서 CSS를 수정한 경우 비주얼 에디터에 반영
+     */
+    _handleExternalCSSChange(filename, content) {
+        console.log('[externalCSS] File changed externally:', filename);
+        const doc = this.modules.preview?.getDocument();
+        if (!doc) return;
+
+        // zaemit-injected-css 태그에 새 CSS 내용 반영
+        let injectedStyle = doc.getElementById('zaemit-injected-css');
+        if (injectedStyle) {
+            injectedStyle.textContent = content;
+        } else {
+            // injected-css가 없으면 새로 생성
+            injectedStyle = doc.createElement('style');
+            injectedStyle.id = 'zaemit-injected-css';
+            injectedStyle.textContent = content;
+            (doc.head || doc.documentElement).appendChild(injectedStyle);
+        }
+
+        // 멀티캔버스 동기화
+        if (this.modules.multiCanvas?._isInitialized) {
+            this.modules.multiCanvas.syncCSSToAllCanvases?.();
+        }
+
+        // 선택된 요소가 있으면 스타일 패널 업데이트
+        const selectedElement = this.modules.selection?.getSelectedElement();
+        if (selectedElement) {
+            this.modules.stylePanel?.updateUI?.(selectedElement);
+            this.modules.overlay?.update?.(selectedElement);
+        }
+
+        console.log('[externalCSS] CSS reloaded:', filename);
     }
 
     /**
@@ -5680,34 +5765,49 @@ class EditorApp extends EventEmitter {
                 const head = clonedDoc.querySelector('head');
                 const body = clonedDoc.querySelector('body');
 
-                // 1. <style id="zaemit-injected-css"> 모두 제거 → <link href="실제CSS파일명"> 복원
+                // 1. <style id="zaemit-injected-css"> 모두 제거
                 const injectedCssList = clonedDoc.querySelectorAll('#zaemit-injected-css');
-                if (injectedCssList.length > 0) {
-                    injectedCssList.forEach(el => el.remove());
-                    if (head && this._fileNames?.css) {
-                        const link = doc.createElement('link');
-                        link.rel = 'stylesheet';
-                        link.href = this._fileNames.css;
-                        head.appendChild(link);
-                    }
-                }
+                injectedCssList.forEach(el => el.remove());
 
                 // 2. <style id="zaemit-temp-styles"> 모두 제거 (saveCSS()에서 이미 style.css에 병합됨)
                 clonedDoc.querySelectorAll('#zaemit-temp-styles').forEach(el => el.remove());
 
-                // 3. <script id="zaemit-injected-js"> 모두 제거 → <script src="실제JS파일명"> 복원
-                const injectedJsList = clonedDoc.querySelectorAll('#zaemit-injected-js');
-                if (injectedJsList.length > 0) {
-                    injectedJsList.forEach(el => el.remove());
-                    if (body && this._fileNames?.js) {
-                        const script = doc.createElement('script');
-                        script.src = this._fileNames.js;
-                        body.appendChild(script);
+                // 3. CSS 파일이 존재하면 <link> 태그 확실히 복원
+                // ★ _fileNames.css가 null이면 CSS를 아직 저장한 적 없으므로 <link> 미삽입
+                //    saveCSS() 최초 호출 시 _fileNames.css가 동적으로 설정됨
+                const cssName = this._fileNames?.css;
+                if (head && cssName) {
+                    const existingLink = clonedDoc.querySelector(`link[rel="stylesheet"][href="${cssName}"]`);
+                    if (!existingLink) {
+                        const link = (clonedDoc.ownerDocument || doc).createElement('link');
+                        link.rel = 'stylesheet';
+                        link.href = cssName;
+                        // <title> 다음 또는 <head> 끝에 삽입
+                        const title = head.querySelector('title');
+                        if (title && title.nextSibling) {
+                            head.insertBefore(link, title.nextSibling);
+                        } else {
+                            head.appendChild(link);
+                        }
                     }
                 }
 
-                // 4. <script id="zaemit-link-interceptor"> 모두 제거 (에디터 전용)
+                // 4. <script id="zaemit-injected-js"> 모두 제거
+                clonedDoc.querySelectorAll('#zaemit-injected-js').forEach(el => el.remove());
+
+                // 5. <script id="zaemit-link-interceptor"> 모두 제거 (에디터 전용)
                 clonedDoc.querySelectorAll('#zaemit-link-interceptor').forEach(el => el.remove());
+
+                // 6. JS 파일이 존재하면 <script src> 태그 확실히 복원
+                const jsName = this._fileNames?.js;
+                if (body && jsName) {
+                    const existingScript = clonedDoc.querySelector(`script[src="${jsName}"]`);
+                    if (!existingScript) {
+                        const script = (clonedDoc.ownerDocument || doc).createElement('script');
+                        script.src = jsName;
+                        body.appendChild(script);
+                    }
+                }
 
                 // 5. blob/data URL → 상대 경로 변환 (data-zaemit-save-url 속성 기반)
                 clonedDoc.querySelectorAll('[data-zaemit-save-url]').forEach(el => {

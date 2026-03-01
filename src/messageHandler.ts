@@ -24,6 +24,9 @@ export class MessageHandler {
     /** HTML에서 감지된 JS 파일명 (없으면 null) */
     public jsFilename: string | null;
 
+    /** 내부 저장 시 외부 watcher 중복 방지 콜백 */
+    public onInternalSave?: (filename: string) => void;
+
     constructor(
         private webview: vscode.Webview,
         private document: vscode.TextDocument,
@@ -197,6 +200,16 @@ export class MessageHandler {
         if (url.match(/\/api\/projects\/[^/]+\/files\//) && method === 'POST') {
             const filename = url.split('/files/')[1];
             if (filename && body?.content !== undefined) {
+                // ★ CSS/JS 파일명 동적 감지 (에디터에서 최초 생성 시)
+                // 원본 HTML에 <link>/<script src> 없이 시작해도,
+                // 에디터에서 스타일/스크립트 편집 시 파일이 자동 생성됨
+                if (!this.cssFilename && filename.endsWith('.css')) {
+                    this.cssFilename = filename;
+                }
+                if (!this.jsFilename && filename.endsWith('.js')) {
+                    this.jsFilename = filename;
+                }
+
                 // ★ 열린 HTML 파일 저장 시: 에디터가 주입한 인라인 태그 정리
                 const content = filename === this.htmlFilename
                     ? this.cleanInjectedTags(body.content)
@@ -220,6 +233,7 @@ export class MessageHandler {
                     }
                 } else {
                     // CSS/JS 등 다른 파일: fileService로 디스크 직접 저장
+                    this.onInternalSave?.(filename);
                     await this.fileService.writeFile(filename, content);
 
                     // 열려있으면 VS Code 문서도 동기화
@@ -649,34 +663,38 @@ export class MessageHandler {
     private cleanInjectedTags(html: string): string {
         let result = html;
 
-        // 1. <style id="zaemit-injected-css">...</style> → <link href="실제CSS파일명"> 복원
-        const beforeCss = result;
+        // 1. <style id="zaemit-injected-css">...</style> 제거
         result = result.replace(/<style\s+id=["']zaemit-injected-css["'][^>]*>[\s\S]*?<\/style>/gi, '');
-        if (result !== beforeCss && this.cssFilename) {
-            // </head> 앞에 <link href="실제CSS파일명"> 복원
-            if (result.includes('</head>')) {
-                result = result.replace('</head>', `  <link rel="stylesheet" href="${this.cssFilename}">\n</head>`);
-            }
-        }
 
         // 2. <style id="zaemit-temp-styles">...</style> 제거
         result = result.replace(/<style\s+id=["']zaemit-temp-styles["'][^>]*>[\s\S]*?<\/style>/gi, '');
 
-        // 3. <script id="zaemit-injected-js">...</script> → <script src="실제JS파일명"> 복원
-        const beforeJs = result;
-        result = result.replace(/<script\s+id=["']zaemit-injected-js["'][^>]*>[\s\S]*?<\/script>/gi, '');
-        if (result !== beforeJs && this.jsFilename) {
-            // </body> 앞에 <script src="실제JS파일명"> 복원
-            if (result.includes('</body>')) {
-                result = result.replace('</body>', `  <script src="${this.jsFilename}"></script>\n</body>`);
+        // 3. CSS 파일이 존재하면 <link> 태그 확실히 복원
+        // ★ 원본 HTML에 CSS 없이 시작해도, 에디터에서 스타일 편집하면 CSS 파일이 자동 생성되므로
+        //    <link> 태그가 반드시 있어야 다시 열었을 때 스타일이 적용됨
+        if (this.cssFilename && result.includes('</head>')) {
+            const linkPattern = new RegExp(`<link[^>]*href=["']${this.cssFilename.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}["'][^>]*>`, 'i');
+            if (!linkPattern.test(result)) {
+                result = result.replace('</head>', `  <link rel="stylesheet" href="${this.cssFilename}">\n</head>`);
             }
         }
 
-        // 4. <script id="zaemit-link-interceptor">...</script> 제거
+        // 4. <script id="zaemit-injected-js">...</script> 제거
+        result = result.replace(/<script\s+id=["']zaemit-injected-js["'][^>]*>[\s\S]*?<\/script>/gi, '');
+
+        // 5. <script id="zaemit-link-interceptor">...</script> 제거
         result = result.replace(/<script\s+id=["']zaemit-link-interceptor["'][^>]*>[\s\S]*?<\/script>/gi, '');
 
-        // 5. bare 링크 인터셉터 제거 (ID 없이 저장된 이전 버그 잔재)
+        // 6. bare 링크 인터셉터 제거 (ID 없이 저장된 이전 버그 잔재)
         result = result.replace(/<script>\s*document\.addEventListener\("click",function\(e\)\{var a=e\.target\.closest\("a"\);if\(a&&a\.href\)\{e\.preventDefault\(\);\}\}\);\s*<\/script>/gi, '');
+
+        // 7. JS 파일이 존재하면 <script src> 태그 확실히 복원
+        if (this.jsFilename && result.includes('</body>')) {
+            const scriptPattern = new RegExp(`<script[^>]*src=["']${this.jsFilename.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}["'][^>]*>`, 'i');
+            if (!scriptPattern.test(result)) {
+                result = result.replace('</body>', `  <script src="${this.jsFilename}"></script>\n</body>`);
+            }
+        }
 
         // 빈 줄 정리 (연속 3줄 이상 → 1줄)
         result = result.replace(/\n{3,}/g, '\n\n');

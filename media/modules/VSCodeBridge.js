@@ -73,6 +73,10 @@ class VSCodeBridge {
                 case 'file:externalChange':
                     if (msg.payload.filename && msg.payload.content !== undefined) {
                         this.projectFiles[msg.payload.filename] = msg.payload.content;
+                        // ★ CSS/JS 외부 변경 시 에디터에 알림
+                        if (this.onExternalFileChange) {
+                            this.onExternalFileChange(msg.payload.filename, msg.payload.content);
+                        }
                     }
                     break;
             }
