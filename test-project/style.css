@@ -602,15 +602,6 @@ img { max-width: 100%; display: block; }
   line-height: 1.15;
   letter-spacing: -0.02em;
   margin-bottom: 16px;
-  border-top-width: 1px;
-  border-top-style: solid;
-  border-right-style: solid;
-  border-bottom-style: solid;
-  border-left-style: solid;
-  border-right-width: 0px;
-  border-bottom-width: 0px;
-  border-left-width: 0px;
-  border-top-color: rgb(255, 10, 10);
 }
 
 .section-subtitle {
@@ -812,6 +803,7 @@ img { max-width: 100%; display: block; }
   padding: 120px 0;
   background-size: cover;
   background-repeat: no-repeat;
+  background-image: url("sample4.jpg");
 }
 
 .showcase-grid {
@@ -1352,8 +1344,8 @@ img { max-width: 100%; display: block; }
 }
 
 .section-title.h2-131jn1 {
-  border-top-width: 1px;
-  border-top-style: solid;
+  border-top-width: 0px;
+  border-top-style: none;
   color: rgb(255, 255, 255);
   margin-top: 50px;
   margin-right: 50px;
@@ -1366,7 +1358,7 @@ img { max-width: 100%; display: block; }
 }
 
 .showcase-img.div-oqpfcr {
-  background-image: url("sample4.jpg");
+  background-image: url("sample3.jpg");
 }
 
 .showcase-img.div-60xey5 {
@@ -1374,7 +1366,7 @@ img { max-width: 100%; display: block; }
 }
 
 .showcase-img.div-1x2izm {
-  background-image: url("sample2.jpg");
+  background-image: url("sample1.jpg");
 }
 
 .showcase-overlay.div-lrt96t {
@@ -1407,4 +1399,49 @@ img { max-width: 100%; display: block; }
   padding-right: 20px;
   padding-bottom: 20px;
   padding: 20px;
+  color: rgb(255, 148, 148);
+  border-color: rgb(250, 250, 250);
+  border-width: 5px;
+  border-style: solid;
+}
+
+[data-animate].visible.showcase-grid {
+  justify-items: start;
+  grid-auto-flow: row;
+  float: none;
+}
+
+.section-title.h2-3xa1ec {
+  border-top-width: 0px;
+  border-top-style: none;
+}
+
+.section-title.h2-oway2a {
+  border-top-width: 0px;
+  border-top-style: none;
+}
+
+.style-panel-content .section-title {
+  border-top-width: 0px;
+  border-top-style: none;
+}
+
+.section-title.h2-np4qil {
+  border-top-width: 0px;
+  border-top-style: none;
+}
+
+.section-title.h2-t9zcdt {
+  border-top-width: 0px;
+  border-top-style: none;
+}
+
+.gallery-item img {
+  width: 1010px;
+  height: 669px;
+}
+
+.gallery-grid {
+  grid-template-columns: repeat(1, 1fr);
+  height: auto;
 }
