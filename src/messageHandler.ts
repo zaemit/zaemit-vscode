@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import { FileService } from './services/fileService';
+import { sendEvent, sendError } from './telemetry';
 
 /**
  * WebView → Extension Host 메시지 라우터
@@ -97,19 +98,24 @@ export class MessageHandler {
         if (msg.type === 'api:request') {
             await this.handleApiRequest(msg);
         } else if (msg.type === 'images:browseFolder') {
+            sendEvent('feature_used', { feature: 'image_browse_folder' });
             await this.handleBrowseFolder(msg);
         } else if (msg.type === 'images:listFolder') {
             await this.handleListFolder(msg);
         } else if (msg.type === 'images:saveDroppedFile') {
+            sendEvent('feature_used', { feature: 'image_drop' });
             await this.handleSaveDroppedFile(msg);
         } else if (msg.type === 'images:pickFile') {
+            sendEvent('feature_used', { feature: 'image_pick' });
             await this.handlePickFile(msg);
         } else if (msg.type === 'webview:loaded') {
-            // WebView 로드 완료 → 초기 데이터 전송
+            sendEvent('webview_loaded');
             await this.sendInitData();
         } else if (msg.type === 'editor:ready') {
+            sendEvent('editor_ready');
             console.log('[Zaemit] Editor initialized in WebView');
         } else if (msg.type === 'editor:error') {
+            sendError('editor_error', { message: msg.payload?.message || 'unknown' });
             console.error('[Zaemit] Editor error:', msg.payload?.message);
             vscode.window.showErrorMessage(`Zaemit Editor Error: ${msg.payload?.message}`);
         }
@@ -252,6 +258,10 @@ export class MessageHandler {
                         await vscode.workspace.applyEdit(edit);
                     }
                 }
+
+                // 파일 저장 추적 (확장자만, 파일명 수집 안함)
+                const ext = path.extname(filename).toLowerCase();
+                sendEvent('file_saved', { fileType: ext });
 
                 return { success: true };
             }

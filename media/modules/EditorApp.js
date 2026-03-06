@@ -54,6 +54,8 @@ import ImageToolbar from './ImageToolbar.js';
 // import IconPickerManager from './IconPickerManager.js';
 // Phase 14: Motion Manager (VS Code only)
 import MotionManager from './MotionManager.js';
+// Phase 15: MCP Bridge (AI CLI 연동)
+import MCPBridge from './MCPBridge.js';
 
 class EditorApp extends EventEmitter {
     constructor() {
@@ -264,6 +266,10 @@ class EditorApp extends EventEmitter {
         // Phase 14: Motion Manager (VS Code only)
         this.modules.motionManager = new MotionManager();
         this.modules.motionManager.init();
+
+        // Phase 15: MCP Bridge (AI CLI 연동)
+        this.modules.mcpBridge = new MCPBridge(this);
+        this.modules.mcpBridge.init();
 
         // Property panels
         this.modules.propertyPanel = new PropertyPanel(this.modules.elementSelector);
@@ -1208,6 +1214,11 @@ class EditorApp extends EventEmitter {
         });
         document.getElementById('redoBtn')?.addEventListener('click', async () => {
             await this.modules.undoRedo.redo();
+        });
+
+        // 리로드 버튼
+        document.getElementById('reloadPageBtn')?.addEventListener('click', () => {
+            this.modules.preview?.refresh();
         });
 
         this.modules.keyboard.on('shortcut:resetZoom', () => {

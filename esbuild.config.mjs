@@ -43,17 +43,31 @@ const bridgeBuild = {
     minify: !isWatch
 };
 
+// 4. MCP Server 번들 (Claude Code가 spawn하는 독립 프로세스)
+const mcpServerBuild = {
+    entryPoints: ['mcp-server.js'],
+    bundle: true,
+    outfile: 'dist/mcp-server.js',
+    platform: 'node',
+    target: 'node18',
+    format: 'cjs',
+    sourcemap: false,
+    minify: !isWatch
+};
+
 if (isWatch) {
     const ctx1 = await esbuild.context(extensionBuild);
     const ctx2 = await esbuild.context(webviewBuild);
     const ctx3 = await esbuild.context(bridgeBuild);
-    await Promise.all([ctx1.watch(), ctx2.watch(), ctx3.watch()]);
+    const ctx4 = await esbuild.context(mcpServerBuild);
+    await Promise.all([ctx1.watch(), ctx2.watch(), ctx3.watch(), ctx4.watch()]);
     console.log('Watching for changes...');
 } else {
     await Promise.all([
         esbuild.build(extensionBuild),
         esbuild.build(webviewBuild),
-        esbuild.build(bridgeBuild)
+        esbuild.build(bridgeBuild),
+        esbuild.build(mcpServerBuild)
     ]);
-    console.log('Build complete (Extension + WebView + Bridge).');
+    console.log('Build complete (Extension + WebView + Bridge + MCP Server).');
 }

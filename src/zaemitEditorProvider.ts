@@ -1,6 +1,8 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import { MessageHandler } from './messageHandler';
+import { mcpBridgeServer } from './extension';
+import { sendEvent, SessionTimer } from './telemetry';
 
 export class ZaemitEditorProvider implements vscode.CustomTextEditorProvider {
 
@@ -56,9 +58,27 @@ export class ZaemitEditorProvider implements vscode.CustomTextEditorProvider {
             this.context.extensionUri
         );
 
-        webviewPanel.webview.onDidReceiveMessage(
-            (msg) => messageHandler.handleMessage(msg)
-        );
+        // MCP Bridge: WebView 연결
+        mcpBridgeServer.setWebview(webviewPanel.webview);
+        mcpBridgeServer.setProjectDir(projectDir);
+
+        // 텔레메트리: 에디터 세션 시작
+        const session = new SessionTimer();
+        const hasCss = messageHandler.cssFilename !== null;
+        const hasJs = messageHandler.jsFilename !== null;
+        sendEvent('editor_session_start', {
+            hasCss: String(hasCss),
+            hasJs: String(hasJs),
+        });
+
+        webviewPanel.webview.onDidReceiveMessage((msg) => {
+            // MCP 관련 메시지는 Bridge Server로 라우팅
+            if (msg.type && msg.type.startsWith('mcp:')) {
+                mcpBridgeServer.handleEditorMessage(msg);
+                return;
+            }
+            messageHandler.handleMessage(msg);
+        });
 
         // 문서 외부 변경 감지 (에디터 내부 저장은 무시)
         const changeDocumentSubscription = vscode.workspace.onDidChangeTextDocument(e => {
@@ -104,8 +124,10 @@ export class ZaemitEditorProvider implements vscode.CustomTextEditorProvider {
         cssJsWatcher.onDidCreate(handleCssJsChange);
 
         webviewPanel.onDidDispose(() => {
+            session.end({ hasCss: String(hasCss), hasJs: String(hasJs) });
             changeDocumentSubscription.dispose();
             cssJsWatcher.dispose();
+            mcpBridgeServer.setWebview(null);
         });
     }
 
