@@ -376,9 +376,6 @@ async function importFromFigma(context: vscode.ExtensionContext): Promise<void> 
 
             vscode.window.showInformationMessage(`Figma 디자인을 figma/${finalName}/에 가져왔습니다.`);
 
-            // AI 반응형 최적화 제안
-            promptResponsiveOptimization(finalDir);
-
         } catch (err: any) {
             sendEvent('figma_import_error', { error: err.message || 'unknown' });
 
