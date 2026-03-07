@@ -77,6 +77,11 @@ export class ZaemitEditorProvider implements vscode.CustomTextEditorProvider {
                 mcpBridgeServer.handleEditorMessage(msg);
                 return;
             }
+            // Zaemit 커맨드 실행 (에디터 사이드바 버튼)
+            if (msg.type === 'zaemit:command' && msg.command) {
+                vscode.commands.executeCommand(msg.command);
+                return;
+            }
             messageHandler.handleMessage(msg);
         });
 
@@ -152,7 +157,7 @@ export class ZaemitEditorProvider implements vscode.CustomTextEditorProvider {
         // CSP 설정
         const cspContent = [
             `default-src 'none'`,
-            `style-src ${webview.cspSource} 'unsafe-inline' https://cdn.jsdelivr.net`,
+            `style-src ${webview.cspSource} 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com`,
             `script-src ${webview.cspSource} 'unsafe-inline' 'unsafe-eval'`,
             `img-src ${webview.cspSource} https: data: blob:`,
             `font-src ${webview.cspSource} https: data:`,

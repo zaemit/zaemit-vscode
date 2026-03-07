@@ -124,6 +124,7 @@
                 <span class="zoom-label">Zoom</span>
                 <div class="zoom-level-display" id="zoomLevelDisplay" title="Click to select zoom level">100%</div>
                 <div class="zoom-dropdown hidden" id="zoomDropdown">
+                    <div class="zoom-option" data-zoom="0.1">10%</div>
                     <div class="zoom-option" data-zoom="0.25">25%</div>
                     <div class="zoom-option" data-zoom="0.5">50%</div>
                     <div class="zoom-option" data-zoom="0.75">75%</div>
@@ -131,7 +132,10 @@
                     <div class="zoom-option" data-zoom="1.25">125%</div>
                     <div class="zoom-option" data-zoom="1.5">150%</div>
                     <div class="zoom-option" data-zoom="2">200%</div>
+                    <div class="zoom-option" data-zoom="2.5">250%</div>
                     <div class="zoom-option" data-zoom="3">300%</div>
+                    <div class="zoom-option" data-zoom="4">400%</div>
+                    <div class="zoom-option" data-zoom="5">500%</div>
                 </div>
             </div>
         </div>
@@ -341,6 +345,31 @@
                     <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
                     <line x1="3" y1="9" x2="21" y2="9"/>
                     <line x1="9" y1="21" x2="9" y2="9"/>
+                </svg>
+            </button>
+
+            <div style="flex:1;"></div>
+
+            <!-- Zaemit Tools -->
+            <button class="left-panel-toggle-btn" id="figmaImportBtn" title="Import from Figma (Ctrl+Shift+F)">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                    <path d="M8 24c2.2 0 4-1.8 4-4v-4H8c-2.2 0-4 1.8-4 4s1.8 4 4 4z" fill="#0ACF83"/>
+                    <path d="M4 12c0-2.2 1.8-4 4-4h4v8H8c-2.2 0-4-1.8-4-4z" fill="#A259FF"/>
+                    <path d="M4 4c0-2.2 1.8-4 4-4h4v8H8C5.8 8 4 6.2 4 4z" fill="#F24E1E"/>
+                    <path d="M12 0h4c2.2 0 4 1.8 4 4s-1.8 4-4 4h-4V0z" fill="#FF7262"/>
+                    <path d="M20 12c0 2.2-1.8 4-4 4s-4-1.8-4-4 1.8-4 4-4 4 1.8 4 4z" fill="#1ABCFE"/>
+                </svg>
+            </button>
+            <button class="left-panel-toggle-btn" id="responsiveOptimizeBtn" title="AI Responsive Optimization">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+                    <line x1="12" y1="18" x2="12.01" y2="18"/>
+                </svg>
+            </button>
+            <button class="left-panel-toggle-btn" id="editorShortcutsBtn" title="Keyboard Shortcuts (Ctrl+Alt+Shift+K)">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="4" width="20" height="16" rx="2"/>
+                    <path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M8 12h8M6 16h.01M10 16h4"/>
                 </svg>
             </button>
         </div>
@@ -1707,6 +1736,26 @@
     <script src="{{codemirrorJsUri}}"></script>
     <!-- Bundled Editor Modules -->
     <script src="{{webviewJsUri}}"></script>
+
+    <!-- Zaemit sidebar button handlers -->
+    <script>
+    (function() {
+        function postCmd(command) {
+            if (window.vscBridge && window.vscBridge.vscode) {
+                window.vscBridge.vscode.postMessage({ type: 'zaemit:command', command: command });
+            }
+        }
+        var figmaBtn = document.getElementById('figmaImportBtn');
+        if (figmaBtn) figmaBtn.addEventListener('click', function() { postCmd('zaemit.figmaImport'); });
+        var responsiveBtn = document.getElementById('responsiveOptimizeBtn');
+        if (responsiveBtn) responsiveBtn.addEventListener('click', function() { postCmd('zaemit.responsiveOptimize'); });
+        var shortcutsBtn = document.getElementById('editorShortcutsBtn');
+        if (shortcutsBtn) shortcutsBtn.addEventListener('click', function() {
+            var modal = document.getElementById('shortcutsModal');
+            if (modal) modal.classList.remove('hidden');
+        });
+    })();
+    </script>
 
 </body>
 </html>

@@ -322,6 +322,11 @@ class EditorApp extends EventEmitter {
             const doc = this.modules.preview.getDocument();
             this.modules.gapOverlay.createGapOverlay(doc);
 
+            // ★ 페이지 폰트 감지 → 셀렉터 드롭다운에 자동 추가
+            if (doc) {
+                this._detectAndAddPageFonts(doc);
+            }
+
             // Reattach context menu iframe handlers (메뉴는 메인 document에 생성됨)
             this.modules.contextMenu.reattachIframeHandlers();
 
@@ -387,6 +392,11 @@ class EditorApp extends EventEmitter {
                             );
                         }
                     });
+
+                    // ★ 페이지 폰트 감지 → 셀렉터 드롭다운에 자동 추가
+                    if (iframeDoc) {
+                        this._detectAndAddPageFonts(iframeDoc);
+                    }
                 };
                 this.modules.multiCanvas.on('multiview:mainIframeLoaded', onMainIframeLoaded);
 
@@ -4908,6 +4918,117 @@ class EditorApp extends EventEmitter {
     }
 
     /**
+     * 페이지에서 사용된 폰트를 감지하여 폰트 셀렉터 드롭다운에 자동 추가
+     * Google Fonts <link> 태그 + 문서 내 computed font-family 스캔
+     */
+    _detectAndAddPageFonts(iframeDoc) {
+        if (!iframeDoc) return;
+        const fonts = new Set();
+
+        // 1. Google Fonts <link> 태그에서 폰트 추출
+        const links = iframeDoc.querySelectorAll('link[href*="fonts.googleapis.com"]');
+        links.forEach(link => {
+            const href = link.getAttribute('href') || '';
+            const matches = href.matchAll(/family=([^&:]+)/g);
+            for (const m of matches) {
+                const name = decodeURIComponent(m[1].replace(/\+/g, ' ')).trim();
+                if (name) fonts.add(name);
+            }
+        });
+
+        // 2. @import url(fonts.googleapis.com) 스캔
+        const styles = iframeDoc.querySelectorAll('style');
+        styles.forEach(style => {
+            const text = style.textContent || '';
+            const imports = text.matchAll(/@import\s+url\([^)]*fonts\.googleapis\.com[^)]*family=([^&:)]+)/g);
+            for (const m of imports) {
+                const name = decodeURIComponent(m[1].replace(/\+/g, ' ')).trim();
+                if (name) fonts.add(name);
+            }
+        });
+
+        // 3. 문서 내 텍스트 요소의 computed font-family에서 비표준 폰트 추출
+        const standardFonts = new Set([
+            'arial', 'helvetica', 'times new roman', 'georgia', 'verdana',
+            'courier new', 'trebuchet ms', 'lucida console', 'impact',
+            'comic sans ms', 'system-ui', 'sans-serif', 'serif', 'monospace',
+            'cursive', 'fantasy', '-apple-system', 'blinkmacsystemfont', 'segoe ui',
+            'roboto', 'tahoma', 'geneva', 'lucida grande',
+        ]);
+        try {
+            const textEls = iframeDoc.querySelectorAll('p, h1, h2, h3, h4, h5, h6, span, a, li, td, th, label, button');
+            const win = iframeDoc.defaultView;
+            if (win) {
+                const seen = new Set();
+                textEls.forEach(el => {
+                    const ff = win.getComputedStyle(el).fontFamily;
+                    if (!ff || seen.has(ff)) return;
+                    seen.add(ff);
+                    ff.split(',').forEach(f => {
+                        const name = f.replace(/['"]/g, '').trim();
+                        if (name && !standardFonts.has(name.toLowerCase())) {
+                            fonts.add(name);
+                        }
+                    });
+                });
+            }
+        } catch (e) { /* cross-origin iframe */ }
+
+        if (fonts.size === 0) return;
+
+        console.log('[FontDetect] Page fonts:', [...fonts]);
+
+        // 4. 폰트 셀렉터 드롭다운에 추가 (속성 패널 + 텍스트 툴바)
+        const selectors = ['styleFontFamily', 'selectionFontFamily'];
+        selectors.forEach(id => {
+            const select = document.getElementById(id);
+            if (!select) return;
+
+            // 기존 페이지 폰트 옵션 제거
+            select.querySelectorAll('option[data-page-font]').forEach(o => o.remove());
+
+            // 구분선 추가
+            const sep = document.createElement('option');
+            sep.disabled = true;
+            sep.textContent = '── Page Fonts ──';
+            sep.dataset.pageFont = 'true';
+            // inherit/Font 플레이스홀더 다음에 삽입
+            const insertAfter = select.options[0];
+            if (insertAfter?.nextSibling) {
+                select.insertBefore(sep, insertAfter.nextSibling);
+            } else {
+                select.appendChild(sep);
+            }
+
+            // 폰트 옵션 추가
+            let insertPos = sep.nextSibling;
+            [...fonts].sort().forEach(fontName => {
+                const opt = document.createElement('option');
+                opt.value = `'${fontName}', sans-serif`;
+                opt.textContent = fontName;
+                opt.dataset.pageFont = 'true';
+                if (insertPos) {
+                    select.insertBefore(opt, insertPos);
+                } else {
+                    select.appendChild(opt);
+                }
+                insertPos = opt.nextSibling;
+            });
+        });
+
+        // 5. 에디터 호스트 문서에도 Google Fonts 로드 (드롭다운에서 폰트 미리보기용)
+        links.forEach(link => {
+            const href = link.getAttribute('href');
+            if (href && !document.querySelector(`link[href="${href}"]`)) {
+                const hostLink = document.createElement('link');
+                hostLink.rel = 'stylesheet';
+                hostLink.href = href;
+                document.head.appendChild(hostLink);
+            }
+        });
+    }
+
+    /**
      * VS Code: iframe 로드 후 상대 경로 이미지/배경을 blob URL로 변환
      * srcdoc iframe(origin: null)에서 webview URI 직접 로딩 불가
      * → 부모 webview에서 fetch → iframe 컨텍스트에서 blob URL 생성
@@ -5695,9 +5816,9 @@ class EditorApp extends EventEmitter {
                 el.style.removeProperty('min-height');
                 el.style.removeProperty('max-height');
 
-                // Restore original values (skip editor artifact px values)
+                // Restore original values
                 if (origHeight && origHeight !== 'auto') el.style.height = origHeight;
-                if (origMinHeight && parseFloat(origMinHeight) < 3000) el.style.minHeight = origMinHeight;
+                if (origMinHeight) el.style.minHeight = origMinHeight;
                 if (origMaxHeight) el.style.maxHeight = origMaxHeight;
 
                 // Remove editor data attributes

@@ -5,7 +5,7 @@
   "version": "0.0.13",
   "publisher": "zaemit",
   "license": "SEE LICENSE IN LICENSE",
-  "homepage": "https://zaemit.github.io/zaemit-vscode/docs/",
+  "homepage": "https://zaemit.github.io/zaemit-vscode/",
   "repository": {
     "type": "git",
     "url": "https://github.com/zaemit/zaemit-vscode"
@@ -28,15 +28,25 @@
     "wysiwyg",
     "drag and drop",
     "web design",
-    "live preview"
+    "live preview",
+    "figma",
+    "figma to html"
   ],
   "activationEvents": [],
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
       {
+        "command": "zaemit.showMainMenu",
+        "title": "Zaemit: Open Menu",
+        "icon": {
+          "light": "media/icons/zaemit-icon-light.svg",
+          "dark": "media/icons/zaemit-icon-dark.svg"
+        }
+      },
+      {
         "command": "zaemit.openWithEditor",
-        "title": "Open with Zaemit Visual Editor",
+        "title": "Zaemit: Open with Visual Editor",
         "icon": {
           "light": "media/icons/zaemit-icon-light.svg",
           "dark": "media/icons/zaemit-icon-dark.svg"
@@ -49,6 +59,51 @@
           "light": "media/icons/zaemit-icon-light.svg",
           "dark": "media/icons/zaemit-icon-dark.svg"
         }
+      },
+      {
+        "command": "zaemit.figmaImport",
+        "title": "Zaemit: Import from Figma",
+        "icon": "$(cloud-download)"
+      },
+      {
+        "command": "zaemit.figmaSetToken",
+        "title": "Zaemit: Set Figma Token",
+        "icon": "$(key)"
+      },
+      {
+        "command": "zaemit.figmaRemoveToken",
+        "title": "Zaemit: Remove Figma Token"
+      },
+      {
+        "command": "zaemit.showShortcuts",
+        "title": "Zaemit: Show Keyboard Shortcuts"
+      },
+      {
+        "command": "zaemit.openDocs",
+        "title": "Zaemit: Open Documentation"
+      },
+      {
+        "command": "zaemit.responsiveOptimize",
+        "title": "Zaemit: AI Responsive Optimization",
+        "icon": "$(device-mobile)"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "zaemit.showMainMenu",
+        "key": "ctrl+shift+z",
+        "mac": "cmd+shift+z"
+      },
+      {
+        "command": "zaemit.openCurrentFile",
+        "key": "ctrl+shift+e",
+        "mac": "cmd+shift+e",
+        "when": "resourceExtname == .html"
+      },
+      {
+        "command": "zaemit.figmaImport",
+        "key": "ctrl+shift+f",
+        "mac": "cmd+shift+f"
       }
     ],
     "menus": {
@@ -57,6 +112,31 @@
           "command": "zaemit.openWithEditor",
           "when": "resourceExtname == .html",
           "group": "navigation"
+        }
+      ],
+      "editor/title": [
+        {
+          "command": "zaemit.showMainMenu",
+          "group": "navigation",
+          "when": "resourceExtname == .html"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "zaemit",
+          "title": "Zaemit",
+          "icon": "media/icons/zaemit-icon-dark.svg"
+        }
+      ]
+    },
+    "views": {
+      "zaemit": [
+        {
+          "id": "zaemit.menu",
+          "name": "Menu",
+          "type": "webview"
         }
       ]
     },
