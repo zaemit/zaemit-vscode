@@ -1041,16 +1041,12 @@ export async function runResponsiveOptimization(projectDir?: vscode.Uri): Promis
 }
 
 async function promptResponsiveOptimization(projectDir: vscode.Uri): Promise<void> {
-    // 파일 내용 읽기
+    // 파일 존재 확인
     const cssUri = vscode.Uri.joinPath(projectDir, 'style.css');
-    let htmlContent: string, cssContent: string;
+    const htmlUri = vscode.Uri.joinPath(projectDir, 'index.html');
     try {
-        htmlContent = Buffer.from(
-            await vscode.workspace.fs.readFile(vscode.Uri.joinPath(projectDir, 'index.html'))
-        ).toString('utf-8');
-        cssContent = Buffer.from(
-            await vscode.workspace.fs.readFile(cssUri)
-        ).toString('utf-8');
+        await vscode.workspace.fs.stat(htmlUri);
+        await vscode.workspace.fs.stat(cssUri);
     } catch {
         vscode.window.showWarningMessage('index.html과 style.css가 있는 폴더에서 실행해주세요.');
         return;
@@ -1075,11 +1071,14 @@ async function promptResponsiveOptimization(projectDir: vscode.Uri): Promise<voi
     };
     const selectedAction = actionMap[pick];
 
-    const prompt = buildResponsivePrompt(htmlContent, cssContent);
+    const htmlPath = vscode.Uri.joinPath(projectDir, 'index.html').fsPath;
+    const cssPath = cssUri.fsPath;
+    const prompt = buildResponsivePrompt(htmlPath, cssPath);
     sendEvent('figma_responsive_start', { tool: selectedAction });
 
     switch (selectedAction) {
         case 'claude': {
+            const TIMEOUT_SEC = 180;
             const outputChannel = vscode.window.createOutputChannel('Zaemit AI', 'css');
             outputChannel.show(true);
             outputChannel.appendLine('/* Claude AI 반응형 최적화 - 생성 중... */\n');
@@ -1092,32 +1091,37 @@ async function promptResponsiveOptimization(projectDir: vscode.Uri): Promise<voi
                 return new Promise<void>((resolve) => {
                     const startTime = Date.now();
                     let received = false;
+                    let settled = false;
+                    const finish = () => { if (!settled) { settled = true; clearInterval(timer); clearTimeout(timeoutId); resolve(); } };
 
-                    // 경과 시간 표시 타이머
                     const timer = setInterval(() => {
                         const elapsed = Math.round((Date.now() - startTime) / 1000);
-                        const msg = received
-                            ? `생성 중... (${elapsed}초)`
-                            : `AI 응답 대기 중... (${elapsed}초)`;
-                        progress.report({ message: msg });
+                        progress.report({ message: received ? `생성 중... (${elapsed}초)` : `AI 응답 대기 중... (${elapsed}초)` });
                     }, 1000);
 
+                    // 타임아웃
+                    const timeoutId = setTimeout(() => {
+                        if (!settled) {
+                            proc.kill();
+                            outputChannel.appendLine(`\n/* ⏰ 타임아웃 (${TIMEOUT_SEC}초) */`);
+                            vscode.window.showErrorMessage(`AI 응답 타임아웃 (${TIMEOUT_SEC}초). 프롬프트가 너무 클 수 있습니다. '프롬프트 복사'로 직접 시도해보세요.`);
+                            finish();
+                        }
+                    }, TIMEOUT_SEC * 1000);
+
                     const cwd = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
-                    const proc = spawn('claude', ['-p'], {
+                    const proc = spawn('claude', ['-p', '--output-format', 'text'], {
                         cwd,
                         shell: true,
                         stdio: ['pipe', 'pipe', 'pipe'],
                     });
 
-                    let killed = false;
                     let fullOutput = '';
 
                     token.onCancellationRequested(() => {
-                        killed = true;
-                        clearInterval(timer);
                         proc.kill();
                         outputChannel.appendLine('\n/* 취소됨 */');
-                        resolve();
+                        finish();
                     });
 
                     proc.stdin!.write(prompt);
@@ -1131,27 +1135,22 @@ async function promptResponsiveOptimization(projectDir: vscode.Uri): Promise<voi
                     });
 
                     proc.stderr!.on('data', (data: Buffer) => {
-                        // stderr도 Output Channel에 표시 (진행 상태일 수 있음)
                         const text = data.toString().trim();
-                        if (text) {
-                            outputChannel.appendLine(`/* ${text} */`);
-                        }
+                        if (text) { outputChannel.appendLine(`/* ${text} */`); }
                     });
 
                     proc.on('error', (err: Error) => {
-                        clearInterval(timer);
-                        if (!killed) {
+                        if (!settled) {
                             outputChannel.appendLine(`\n/* 실행 실패: ${err.message} */`);
                             vscode.window.showErrorMessage(
                                 `Claude Code 실행 실패: ${err.message}\n'claude' CLI가 설치되어 있는지 확인하세요.`
                             );
                         }
-                        resolve();
+                        finish();
                     });
 
                     proc.on('close', async (code: number | null) => {
-                        clearInterval(timer);
-                        if (killed) { return; }
+                        if (settled) { return; }
                         const elapsed = Math.round((Date.now() - startTime) / 1000);
 
                         if (code === 0 && fullOutput.trim()) {
@@ -1164,11 +1163,9 @@ async function promptResponsiveOptimization(projectDir: vscode.Uri): Promise<voi
                             vscode.window.showInformationMessage(`반응형 최적화 완료! (${elapsed}초)`);
                         } else {
                             outputChannel.appendLine(`\n/* ❌ 실패 (exit: ${code}, ${elapsed}초) */`);
-                            vscode.window.showErrorMessage(
-                                `AI 최적화 실패 (exit: ${code})`
-                            );
+                            vscode.window.showErrorMessage(`AI 최적화 실패 (exit: ${code})`);
                         }
-                        resolve();
+                        finish();
                     });
                 });
             });
@@ -1197,18 +1194,14 @@ async function promptResponsiveOptimization(projectDir: vscode.Uri): Promise<voi
     }
 }
 
-function buildResponsivePrompt(html: string, css: string): string {
-    return `Convert this Figma-imported design to responsive CSS.
+function buildResponsivePrompt(htmlPath: string, cssPath: string): string {
+    return `Convert a Figma-imported design to responsive CSS.
 
-## Current HTML
-\`\`\`html
-${html}
-\`\`\`
+## Files
+- HTML: ${htmlPath}
+- CSS: ${cssPath}
 
-## Current CSS
-\`\`\`css
-${css}
-\`\`\`
+Read both files first, then rewrite style.css with the following rules.
 
 ## Rules
 
