@@ -493,14 +493,17 @@ function convertToHtml(rootNode: any, imageMap: Record<string, string>, title: s
     const bodyContent = renderNode(rootNode, cssRules, imageMap, true);
 
     // Google Fonts import 생성
+    // ★ 폰트별 개별 <link> 태그 생성: 일부 폰트(Sorts Mill Goudy 등)는 특정 weight만 지원하며,
+    //   존재하지 않는 weight를 요청하면 Google Fonts API가 400 에러를 반환함.
+    //   개별 태그로 분리하면 한 폰트 실패가 다른 폰트에 영향을 주지 않음.
     let fontLink = '';
     if (usedFonts.size > 0) {
-        const families = Array.from(usedFonts)
-            .map(f => f.replace(/ /g, '+') + ':wght@100;200;300;400;500;600;700;800;900')
-            .join('&family=');
         fontLink = `\n    <link rel="preconnect" href="https://fonts.googleapis.com">` +
-                   `\n    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>` +
-                   `\n    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=${families}&display=swap">`;
+                   `\n    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>`;
+        for (const fontName of usedFonts) {
+            const encoded = fontName.replace(/ /g, '+');
+            fontLink += `\n    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=${encoded}&display=swap">`;
+        }
     }
 
     const html = `<!DOCTYPE html>
@@ -725,9 +728,9 @@ function renderNode(node: any, cssRules: string[], imageMap: Record<string, stri
             styles.push(`font-family: '${googleName}', sans-serif`);
             usedFonts.add(googleName);
         }
-        if (ts.fontSize) { styles.push(`font-size: ${Math.round(ts.fontSize)}px`); }
+        if (ts.fontSize) { styles.push(`font-size: ${responsiveFontSize(ts.fontSize)}`); }
         if (ts.fontWeight && ts.fontWeight !== 400) { styles.push(`font-weight: ${ts.fontWeight}`); }
-        if (ts.lineHeightPx) { styles.push(`line-height: ${Math.round(ts.lineHeightPx)}px`); }
+        if (ts.lineHeightPx) { styles.push(`line-height: ${ts.fontSize ? responsiveLineHeight(ts.lineHeightPx, ts.fontSize) : Math.round(ts.lineHeightPx) + 'px'}`); }
         if (ts.letterSpacing) { styles.push(`letter-spacing: ${ts.letterSpacing.toFixed(1)}px`); }
         if (ts.textAlignHorizontal) {
             const taMap: Record<string, string> = { LEFT: 'left', CENTER: 'center', RIGHT: 'right', JUSTIFIED: 'justify' };
@@ -823,6 +826,61 @@ function renderNode(node: any, cssRules: string[], imageMap: Record<string, stri
         return `  <div ${attrs.join(' ')}></div>\n`;
     }
     return `  <div ${attrs.join(' ')}>\n${childrenHtml}  </div>\n`;
+}
+
+// ── 반응형 폰트 유틸리티 ──────────────────────────────
+// PC 80px → Mobile 32px 비율로 선형 보간, 12px 이하는 변화 없음
+// viewport 480px~1600px 구간에서 fluid typography 적용
+const RESPONSIVE_MIN_FONT = 12;   // 이 이하는 크기 변화 없음
+const RESPONSIVE_PC_REF = 80;     // 기준 PC 폰트 크기
+const RESPONSIVE_MOBILE_REF = 32; // 기준 모바일 폰트 크기
+const RESPONSIVE_VW_MIN = 480;    // 모바일 뷰포트
+const RESPONSIVE_VW_MAX = 1600;   // PC 뷰포트
+
+function responsiveFontSize(pcSize: number): string {
+    const rounded = Math.round(pcSize);
+    if (rounded <= RESPONSIVE_MIN_FONT) {
+        return `${rounded}px`;
+    }
+    // 선형 보간: mobileSize = MIN + (pcSize - MIN) * (MOBILE_REF - MIN) / (PC_REF - MIN)
+    const ratio = (RESPONSIVE_MOBILE_REF - RESPONSIVE_MIN_FONT) / (RESPONSIVE_PC_REF - RESPONSIVE_MIN_FONT);
+    const mobileSize = Math.round(RESPONSIVE_MIN_FONT + (rounded - RESPONSIVE_MIN_FONT) * ratio);
+
+    if (mobileSize >= rounded) {
+        return `${rounded}px`;
+    }
+
+    // fluid typography: clamp(mobile, intercept + slope*vw, pc)
+    const vwRange = RESPONSIVE_VW_MAX - RESPONSIVE_VW_MIN;
+    const slope = (rounded - mobileSize) / vwRange; // px per viewport-px
+    const slopeVw = +(slope * 100).toFixed(4);       // in vw units
+    const intercept = +(mobileSize - slope * RESPONSIVE_VW_MIN).toFixed(2);
+
+    return `clamp(${mobileSize}px, ${intercept}px + ${slopeVw}vw, ${rounded}px)`;
+}
+
+function responsiveLineHeight(pcLh: number, pcFontSize: number): string {
+    const roundedLh = Math.round(pcLh);
+    const roundedFs = Math.round(pcFontSize);
+    if (roundedFs <= RESPONSIVE_MIN_FONT) {
+        return `${roundedLh}px`;
+    }
+    // line-height를 font-size와 동일 비율로 축소
+    const ratio = (RESPONSIVE_MOBILE_REF - RESPONSIVE_MIN_FONT) / (RESPONSIVE_PC_REF - RESPONSIVE_MIN_FONT);
+    const mobileFontSize = RESPONSIVE_MIN_FONT + (roundedFs - RESPONSIVE_MIN_FONT) * ratio;
+    const scale = mobileFontSize / roundedFs;
+    const mobileLh = Math.round(roundedLh * scale);
+
+    if (mobileLh >= roundedLh) {
+        return `${roundedLh}px`;
+    }
+
+    const vwRange = RESPONSIVE_VW_MAX - RESPONSIVE_VW_MIN;
+    const slope = (roundedLh - mobileLh) / vwRange;
+    const slopeVw = +(slope * 100).toFixed(4);
+    const intercept = +(mobileLh - slope * RESPONSIVE_VW_MIN).toFixed(2);
+
+    return `clamp(${mobileLh}px, ${intercept}px + ${slopeVw}vw, ${roundedLh}px)`;
 }
 
 // ── 유틸리티 ────────────────────────────────────────
@@ -1216,16 +1274,27 @@ This is auto-generated from Figma. ALL layouts use position:relative on parents 
 - Fixed heights → min-height or remove
 - Only keep position:absolute for genuine overlays/badges
 
+### Font Scaling (IMPORTANT)
+Font sizes already use clamp() for fluid responsive scaling between 480px-1600px viewport.
+The scaling rule: PC 80px → Mobile 32px proportionally, text ≤12px stays unchanged.
+Keep all existing clamp() values as-is. Do NOT convert to rem/em — keep the clamp() expressions.
+
+### Mobile Layout Transformation
+- Horizontal card rows (items side by side) → vertical stack on mobile
+- Card images → width:100% on mobile
+- Multi-column grids → single column on mobile
+- Navigation items → hamburger menu or vertical stack
+
 ### Breakpoints
 - Desktop: default (MUST look identical to original)
-- Tablet @media(max-width:768px): stack horizontal→vertical, fonts -10~15%, grid 3→2col
+- Tablet @media(max-width:768px): stack horizontal→vertical, grid 3→2col
 - Mobile @media(max-width:480px): single column, full-width, min 44px tap targets
 
 ### Preservation (CRITICAL)
 Desktop view MUST be pixel-identical to original. Preserve ALL colors, fonts, sizes, weights, border-radius, shadows, gradients, opacity, image ratios. Do NOT remove elements or change class names.
 
 ### Best Practices
-rem/em for fonts (base 16px), overflow-x:hidden on body, word-break:break-word for narrow containers.
+overflow-x:hidden on body, word-break:break-word for narrow containers.
 
 ## OUTPUT
 Output ONLY the complete CSS that replaces the current style.css. No explanations, no markdown fences, just raw CSS. Include responsive sections with comments: /* Tablet */ and /* Mobile */`;

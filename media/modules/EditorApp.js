@@ -518,12 +518,13 @@ class EditorApp extends EventEmitter {
             this.startTextEditing(element, clickInfo);
         });
 
-        // Quick text edit mode - single click to edit text elements
-        // Only triggers when clicking directly on text content (not padding/margin areas)
+        // Text edit on click: Ctrl+Click always, or single click when quickTextEdit enabled
         this.modules.preview.on('element:click', (element, clickInfo) => {
             // Ignore clicks during drag operation
             if (this.modules.dragDrop?.isDraggingElement()) return;
-            if (!this.modules.settings.get('quickTextEdit')) return;
+            // Ctrl+Click → 텍스트 편집 우선, quickTextEdit 설정 시 일반 클릭도 허용
+            const isCtrlClick = clickInfo?.ctrlKey || clickInfo?.metaKey;
+            if (!isCtrlClick && !this.modules.settings.get('quickTextEdit')) return;
             if (!clickInfo || !this.modules.textEditing.isTextEditable(element)) return;
             if (!this.isTextContentElement(element)) return;
 
@@ -610,8 +611,9 @@ class EditorApp extends EventEmitter {
             // 요소 선택
             this.modules.elementSelector.selectElement(element);
 
-            // Quick text edit 처리
-            if (this.modules.settings.get('quickTextEdit') && info) {
+            // Ctrl+Click → 텍스트 편집 우선, quickTextEdit 설정 시 일반 클릭도 허용
+            const isCtrlClick = info?.ctrlKey || info?.metaKey;
+            if ((isCtrlClick || this.modules.settings.get('quickTextEdit')) && info) {
                 this._handleQuickTextEdit(element, info);
             }
         });
@@ -646,6 +648,22 @@ class EditorApp extends EventEmitter {
                 elementTag: element.tagName,
                 element
             });
+        });
+
+        // mousedown → threshold exceeded → drag start (first-click-drag)
+        this.modules.multiCanvas.on('element:dragstart', (element, info) => {
+            if (!element) return;
+            const doc = element.ownerDocument;
+            if (!doc) return;
+            const pos = doc.defaultView.getComputedStyle(element).position;
+            if (pos !== 'static') {
+                // non-static: left/top 이동
+                this.modules.resizeDrag.startMove(info.event);
+            } else {
+                // static: DOM 위치 드래그
+                this.modules.dragDrop.startDrag(element, info.event);
+                this.modules.overlay.hide();
+            }
         });
 
         // 멀티뷰 비활성화 시 현재 선택된 iframe 유지
@@ -1379,6 +1397,49 @@ class EditorApp extends EventEmitter {
             }
         });
 
+        // Arrow key nudge for absolute/relative/fixed positioned elements
+        this.modules.keyboard.on('shortcut:nudge', async ({ dx, dy }) => {
+            const element = this.modules.selection.getSelectedElement();
+            if (!element) return;
+            const doc = element.ownerDocument;
+            if (!doc) return;
+            const computed = doc.defaultView.getComputedStyle(element);
+            const position = computed.position;
+            if (position === 'static') return;
+
+            const oldLeft = computed.left || 'auto';
+            const oldTop = computed.top || 'auto';
+            const curLeft = parseFloat(oldLeft) || 0;
+            const curTop = parseFloat(oldTop) || 0;
+
+            const newLeft = Math.round(curLeft + dx) + 'px';
+            const newTop = Math.round(curTop + dy) + 'px';
+
+            element.style.left = newLeft;
+            element.style.top = newTop;
+
+            const changes = [];
+            if (dx !== 0) changes.push({ property: 'left', oldValue: oldLeft, newValue: newLeft });
+            if (dy !== 0) changes.push({ property: 'top', oldValue: oldTop, newValue: newTop });
+
+            if (changes.length > 0) {
+                this.modules.undoRedo.beginTransaction();
+                const section = this._getAnyStyleSection();
+                if (section) {
+                    await this._applyDragStyleChanges(element, changes, section);
+                } else {
+                    this._removeInlineStyles(element, changes);
+                }
+                this.modules.undoRedo.endTransaction();
+            }
+
+            this.modules.overlay.updateOverlay();
+            this.modules.gapOverlay?.updateGapOverlay();
+            if (this.modules.stylePanel?.updateStyles) {
+                this.modules.stylePanel.updateStyles();
+            }
+        });
+
         this.modules.keyboard.on('shortcut:alignElement', (alignment) => {
             this.alignElement(alignment);
         });
@@ -1674,6 +1735,7 @@ class EditorApp extends EventEmitter {
 
         this.modules.resizeDrag.on('resize:complete', async ({ element, changes, message }) => {
             if (changes && changes.length > 0) {
+                this.modules.undoRedo.beginTransaction();
                 const section = this._getAnyStyleSection();
                 if (section) {
                     await this._applyDragStyleChanges(element, changes, section);
@@ -1681,6 +1743,7 @@ class EditorApp extends EventEmitter {
                     // Fallback: section 없으면 최소한 inline 제거
                     this._removeInlineStyles(element, changes);
                 }
+                this.modules.undoRedo.endTransaction();
             }
 
             // Update overlay and style panel after resize
@@ -1764,13 +1827,16 @@ class EditorApp extends EventEmitter {
 
         this.modules.resizeDrag.on('move:complete', async ({ element, changes }) => {
             // move는 position 관련 속성 (left, top, right, bottom) 사용
+            // ★ left+top을 하나의 undo 단위로 묶기 (트랜잭션)
             if (changes && changes.length > 0) {
+                this.modules.undoRedo.beginTransaction();
                 const section = this._getAnyStyleSection();
                 if (section) {
                     await this._applyDragStyleChanges(element, changes, section);
                 } else {
                     this._removeInlineStyles(element, changes);
                 }
+                this.modules.undoRedo.endTransaction();
             }
 
             // Update overlay and style panel after move

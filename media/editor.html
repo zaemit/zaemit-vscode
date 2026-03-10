@@ -9,6 +9,39 @@
     <link rel="stylesheet" href="{{editorCssUri}}">
     <link rel="stylesheet" href="{{codemirrorCssUri}}">
     <style>
+        /* ── Loading Splash: 에디터 초기화 완료 전까지 UI 숨김 ── */
+        body:not(.editor-ready) .toolbar,
+        body:not(.editor-ready) .editor-container {
+            visibility: hidden;
+        }
+        .zaemit-splash {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--vscode-editor-background, #1e1e1e);
+            transition: opacity 0.35s ease, visibility 0.35s ease;
+        }
+        .zaemit-splash.fade-out {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        .zaemit-splash-logo {
+            font-size: 28px;
+            font-weight: 700;
+            font-style: italic;
+            color: var(--vscode-editor-foreground, #ccc);
+            opacity: 0.7;
+            animation: zaemit-pulse 1.8s ease-in-out infinite;
+        }
+        @keyframes zaemit-pulse {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 0.85; }
+        }
+
         /* Motion Panel Styles (VS Code Extension only) */
         .motion-panel-content { padding: 0; }
         .motion-panel-content .no-selection { padding: 40px 20px; text-align: center; color: var(--text-secondary, #888); }
@@ -64,6 +97,11 @@
     </style>
 </head>
 <body>
+    <!-- Loading Splash -->
+    <div class="zaemit-splash" id="zaemitSplash">
+        <span class="zaemit-splash-logo">ZAEMIT</span>
+    </div>
+
     <!-- Top Toolbar -->
     <header class="toolbar">
         <div class="toolbar-left">

@@ -3,7 +3,7 @@
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Zaemit — Visual HTML/CSS Editor for VS Code</title>
+  <title>Zaemit — Visual HTML/CSS Editor for VS Code</title><link rel="stylesheet" href="style.css">
   <link rel="icon" type="image/svg+xml" href="../media/icons/zaemit-logo.svg">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
   <style>
@@ -1033,11 +1033,11 @@
       }
     }
   </style>
-<link rel="stylesheet" href="style.css"></head>
+</head>
 <body>
 
   <!-- Background Glow -->
-  <div class="bg-glow" style="min-height: 1769px;"></div>
+  <div class="bg-glow" style="min-height: 1794px !important; height: auto !important;"></div>
 
   <!-- Navigation -->
   <nav class="">
@@ -1078,19 +1078,19 @@
       <div class="hero-badge">
         <span class="badge-dot"></span>
         VS Code Extension · v0.0.5
-      </div><h1>
+      </div><h1 class="">
         <span class="line editor-editable" contenteditable="true">Design visually.</span>
         <span class="line"><span class="gradient-text">Ship real code.</span></span>
       </h1>
-      <p class="">
+      
+      <p class="" style="color: rgb(255, 0, 0);">
         Stop switching between your editor and browser. Zaemit brings a full visual editor right into VS Code — drag, style, and ship production-ready HTML/CSS in real time.
-      </p>
-      <div class="hero-actions">
+      </p><div class="hero-actions">
         <a href="https://marketplace.visualstudio.com/items?itemName=zaemit.zaemit-visual-editor" target="_blank" class="btn-primary">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
           Install from Marketplace
         </a>
-        <a href="https://github.com/zaemit/zaemit-vscode" target="_blank" class="btn-secondary">
+        <a href="https://github.com/zaemit/zaemit-vscode" target="_blank" class="btn-secondary" style="">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"></path></svg>
           View on GitHub
         </a>
@@ -1108,10 +1108,10 @@
       <h2 class="section-title animate-on-scroll visible h2-3xa1ec">
         Everything you need,<br><span class="gradient-text">right inside VS Code</span>
       </h2>
-      <p class="section-desc animate-on-scroll visible">
+      
+      <p class="section-desc animate-on-scroll visible" style="">
         Tired of switching between your code editor and browser to tweak designs? Zaemit brings a full visual editor right into VS Code.
-      </p>
-      <div class="why-grid">
+      </p><div class="why-grid">
         <div class="why-card animate-on-scroll animate-delay-1 visible">
           <div class="why-icon">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6C5CE7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
@@ -1123,60 +1123,63 @@
           <div class="why-icon">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6C5CE7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
           </div>
-          <h3>No Browser Needed</h3>
-          <p>Preview and edit your web pages without ever leaving VS Code. Your design workflow stays inside a single tool.</p>
+          <h3 class="">No Browser Needed</h3>
+          <p class="">Preview and edit your web pages without ever leaving VS Code. Your design workflow stays inside a single tool.</p>
         </div>
         <div class="why-card animate-on-scroll animate-delay-3 visible">
           <div class="why-icon">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6C5CE7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
           </div>
-          <h3>Production-Ready Output</h3>
-          <p>The code Zaemit generates is the code you ship. No extra build steps, no abstraction layers — just clean HTML and CSS.</p>
+          <h3 class="">Production-Ready Output</h3>
+          <p class="">The code Zaemit generates is the code you ship. No extra build steps, no abstraction layers — just clean HTML and CSS.</p>
         </div>
       </div>
     </div>
   </section>
 
   <!-- Features -->
-  <section class="features-section" id="features">
-    <div class="container">
+  
+
+  <!-- Style Panel Detail -->
+  <section class="features-section" id="features" style="">
+    <div class="container" style="">
       <span class="section-label animate-on-scroll visible">Features</span>
       <h2 class="section-title animate-on-scroll visible h2-oway2a">
         A complete design toolkit<br><span class="gradient-text">for web developers</span>
       </h2>
-      <p class="section-desc animate-on-scroll visible">
+      
+      <p class="section-desc animate-on-scroll visible" style="">
         Select elements, drag them around, edit styles — and watch the code update in real time. It's the fastest way to build and refine web pages.
-      </p>
-      <div class="features-grid">
-        <div class="feature-card featured animate-on-scroll visible" style="--glow-x: 658px; --glow-y: 194.8125px;">
+      </p><div class="features-grid" style="height: auto !important; min-height: 1074px !important;">
+        <div class="feature-card featured animate-on-scroll visible" style="--glow-x: 645.5px; --glow-y: 0.8125px;">
           <div class="feature-icon">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6C5CE7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
           </div>
-          <h3>Visual Drag &amp; Drop Editing</h3>
-          <p>Click any element to select it. Drag to move. Resize with handles. Rotate freely. Everything you do visually is reflected in clean, production-ready HTML/CSS code.</p>
+          <h3 class="">Visual Drag &amp; Drop Editing</h3>
+          <p class="">Click any element to select it. Drag to move. Resize with handles. Rotate freely. Everything you do visually is reflected in clean, production-ready HTML/CSS code.</p>
         </div>
-        <div class="feature-card animate-on-scroll animate-delay-1 visible">
+        <div class="feature-card animate-on-scroll animate-delay-1 visible" style="--glow-x: 294px; --glow-y: 8.75px;">
           <div class="feature-icon">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6C5CE7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
           </div>
-          <h3>Comprehensive Style Panel</h3>
-          <p>No more guessing CSS property names. Intuitive controls for layout, typography, borders, backgrounds, effects, overflow, and more.</p>
+          <h3 class="">Comprehensive Style Panel</h3>
+          <p class="">No more guessing CSS property names. Intuitive controls for layout, typography, borders, backgrounds, effects, overflow, and more.</p>
         </div>
-        <div class="feature-card animate-on-scroll animate-delay-2 visible">
+        <div class="feature-card animate-on-scroll animate-delay-2 visible" style="--glow-x: 119.5px; --glow-y: 0.90625px;">
           <div class="feature-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6C5CE7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6C5CE7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class=""><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
           </div>
           <h3>Responsive Design Mode</h3>
           <p>Instantly preview your page at different screen sizes. Switch between Desktop, Tablet, and Mobile viewports with a single click.</p>
         </div>
-        <div class="feature-card animate-on-scroll animate-delay-1 visible" style="--glow-x: 232.671875px; --glow-y: 141.766845703125px;">
+        <div class="feature-card animate-on-scroll animate-delay-1 visible" style="--glow-x: 252px; --glow-y: 64.137451171875px;">
           <div class="feature-icon">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6C5CE7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
           </div>
           <h3 class="">Layer Panel</h3>
           <p>See and navigate the full DOM tree. Reorder elements by drag &amp; drop. Rename layers for better organization. Multi-select for batch operations.</p>
         </div>
-        <div class="feature-card animate-on-scroll animate-delay-2 visible">
+        <div class="feature-card animate-on-scroll animate-delay-2 visible" style="--glow-x: 26px; --glow-y: 173.137451171875px;">
           <div class="feature-icon">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6C5CE7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
           </div>
@@ -1190,14 +1193,14 @@
           <h3>Undo / Redo</h3>
           <p>Every action is tracked. Press Ctrl+Z to undo, Ctrl+Y to redo. The change history captures style edits, moves, content changes, and structural modifications.</p>
         </div>
-        <div class="feature-card animate-on-scroll animate-delay-2 visible" style="--glow-x: 250.671875px; --glow-y: 238.515625px;">
+        <div class="feature-card animate-on-scroll animate-delay-2 visible" style="--glow-x: 146px; --glow-y: 31.52490234375px;">
           <div class="feature-icon">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6C5CE7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg>
           </div>
           <h3>Multi-Element Selection</h3>
           <p>Hold Ctrl and click to select multiple elements. Apply styles, move, or delete them all at once for efficient batch editing.</p>
         </div>
-        <div class="feature-card animate-on-scroll animate-delay-1 visible">
+        <div class="feature-card animate-on-scroll animate-delay-1 visible" style="--glow-x: 152px; --glow-y: 41.625px;">
           <div class="feature-icon">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6C5CE7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
           </div>
@@ -1206,10 +1209,7 @@
         </div>
       </div>
     </div>
-  </section>
-
-  <!-- Style Panel Detail -->
-  <section class="style-panel-section">
+  </section><section class="style-panel-section" style="">
     <div class="container">
       <div class="style-panel-content">
         <span class="section-label animate-on-scroll visible">Style Panel</span>
