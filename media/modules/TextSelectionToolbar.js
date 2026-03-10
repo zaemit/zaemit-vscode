@@ -887,161 +887,193 @@ class TextSelectionToolbar extends EventEmitter {
         const newTabCheck = document.getElementById('linkModalNewTab');
         const applyBtn = document.getElementById('linkModalApply');
         const cancelBtn = document.getElementById('linkModalCancel');
+        const removeBtn = document.getElementById('linkModalRemove');
+        const titleEl = document.getElementById('linkModalTitle');
 
         if (!modal || !urlInput || !newTabCheck || !applyBtn || !cancelBtn) return;
+
+        // ★ selectionchange로 덮어써지기 전에 스냅샷 저장
+        const savedSelection = { sel: this.currentSelection.sel, range: this.currentSelection.range };
 
         // Position modal near selection
         this._positionLinkModal(modal);
 
         // Check if selection is already a link
-        const { range } = this.currentSelection;
-        let container = range.commonAncestorContainer;
-        if (container.nodeType === Node.TEXT_NODE) {
-            container = container.parentNode;
-        }
+        const savedAnchor = this._findAnchorInRange(savedSelection.range);
 
-        // If already a link, pre-fill values
-        const existingLink = container.tagName === 'A' ? container : container.closest('a');
-        if (existingLink) {
-            urlInput.value = existingLink.getAttribute('href') || '';
-            newTabCheck.checked = existingLink.getAttribute('target') === '_blank';
+        if (savedAnchor) {
+            urlInput.value = savedAnchor.getAttribute('href') || '';
+            newTabCheck.checked = savedAnchor.getAttribute('target') === '_blank';
+            if (titleEl) titleEl.textContent = 'Edit Link';
+            if (removeBtn) removeBtn.classList.remove('hidden');
         } else {
             urlInput.value = '';
             newTabCheck.checked = false;
+            if (titleEl) titleEl.textContent = 'Add Link';
+            if (removeBtn) removeBtn.classList.add('hidden');
         }
 
         // Show modal
         modal.classList.remove('hidden');
         urlInput.focus();
 
-        // Handle apply
+        // Handle apply — savedSelection/savedAnchor를 클로저로 캡처
         const handleApply = () => {
             const url = urlInput.value.trim();
-            if (url) {
-                this.applyLink(url, newTabCheck.checked);
+            if (!url && savedAnchor) {
+                // URL 비움 → 링크 제거
+                this._unlinkAnchor(savedAnchor);
+                this.emit('toolbar:save');
+            } else if (url) {
+                this._applyLinkWithSaved(url, newTabCheck.checked, savedSelection, savedAnchor);
             }
             cleanup();
         };
 
-        // Handle cancel
-        const handleCancel = () => {
+        // Handle remove
+        const handleRemove = () => {
+            if (savedAnchor) {
+                this._unlinkAnchor(savedAnchor);
+                this.emit('toolbar:save');
+            }
             cleanup();
         };
 
-        // Handle enter key
+        const handleCancel = () => { cleanup(); };
+
         const handleKeydown = (e) => {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                handleApply();
-            } else if (e.key === 'Escape') {
-                e.preventDefault();
-                handleCancel();
-            }
+            if (e.key === 'Enter') { e.preventDefault(); handleApply(); }
+            else if (e.key === 'Escape') { e.preventDefault(); handleCancel(); }
         };
 
-        // Cleanup function
         const cleanup = () => {
             modal.classList.add('hidden');
+            if (titleEl) titleEl.textContent = 'Add Link';
+            if (removeBtn) removeBtn.classList.add('hidden');
             applyBtn.removeEventListener('click', handleApply);
             cancelBtn.removeEventListener('click', handleCancel);
             urlInput.removeEventListener('keydown', handleKeydown);
+            if (removeBtn) removeBtn.removeEventListener('click', handleRemove);
         };
 
-        // Add listeners
         applyBtn.addEventListener('click', handleApply);
         cancelBtn.addEventListener('click', handleCancel);
         urlInput.addEventListener('keydown', handleKeydown);
+        if (removeBtn) removeBtn.addEventListener('click', handleRemove);
     }
 
     /**
-     * Apply link to selection
-     * @param {string} url
-     * @param {boolean} newTab
+     * Range 내 <a> 탐색 (startContainer, endContainer, children 모두 확인)
      */
-    applyLink(url, newTab) {
-        if (!this.currentSelection) return;
+    _findAnchorInRange(range) {
+        if (!range) return null;
+        let node = range.commonAncestorContainer;
+        if (node.nodeType === Node.TEXT_NODE) node = node.parentNode;
+        let a = node?.tagName === 'A' ? node : node?.closest?.('a');
+        if (a) return a;
+        // endContainer 확인
+        let end = range.endContainer;
+        if (end?.nodeType === Node.TEXT_NODE) end = end.parentNode;
+        a = end?.tagName === 'A' ? end : end?.closest?.('a');
+        if (a) return a;
+        // children 내 <a> 확인
+        const root = range.commonAncestorContainer;
+        const searchRoot = root?.nodeType === Node.TEXT_NODE ? root.parentElement : root;
+        if (searchRoot?.tagName === 'A') return searchRoot;
+        return searchRoot?.querySelector?.('a') || null;
+    }
 
+    /**
+     * <a> 링크 제거 — class/style 등 속성이 있으면 <span>으로 변환하여 보존
+     */
+    _unlinkAnchor(anchor) {
+        if (!anchor || !anchor.parentNode) return false;
+        const doc = anchor.ownerDocument;
+        const LINK_ATTRS = ['href', 'target', 'rel'];
+
+        // 링크 외 의미 있는 속성이 있는지 확인
+        let hasOtherAttrs = !!(anchor.className?.trim()) || !!anchor.getAttribute('style') || !!anchor.id;
+        if (!hasOtherAttrs) {
+            for (const attr of anchor.attributes) {
+                if (!LINK_ATTRS.includes(attr.name)) { hasOtherAttrs = true; break; }
+            }
+        }
+
+        if (hasOtherAttrs) {
+            // <a class="btn-primary" ...> → <span class="btn-primary" ...>
+            const span = doc.createElement('span');
+            for (const attr of [...anchor.attributes]) {
+                if (!LINK_ATTRS.includes(attr.name)) span.setAttribute(attr.name, attr.value);
+            }
+            while (anchor.firstChild) span.appendChild(anchor.firstChild);
+            anchor.parentNode.replaceChild(span, anchor);
+        } else {
+            // 순수 링크 → unwrap
+            const parent = anchor.parentNode;
+            while (anchor.firstChild) parent.insertBefore(anchor.firstChild, anchor);
+            anchor.remove();
+        }
+        return true;
+    }
+
+    /**
+     * 저장된 selection/anchor로 링크 적용 (selectionchange 영향 없음)
+     */
+    _applyLinkWithSaved(url, newTab, savedSelection, savedAnchor) {
         try {
-            const { sel, range } = this.currentSelection;
+            const { sel, range } = savedSelection;
             const doc = this.previewFrame.contentDocument;
 
-            // Check if selection is collapsed
-            if (range.collapsed) {
-                this.emit('toast', { message: 'Please select text to add a link', type: 'info' });
-                return;
+            // 프로토콜 자동 추가
+            if (!/^https?:\/\//i.test(url) && !url.startsWith('/') && !url.startsWith('#') && !url.startsWith('mailto:')) {
+                url = 'https://' + url;
             }
 
-            // Check if already in a link element
-            let container = range.commonAncestorContainer;
-            if (container.nodeType === Node.TEXT_NODE) {
-                container = container.parentNode;
-            }
-
-            const existingLink = container.tagName === 'A' ? container : container.closest('a');
-
-            if (existingLink && range.toString() === existingLink.textContent) {
-                // Update existing link
-                const oldHref = existingLink.getAttribute('href') || '';
-                existingLink.setAttribute('href', url);
-
+            // 기존 링크 수정
+            if (savedAnchor && savedAnchor.parentNode) {
+                const oldHref = savedAnchor.getAttribute('href') || '';
+                savedAnchor.setAttribute('href', url);
                 if (newTab) {
-                    existingLink.setAttribute('target', '_blank');
-                    const currentRel = existingLink.getAttribute('rel') || '';
-                    if (!currentRel.includes('noopener')) {
-                        existingLink.setAttribute('rel', (currentRel + ' noopener').trim());
-                    }
+                    savedAnchor.setAttribute('target', '_blank');
+                    const rel = savedAnchor.getAttribute('rel') || '';
+                    if (!rel.includes('noopener')) savedAnchor.setAttribute('rel', (rel + ' noopener').trim());
                 } else {
-                    existingLink.removeAttribute('target');
-                    const currentRel = existingLink.getAttribute('rel') || '';
-                    const newRel = currentRel.replace(/\s*noopener\s*/g, ' ').trim();
-                    if (newRel) {
-                        existingLink.setAttribute('rel', newRel);
-                    } else {
-                        existingLink.removeAttribute('rel');
-                    }
+                    savedAnchor.removeAttribute('target');
+                    const rel = (savedAnchor.getAttribute('rel') || '').replace(/\s*noopener\s*/g, ' ').trim();
+                    rel ? savedAnchor.setAttribute('rel', rel) : savedAnchor.removeAttribute('rel');
                 }
-
-                this.emit('attribute:changed', {
-                    element: existingLink,
-                    attribute: 'href',
-                    oldValue: oldHref,
-                    newValue: url
-                });
+                this.emit('attribute:changed', { element: savedAnchor, attribute: 'href', oldValue: oldHref, newValue: url });
                 this.emit('toolbar:save');
                 return;
             }
 
-            // Create new link
+            // 새 링크 생성
+            if (range.collapsed) {
+                this.emit('toast', { message: '텍스트를 먼저 선택해주세요', type: 'info' });
+                return;
+            }
+
+            // iframe selection 복원
+            const win = this.previewFrame.contentWindow;
+            if (win) {
+                const iframeSel = win.getSelection();
+                if (iframeSel) { iframeSel.removeAllRanges(); iframeSel.addRange(range); }
+            }
+
             const link = doc.createElement('a');
             link.setAttribute('href', url);
+            if (newTab) { link.setAttribute('target', '_blank'); link.setAttribute('rel', 'noopener noreferrer'); }
 
-            if (newTab) {
-                link.setAttribute('target', '_blank');
-                link.setAttribute('rel', 'noopener');
-            }
-
-            // Get parent element for undo recording
-            let parentElement = container;
-            if (container.nodeType === Node.TEXT_NODE) {
-                parentElement = container.parentNode;
-            }
+            let parentElement = range.commonAncestorContainer;
+            if (parentElement.nodeType === Node.TEXT_NODE) parentElement = parentElement.parentNode;
             const oldContent = parentElement.innerHTML;
 
-            // Extract and wrap the selected content
             const contents = range.extractContents();
             link.appendChild(contents);
             range.insertNode(link);
 
-            // Record content change for undo
-            const newContent = parentElement.innerHTML;
-            this.emit('content:changed', {
-                element: parentElement,
-                oldContent,
-                newContent
-            });
+            this.emit('content:changed', { element: parentElement, oldContent, newContent: parentElement.innerHTML });
 
-            // Restore selection (link가 여전히 문서에 있는지 확인)
-            // content:changed 이벤트가 멀티뷰 동기화를 트리거할 수 있음
             try {
                 if (link.isConnected && doc.contains(link)) {
                     sel.removeAllRanges();
@@ -1050,15 +1082,29 @@ class TextSelectionToolbar extends EventEmitter {
                     sel.addRange(newRange);
                     this.currentSelection = { sel, range: newRange };
                 }
-            } catch (selErr) {
-                console.warn('Could not restore selection after link insert:', selErr);
-            }
+            } catch (selErr) { console.warn('Could not restore selection after link insert:', selErr); }
 
             this.emit('toolbar:save');
-
         } catch (err) {
             console.error('Error applying link:', err);
             this.emit('toast', { message: 'Failed to apply link', type: 'error' });
+        }
+    }
+
+    /**
+     * Apply link to selection (legacy — 외부 호출 호환용)
+     */
+    applyLink(url, newTab) {
+        const sel = this.currentSelection;
+        if (!sel) return;
+        const anchor = this._findAnchorInRange(sel.range);
+        if (!url && anchor) {
+            this._unlinkAnchor(anchor);
+            this.emit('toolbar:save');
+            return;
+        }
+        if (url) {
+            this._applyLinkWithSaved(url, newTab, sel, anchor);
         }
     }
 

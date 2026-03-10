@@ -415,30 +415,30 @@ class PropertyPanel extends EventEmitter {
      */
     updateLinkOptions() {
         const linkSection = document.getElementById('linkOptionsSection');
+        const removeBtn = document.getElementById('linkSectionRemove');
         if (!linkSection || !this.selectedElement) {
             if (linkSection) linkSection.classList.add('hidden');
             return;
         }
 
-        const tag = this.selectedElement.tagName.toLowerCase();
+        // 자신이 <a>이거나, 부모/조상 중 <a>가 있는지 확인
+        const el = this.selectedElement;
+        const anchor = (el.tagName === 'A') ? el : el.closest?.('a') || null;
 
-        if (tag === 'a') {
-            linkSection.classList.remove('hidden');
+        // 모든 요소에서 Link 섹션 표시
+        linkSection.classList.remove('hidden');
 
-            // href value
-            const hrefInput = document.getElementById('linkHref');
-            if (hrefInput) {
-                hrefInput.value = this.selectedElement.getAttribute('href') || '';
-            }
+        const hrefInput = document.getElementById('linkHref');
+        const newTabToggle = document.getElementById('linkNewTabToggle');
 
-            // new tab toggle
-            const target = this.selectedElement.getAttribute('target') || '';
-            const newTabToggle = document.getElementById('linkNewTabToggle');
-            if (newTabToggle) {
-                newTabToggle.checked = target === '_blank';
-            }
+        if (anchor) {
+            if (hrefInput) hrefInput.value = anchor.getAttribute('href') || '';
+            if (newTabToggle) newTabToggle.checked = anchor.getAttribute('target') === '_blank';
+            if (removeBtn) removeBtn.classList.remove('hidden');
         } else {
-            linkSection.classList.add('hidden');
+            if (hrefInput) hrefInput.value = '';
+            if (newTabToggle) newTabToggle.checked = false;
+            if (removeBtn) removeBtn.classList.add('hidden');
         }
 
         // Update image section
@@ -469,71 +469,132 @@ class PropertyPanel extends EventEmitter {
     /**
      * Setup handlers for Link Options section
      */
+    /**
+     * 선택된 요소에서 <a> 앵커 찾기 (자신 또는 closest)
+     */
+    _findAnchorForSelected() {
+        const el = this.selectedElement;
+        if (!el) return null;
+        return (el.tagName === 'A') ? el : el.closest?.('a') || null;
+    }
+
+    /**
+     * <a> 링크 제거 — class/style 등 속성 보존 시 <span> 변환
+     */
+    _unlinkAnchor(anchor) {
+        if (!anchor || !anchor.parentNode) return null;
+        const doc = anchor.ownerDocument;
+        const LINK_ATTRS = ['href', 'target', 'rel'];
+
+        let hasOtherAttrs = !!(anchor.className?.trim()) || !!anchor.getAttribute('style') || !!anchor.id;
+        if (!hasOtherAttrs) {
+            for (const attr of anchor.attributes) {
+                if (!LINK_ATTRS.includes(attr.name)) { hasOtherAttrs = true; break; }
+            }
+        }
+
+        let replacement;
+        if (hasOtherAttrs) {
+            replacement = doc.createElement('span');
+            for (const attr of [...anchor.attributes]) {
+                if (!LINK_ATTRS.includes(attr.name)) replacement.setAttribute(attr.name, attr.value);
+            }
+            while (anchor.firstChild) replacement.appendChild(anchor.firstChild);
+            anchor.parentNode.replaceChild(replacement, anchor);
+        } else {
+            const parent = anchor.parentNode;
+            replacement = anchor.firstElementChild || anchor.firstChild;
+            while (anchor.firstChild) parent.insertBefore(anchor.firstChild, anchor);
+            anchor.remove();
+            if (!replacement) replacement = parent;
+        }
+        return replacement;
+    }
+
     setupLinkOptionsHandlers() {
-        // href input - 빈값 시 href 속성 제거 (href="" 방지)
+        // href input — 모든 요소에서 링크 추가/수정
         document.getElementById('linkHref')?.addEventListener('change', (e) => {
-            if (!this.selectedElement || this.selectedElement.tagName.toLowerCase() !== 'a') return;
-            const oldValue = this.selectedElement.getAttribute('href') || '';
+            if (!this.selectedElement) return;
             const newValue = e.target.value.trim();
+            const anchor = this._findAnchorForSelected();
 
-            if (newValue) {
-                this.selectedElement.setAttribute('href', newValue);
-            } else {
-                this.selectedElement.removeAttribute('href');
-            }
-            this.emit('property:changed', { element: this.selectedElement, property: 'href', oldValue, newValue: newValue || null });
-        });
-
-        // ★ 링크 해제 버튼 (a 태그를 자식 내용으로 unwrap)
-        document.getElementById('unlinkBtn')?.addEventListener('click', () => {
-            if (!this.selectedElement || this.selectedElement.tagName.toLowerCase() !== 'a') return;
-
-            const aElement = this.selectedElement;
-            const parent = aElement.parentElement;
-            if (!parent) return;
-
-            // Undo를 위한 이전 상태 저장
-            const oldOuterHTML = aElement.outerHTML;
-
-            // a 태그의 자식 노드들을 a 태그 위치에 삽입
-            const doc = aElement.ownerDocument;
-            const fragment = doc.createDocumentFragment();
-            while (aElement.firstChild) {
-                fragment.appendChild(aElement.firstChild);
-            }
-
-            // 첫 번째 요소를 기억 (선택 대상)
-            const firstChild = fragment.firstElementChild;
-
-            parent.replaceChild(fragment, aElement);
-
-            // 이벤트 발생
-            this.emit('link:removed', { parent, oldOuterHTML, newElement: firstChild || parent });
-        });
-
-        // new tab toggle
-        document.getElementById('linkNewTabToggle')?.addEventListener('change', (e) => {
-            if (!this.selectedElement || this.selectedElement.tagName.toLowerCase() !== 'a') return;
-
-            const oldValue = this.selectedElement.getAttribute('target') || '';
-            const newValue = e.target.checked ? '_blank' : '';
-
-            if (newValue) {
-                this.selectedElement.setAttribute('target', '_blank');
-                // Auto-add noopener for security
-                const currentRel = this.selectedElement.getAttribute('rel') || '';
-                if (!currentRel.includes('noopener')) {
-                    const newRel = (currentRel + ' noopener').trim();
-                    this.selectedElement.setAttribute('rel', newRel);
-                    this.updateLinkOptions();
+            if (!newValue) {
+                // 빈값: <a>인 경우 href 제거만 (삭제는 Remove 버튼)
+                if (anchor) {
+                    anchor.removeAttribute('href');
+                    this.emit('property:changed', { element: anchor, property: 'href', oldValue: anchor.getAttribute('href'), newValue: null });
                 }
-            } else {
-                this.selectedElement.removeAttribute('target');
+                return;
             }
 
-            this.emit('property:changed', { element: this.selectedElement, property: 'target', oldValue, newValue });
+            // 프로토콜 자동 추가
+            let url = newValue;
+            if (!/^https?:\/\//i.test(url) && !url.startsWith('/') && !url.startsWith('#') && !url.startsWith('mailto:')) {
+                url = 'https://' + url;
+                e.target.value = url;
+            }
+
+            if (anchor) {
+                // 기존 <a> 수정
+                const oldValue = anchor.getAttribute('href') || '';
+                anchor.setAttribute('href', url);
+                this.emit('property:changed', { element: anchor, property: 'href', oldValue, newValue: url });
+            } else {
+                // 새 <a>로 요소 감싸기
+                const doc = this.selectedElement.ownerDocument;
+                const a = doc.createElement('a');
+                a.setAttribute('href', url);
+                const newTabToggle = document.getElementById('linkNewTabToggle');
+                if (newTabToggle?.checked) {
+                    a.setAttribute('target', '_blank');
+                    a.setAttribute('rel', 'noopener noreferrer');
+                }
+                this.selectedElement.parentNode.insertBefore(a, this.selectedElement);
+                a.appendChild(this.selectedElement);
+                this.emit('link:wrapped', { element: a, child: this.selectedElement });
+            }
+
+            // Remove 버튼 표시
+            const removeBtn = document.getElementById('linkSectionRemove');
+            if (removeBtn) removeBtn.classList.remove('hidden');
         });
 
+        // Enter 키로 href 적용
+        document.getElementById('linkHref')?.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') { e.preventDefault(); e.target.dispatchEvent(new Event('change')); e.target.blur(); }
+        });
+
+        // ★ 링크 해제 버튼 (기존 unlinkBtn 호환 + 새 linkSectionRemove)
+        const setupUnlinkHandler = (btnId) => {
+            document.getElementById(btnId)?.addEventListener('click', () => {
+                const anchor = this._findAnchorForSelected();
+                if (!anchor) return;
+
+                const oldOuterHTML = anchor.outerHTML;
+                const replacement = this._unlinkAnchor(anchor);
+
+                this.emit('link:removed', { parent: replacement?.parentNode, oldOuterHTML, newElement: replacement });
+                this.updateLinkOptions();
+            });
+        };
+        setupUnlinkHandler('unlinkBtn');
+        setupUnlinkHandler('linkSectionRemove');
+
+        // new tab toggle — 모든 요소의 <a>에 적용
+        document.getElementById('linkNewTabToggle')?.addEventListener('change', (e) => {
+            const anchor = this._findAnchorForSelected();
+            if (!anchor) return;
+
+            const oldValue = anchor.getAttribute('target') || '';
+            if (e.target.checked) {
+                anchor.setAttribute('target', '_blank');
+                const rel = anchor.getAttribute('rel') || '';
+                if (!rel.includes('noopener')) anchor.setAttribute('rel', (rel + ' noopener').trim());
+            } else {
+                anchor.removeAttribute('target');
+            }
+            this.emit('property:changed', { element: anchor, property: 'target', oldValue, newValue: e.target.checked ? '_blank' : '' });
+        });
     }
 
     updateAttributesList() {

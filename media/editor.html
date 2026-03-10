@@ -1369,7 +1369,7 @@
                             </div>
                         </div>
 
-                        <!-- Link Section (shown for <a> tags) -->
+                        <!-- Link Section (shown for all elements) -->
                         <div class="property-section link-section-simple hidden" id="linkOptionsSection">
                             <h3 class="section-title">Link</h3>
                             <div class="link-input-group">
@@ -1379,6 +1379,7 @@
                                     <span>New tab</span>
                                 </label>
                             </div>
+                            <button id="linkSectionRemove" class="link-remove-btn hidden">Remove Link</button>
                         </div>
 
                         <!-- Image Section (shown for <img> tags) -->
@@ -1755,13 +1756,14 @@
     <!-- Link Modal (for text selection toolbar) -->
     <div class="link-modal hidden" id="linkModal">
         <div class="link-modal-content">
-            <h4>Add Link</h4>
+            <h4 id="linkModalTitle">Add Link</h4>
             <input type="text" id="linkModalUrl" placeholder="Enter URL (https://example.com)" />
             <label class="link-modal-checkbox">
                 <input type="checkbox" id="linkModalNewTab" />
                 <span>Open in new tab</span>
             </label>
             <div class="link-modal-buttons">
+                <button id="linkModalRemove" class="btn-danger hidden">Remove Link</button>
                 <button id="linkModalCancel" class="btn-secondary">Cancel</button>
                 <button id="linkModalApply" class="btn-primary">Apply</button>
             </div>

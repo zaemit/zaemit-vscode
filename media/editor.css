@@ -6754,6 +6754,28 @@ body.panning-mode .multicanvas-resize-handle {
     accent-color: var(--primary-color);
 }
 
+.link-remove-btn {
+    width: 100%;
+    padding: 6px 12px;
+    margin-top: 8px;
+    border: 1px solid #e53e3e;
+    border-radius: 6px;
+    background: transparent;
+    color: #e53e3e;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.link-remove-btn:hover {
+    background: #e53e3e;
+    color: #fff;
+}
+
+.link-remove-btn.hidden {
+    display: none;
+}
+
 /* Image Section */
 .image-section-simple .property-row {
     flex-direction: column;
@@ -7805,6 +7827,22 @@ body.panning-mode .multicanvas-resize-handle {
 .link-modal-buttons .btn-primary:hover {
     background: var(--primary-dark, #5a6fd6);
     border-color: var(--primary-dark, #5a6fd6);
+}
+
+.link-modal-buttons .btn-danger {
+    background: #e53e3e;
+    border: 1px solid #e53e3e;
+    color: #fff;
+    margin-right: auto;
+}
+
+.link-modal-buttons .btn-danger:hover {
+    background: #c53030;
+    border-color: #c53030;
+}
+
+.link-modal-buttons .btn-danger.hidden {
+    display: none;
 }
 
 /* ===== Image Manager Panel ===== */
