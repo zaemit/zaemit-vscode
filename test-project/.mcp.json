@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "zaemit-editor": {
+      "command": "node",
+      "args": [
+        "d:\\www\\bazix-vscode\\dist\\mcp-server.js"
+      ]
+    }
+  }
+}
