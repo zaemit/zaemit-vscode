@@ -290,6 +290,10 @@ class MultiCanvasManager extends EventEmitter {
                 e.preventDefault();
                 e.stopPropagation();
 
+                // ★ preventDefault()가 포커스 전이를 차단하므로 수동으로 iframe 포커스 설정
+                // (키보드 단축키가 iframe document의 keydown 핸들러에 도달하려면 필수)
+                try { iframe.contentWindow.focus(); } catch (_) {}
+
                 this._selectIframe(parseInt(iframe.dataset.index));
 
                 const target = e.target;

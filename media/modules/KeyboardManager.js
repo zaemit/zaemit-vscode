@@ -84,8 +84,21 @@ class KeyboardManager extends EventEmitter {
      * Setup keyboard shortcuts
      */
     setupKeyboardShortcuts() {
+        // Dedup guard: prevent same physical keypress from firing on both document and iframeDoc
+        this._lastHandledKey = '';
+        this._lastHandledTime = 0;
+
         // Store handleKeydown as instance method for reuse
         this.handleKeydown = (e) => {
+            // Dedup: same key combo within 50ms → likely duplicate from document + iframeDoc
+            const now = Date.now();
+            const eventKey = `${e.key}|${e.ctrlKey}|${e.metaKey}|${e.shiftKey}|${e.altKey}`;
+            if (eventKey === this._lastHandledKey && (now - this._lastHandledTime) < 50) {
+                return;
+            }
+            this._lastHandledKey = eventKey;
+            this._lastHandledTime = now;
+
             // Alt+V / Enter / ESC (미니 AI 대화창) → AIChatManager._registerGlobalShortcuts()에서 처리
 
             // Ctrl+S or Cmd+S - Save

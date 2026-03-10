@@ -330,6 +330,9 @@ class EditorApp extends EventEmitter {
             // Reattach context menu iframe handlers (메뉴는 메인 document에 생성됨)
             this.modules.contextMenu.reattachIframeHandlers();
 
+            // ★ Reattach keyboard handler to new iframe document
+            this.modules.keyboard.reattachIframeHandler();
+
             // Re-inject table editor styles
             this.modules.tableEditor.injectResizeStyles();
 
@@ -964,6 +967,27 @@ class EditorApp extends EventEmitter {
             // Reselect the new element after tag change
             this.modules.elementSelector.selectElement(newElement);
             this.modules.overlay.updateOverlay();
+        });
+
+        // Link wrap/remove events from PropertyPanel
+        this.modules.propertyPanel.on('link:wrapped', ({ element, child }) => {
+            // After wrapping with <a>, reselect the <a> and save
+            this.modules.elementSelector.selectElement(element);
+            this.modules.overlay.updateOverlay();
+            this.modules.propertyPanel.updateProperties(element);
+            this.modules.layerPanel?.refresh();
+            this.saveHTML();
+        });
+
+        this.modules.propertyPanel.on('link:removed', ({ parent, oldOuterHTML, newElement }) => {
+            // After unlinking, reselect replacement element and save
+            if (newElement) {
+                this.modules.elementSelector.selectElement(newElement);
+                this.modules.overlay.updateOverlay();
+                this.modules.propertyPanel.updateProperties(newElement);
+            }
+            this.modules.layerPanel?.refresh();
+            this.saveHTML();
         });
 
         this.modules.stylePanel.on('style:changed', ({ element, property, oldValue, newValue, cssMode }) => {
@@ -2220,6 +2244,7 @@ class EditorApp extends EventEmitter {
                     this.modules.textToolbar?.reattachIframeHandlers?.();
                     this.modules.contextMenu?.reattachIframeHandlers?.();
                     this.modules.dragDrop?.reattachIframeHandlers?.();
+                    this.modules.keyboard?.reattachIframeHandler();
                     // 100vh 요소 높이 제한 재적용
                     this.modules.preview?.limitViewportHeightElements?.();
 
@@ -2254,6 +2279,7 @@ class EditorApp extends EventEmitter {
                 this.modules.textToolbar?.reattachIframeHandlers?.();
                 this.modules.contextMenu?.reattachIframeHandlers?.();
                 this.modules.dragDrop?.reattachIframeHandlers?.();
+                this.modules.keyboard?.reattachIframeHandler();
 
                 // 멀티캔버스 동기화 (CSS 또는 tempCSS 변경 시)
                 if (this.modules.multiCanvas?.isEnabled()) {
@@ -2515,6 +2541,7 @@ class EditorApp extends EventEmitter {
             this.modules.textToolbar?.reattachIframeHandlers?.();
             this.modules.contextMenu?.reattachIframeHandlers?.();
             this.modules.dragDrop?.reattachIframeHandlers?.();
+            this.modules.keyboard?.reattachIframeHandler();
         }
 
         // snapshot 타입의 limitViewportHeightElements()는
@@ -4660,6 +4687,9 @@ class EditorApp extends EventEmitter {
      */
     _updateActiveIframe(iframe) {
         if (!iframe) return;
+
+        // ★ 활성 iframe에 키보드 포커스 설정 (단축키가 iframe keydown에 도달하도록)
+        try { iframe.contentWindow?.focus(); } catch (_) {}
 
         // 활성 iframe을 사용하는 모듈들 업데이트
         this.modules.preview.setActiveIframe(iframe);

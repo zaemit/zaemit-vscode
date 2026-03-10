@@ -663,6 +663,10 @@ class PreviewManager extends EventEmitter {
 
                 e.preventDefault();
                 e.stopPropagation();
+
+                // ★ preventDefault()가 포커스 전이를 차단할 수 있으므로 수동으로 iframe 포커스 설정
+                try { this.previewFrame.contentWindow?.focus(); } catch (_) {}
+
                 this.emit('element:click', e.target, {
                     clientX: e.clientX,
                     clientY: e.clientY,
