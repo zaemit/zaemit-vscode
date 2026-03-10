@@ -1,0 +1,970 @@
+/* ===== Reset ===== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Zen Kaku Gothic New', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  overflow-x: hidden;
+  background-color: #000000;
+}
+
+/* ===== Main Container ===== */
+.f-1 {
+  display: flex;
+  flex-direction: column;
+  max-width: 100rem;
+  width: 100%;
+  margin: 0 auto;
+  background-color: #000000;
+  overflow: hidden;
+  position: relative;
+}
+
+/* ===== Flex ordering ===== */
+.f-2   { order: 1; }
+.f-3   { order: 2; }
+.f-318 { order: 3; }
+.f-319 { order: 4; }
+.f-320 { order: 5; }
+.f-304 { order: 6; }
+.f-4   { order: 10; }
+.f-34  { order: 11; }
+.f-64  { order: 12; }
+.f-94  { order: 13; }
+.f-124 { order: 14; }
+.f-154 { order: 15; }
+.f-184 { order: 16; }
+.f-214 { order: 17; }
+.f-244 { order: 18; }
+.f-274 { order: 19; }
+.f-305 { order: 20; }
+.f-329 { order: 30; }
+.f-376 { order: 0; }
+.f-382 { order: 0; }
+.f-401 { order: 0; }
+.f-404 { order: 0; }
+
+/* ===== Background Textures (decorative overlay) ===== */
+.f-2 {
+  position: absolute;
+  top: 21.375rem;
+  left: 11.6%;
+  width: 88.4%;
+  height: 61.4375rem;
+  background-image: url('images/img-4.png');
+  background-size: cover;
+  background-position: center;
+  z-index: 0;
+  pointer-events: none;
+}
+.f-3 {
+  position: absolute;
+  top: 72.8125rem;
+  left: 11.6%;
+  width: 88.4%;
+  height: 61.4375rem;
+  background-image: url('images/img-5.png');
+  background-size: cover;
+  background-position: center;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ===== Header Overlay ===== */
+.f-382 {
+  position: absolute;
+  top: 2.9375rem;
+  left: 3.35%;
+  z-index: 30;
+  width: 13.09%;
+  height: 1.1875rem;
+}
+.f-383, .f-384 { background-color: #ffffff; object-fit: cover; }
+.f-385 { position: absolute; left: 0; top: 0; width: 100%; height: 100%; z-index: 2; }
+.f-386 { position: absolute; left: 0; top: 0; width: 22.33%; height: 1.125rem; }
+.f-390 { position: absolute; left: 27.25%; top: 0; width: 72.75%; height: 1.1875rem; z-index: 1; }
+.f-387, .f-388, .f-389,
+.f-391, .f-392, .f-393, .f-394, .f-395, .f-396, .f-397, .f-398, .f-399, .f-400 {
+  background-color: #ffffff; object-fit: cover;
+}
+
+.f-376 {
+  position: absolute;
+  top: 2.75rem;
+  left: 33.88%;
+  z-index: 30;
+  width: 32.25%;
+  height: 1.6875rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.f-377, .f-378, .f-379, .f-380, .f-381 {
+  font-family: 'OFL Sorts Mill Goudy TT', Georgia, serif;
+  font-size: 1.125rem;
+  font-weight: 500;
+  line-height: 1.6875rem;
+  letter-spacing: -0.9px;
+  color: #ffffff;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.f-401 {
+  position: absolute;
+  top: 2.125rem;
+  left: 90.19%;
+  z-index: 30;
+  border-radius: 100px;
+  width: 7.69%;
+  height: 2.875rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.f-402 {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(53, 53, 53, 0.60);
+  border-radius: 100px;
+}
+.f-403 {
+  position: relative;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.3125rem;
+  color: #ffffff;
+}
+
+.f-404 {
+  position: absolute;
+  top: 2.125rem;
+  left: 82.81%;
+  z-index: 30;
+  border-radius: 100px;
+  width: 6.56%;
+  height: 2.875rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.f-405 {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(53, 53, 53, 0.60);
+  border-radius: 100px;
+}
+.f-406 {
+  position: relative;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.3125rem;
+  color: #ffffff;
+}
+
+/* ===== Hero Section ===== */
+.f-318 {
+  font-family: 'OFL Sorts Mill Goudy TT', Georgia, serif;
+  font-size: 5rem;
+  font-weight: 500;
+  line-height: 7.4375rem;
+  letter-spacing: -2.4px;
+  text-align: center;
+  color: #ffffff;
+  width: 100%;
+  padding: 9.375rem 1rem 0;
+}
+.f-319 {
+  font-family: 'Zen Kaku Gothic New', sans-serif;
+  font-size: 1.125rem;
+  line-height: 2.25rem;
+  text-align: center;
+  color: #ffffff;
+  width: 100%;
+  padding: 0 1rem;
+  margin-bottom: 1.5rem;
+}
+
+/* ===== Filter Controls ===== */
+.f-320 {
+  position: relative;
+  align-self: flex-end;
+  width: 31.37%;
+  margin-right: 2.38%;
+  height: 2.4375rem;
+  margin-bottom: 5.625rem;
+}
+.f-321 {
+  position: absolute;
+  left: 18.92%;
+  top: 0;
+  width: 32.87%;
+  height: 100%;
+  background-color: #272727;
+  border-radius: 3px;
+}
+.f-322 {
+  position: absolute;
+  left: 67.13%;
+  top: 0;
+  width: 32.87%;
+  height: 100%;
+  background-color: #272727;
+  border-radius: 3px;
+}
+.f-323 {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: 'OFL Sorts Mill Goudy TT', Georgia, serif;
+  font-size: 1.125rem;
+  font-weight: 500;
+  line-height: 1.6875rem;
+  letter-spacing: -0.5px;
+  color: #ffffff;
+}
+.f-324 {
+  position: absolute;
+  left: 53%;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: 'OFL Sorts Mill Goudy TT', Georgia, serif;
+  font-size: 1.125rem;
+  font-weight: 500;
+  line-height: 1.6875rem;
+  letter-spacing: -0.5px;
+  color: #ffffff;
+}
+.f-325 {
+  position: absolute;
+  left: 72%;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: 'OFL Sorts Mill Goudy TT', Georgia, serif;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.5rem;
+  letter-spacing: -0.5px;
+  color: #ffffff;
+}
+.f-326 {
+  position: absolute;
+  left: 24%;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: 'OFL Sorts Mill Goudy TT', Georgia, serif;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.5rem;
+  letter-spacing: -0.5px;
+  color: #ffffff;
+}
+.f-327 {
+  position: absolute;
+  left: 47%;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #ffffff;
+  object-fit: cover;
+}
+.f-328 {
+  position: absolute;
+  right: 3%;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #ffffff;
+  object-fit: cover;
+}
+
+/* ===== News List Title ===== */
+.f-304 {
+  font-family: 'OFL Sorts Mill Goudy TT', Georgia, serif;
+  font-size: 1.5625rem;
+  font-weight: 500;
+  line-height: 2.3125rem;
+  letter-spacing: -1.3px;
+  color: #ffffff;
+  padding-left: 3.8%;
+  margin-bottom: 1.875rem;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+/* ===== News Card Containers ===== */
+:is(.f-4, .f-34, .f-64, .f-94, .f-124, .f-154, .f-184, .f-214, .f-244, .f-274) {
+  display: grid;
+  grid-template-columns: 13.37% 5.34% 4.87% 4.24% 7.86% 5.11% 1fr 9.03% 1.34%;
+  grid-template-rows: 1.25rem 1fr auto;
+  width: 79.56%;
+  margin-left: 16%;
+  min-height: 8.5rem;
+  background-color: #ffffff;
+  box-shadow: 0px 4px 30px rgba(12, 17, 49, 0.30);
+  margin-bottom: 1.875rem;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+
+/* Card child placement via grid */
+/* Child 1: Arrow icon → rightmost column */
+:is(.f-4, .f-34, .f-64, .f-94, .f-124, .f-154, .f-184, .f-214, .f-244, .f-274) > :nth-child(1) {
+  grid-column: 9;
+  grid-row: 1 / 3;
+  align-self: center;
+  justify-self: center;
+}
+/* Child 2: Description text → title/desc column */
+:is(.f-4, .f-34, .f-64, .f-94, .f-124, .f-154, .f-184, .f-214, .f-244, .f-274) > :nth-child(2) {
+  grid-column: 7;
+  grid-row: 2;
+  align-self: start;
+}
+/* Child 3: Date value → date column */
+:is(.f-4, .f-34, .f-64, .f-94, .f-124, .f-154, .f-184, .f-214, .f-244, .f-274) > :nth-child(3) {
+  grid-column: 3;
+  grid-row: 2;
+  align-self: start;
+}
+/* Child 4: "data" label → date column header */
+:is(.f-4, .f-34, .f-64, .f-94, .f-124, .f-154, .f-184, .f-214, .f-244, .f-274) > :nth-child(4) {
+  grid-column: 3;
+  grid-row: 1;
+}
+/* Child 5: "Press Release" → category column value */
+:is(.f-4, .f-34, .f-64, .f-94, .f-124, .f-154, .f-184, .f-214, .f-244, .f-274) > :nth-child(5) {
+  grid-column: 5;
+  grid-row: 2;
+  align-self: start;
+}
+/* Child 6: "Category" label → category column header */
+:is(.f-4, .f-34, .f-64, .f-94, .f-124, .f-154, .f-184, .f-214, .f-244, .f-274) > :nth-child(6) {
+  grid-column: 5;
+  grid-row: 1;
+}
+/* Child 7: "Title" label → title column header */
+:is(.f-4, .f-34, .f-64, .f-94, .f-124, .f-154, .f-184, .f-214, .f-244, .f-274) > :nth-child(7) {
+  grid-column: 7;
+  grid-row: 1;
+}
+/* Child 8: Separator line → full width bottom */
+:is(.f-4, .f-34, .f-64, .f-94, .f-124, .f-154, .f-184, .f-214, .f-244, .f-274) > :nth-child(8) {
+  grid-column: 1 / -1;
+  grid-row: 3;
+  width: 100%;
+}
+/* Child 9: Logo → first column spanning rows */
+:is(.f-4, .f-34, .f-64, .f-94, .f-124, .f-154, .f-184, .f-214, .f-244, .f-274) > :nth-child(9) {
+  grid-column: 1;
+  grid-row: 1 / 3;
+  position: relative;
+  height: 6.1875rem;
+}
+
+/* ===== Card Text Styles ===== */
+/* Arrow icons */
+.f-5, .f-35, .f-65, .f-95, .f-125, .f-155, .f-185, .f-215, .f-245, .f-275 {
+  border: 1px solid #000000;
+  object-fit: cover;
+  width: 1.03125rem;
+  height: 0.8rem;
+}
+/* Description text */
+.f-6, .f-36, .f-66, .f-96, .f-126, .f-156, .f-186, .f-216, .f-246, .f-276 {
+  font-family: 'Zen Kaku Gothic New', sans-serif;
+  font-size: 1rem;
+  line-height: 2rem;
+  letter-spacing: 0.8px;
+  text-align: left;
+  color: #000000;
+  word-break: break-word;
+}
+/* Date values */
+.f-7, .f-37, .f-67, .f-97, .f-127, .f-157, .f-187, .f-217, .f-247, .f-277 {
+  font-family: 'Zen Kaku Gothic New', sans-serif;
+  font-size: 0.9375rem;
+  line-height: 1.375rem;
+  text-align: center;
+  color: #000000;
+}
+/* "data" / "Category" / "Title" labels */
+.f-8, .f-10, .f-11,
+.f-38, .f-40, .f-41,
+.f-68, .f-70, .f-71,
+.f-98, .f-100, .f-101,
+.f-128, .f-130, .f-131,
+.f-158, .f-160, .f-161,
+.f-188, .f-190, .f-191,
+.f-218, .f-220, .f-221,
+.f-248, .f-250, .f-251,
+.f-278, .f-280, .f-281 {
+  font-family: 'OFL Sorts Mill Goudy TT', Georgia, serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.125rem;
+  text-align: left;
+  color: #797979;
+}
+/* "Press Release" category values */
+.f-9, .f-39, .f-69, .f-99, .f-129, .f-159, .f-189, .f-219, .f-249, .f-279 {
+  font-family: 'OFL Sorts Mill Goudy TT', Georgia, serif;
+  font-size: 1.25rem;
+  font-weight: 500;
+  line-height: 1.875rem;
+  letter-spacing: -1px;
+  text-align: center;
+  color: #000000;
+}
+/* Separator lines */
+.f-12, .f-42, .f-72, .f-102, .f-132, .f-162, .f-192, .f-222, .f-252, .f-282 {
+  border: none;
+  border-top: 1px solid #8b8b8b;
+  object-fit: cover;
+  height: 1px;
+}
+
+/* ===== Card Logo Compositions (keep absolute internals) ===== */
+/* Logo containers */
+.f-13, .f-43, .f-73, .f-103, .f-133, .f-163, .f-193, .f-223, .f-253, .f-283 {
+  position: relative;
+  width: 100%;
+  height: 6.1875rem;
+}
+/* Logo background images */
+.f-14 { position: absolute; inset: 0; background-image: url('images/img-3.png'); background-size: cover; background-position: center; }
+.f-44 { position: absolute; inset: 0; background-image: url('images/img-25.png'); background-size: cover; background-position: center; }
+.f-74 { position: absolute; inset: 0; background-image: url('images/img-42.png'); background-size: cover; background-position: center; }
+.f-104 { position: absolute; inset: 0; background-image: url('images/img-60.png'); background-size: cover; background-position: center; }
+.f-134 { position: absolute; inset: 0; background-image: url('images/img-80.png'); background-size: cover; background-position: center; }
+.f-164 { position: absolute; inset: 0; background-image: url('images/img-95.png'); background-size: cover; background-position: center; }
+.f-194 { position: absolute; inset: 0; background-image: url('images/img-115.png'); background-size: cover; background-position: center; }
+.f-224 { position: absolute; inset: 0; background-image: url('images/img-135.png'); background-size: cover; background-position: center; }
+.f-254 { position: absolute; inset: 0; background-image: url('images/img-150.png'); background-size: cover; background-position: center; }
+.f-284 { position: absolute; inset: 0; background-image: url('images/img-169.png'); background-size: cover; background-position: center; }
+
+/* Logo text containers */
+.f-15, .f-45, .f-75, .f-105, .f-135, .f-165, .f-195, .f-225, .f-255, .f-285 {
+  position: absolute;
+  left: 21.01%;
+  top: 2.4375rem;
+  width: 59.21%;
+  height: 1.375rem;
+}
+/* Logo text wrappers */
+.f-18, .f-48, .f-78, .f-108, .f-138, .f-168, .f-198, .f-228, .f-258, .f-288 {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 1.375rem;
+}
+/* Logo left part ("I.Y.P") */
+.f-19, .f-49, .f-79, .f-109, .f-139, .f-169, .f-199, .f-229, .f-259, .f-289 {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 52.95%;
+  height: 1.3125rem;
+}
+/* Logo right part ("Consulting") */
+.f-23, .f-53, .f-83, .f-113, .f-143, .f-173, .f-203, .f-233, .f-263, .f-293 {
+  position: absolute;
+  left: 58.41%;
+  top: 0.875rem;
+  width: 41.59%;
+  height: 0.5rem;
+}
+
+/* Logo Rectangle images */
+.f-16, .f-17, .f-46, .f-47, .f-76, .f-77, .f-106, .f-107, .f-136, .f-137,
+.f-166, .f-167, .f-196, .f-197, .f-226, .f-227, .f-256, .f-257, .f-286, .f-287 {
+  background-color: #ffffff;
+  object-fit: cover;
+}
+
+/* All Vector images inside logos */
+.f-20, .f-21, .f-22, .f-24, .f-25, .f-26, .f-27, .f-28, .f-29, .f-30, .f-31, .f-32, .f-33,
+.f-50, .f-51, .f-52, .f-54, .f-55, .f-56, .f-57, .f-58, .f-59, .f-60, .f-61, .f-62, .f-63,
+.f-80, .f-81, .f-82, .f-84, .f-85, .f-86, .f-87, .f-88, .f-89, .f-90, .f-91, .f-92, .f-93,
+.f-110, .f-111, .f-112, .f-114, .f-115, .f-116, .f-117, .f-118, .f-119, .f-120, .f-121, .f-122, .f-123,
+.f-140, .f-141, .f-142, .f-144, .f-145, .f-146, .f-147, .f-148, .f-149, .f-150, .f-151, .f-152, .f-153,
+.f-170, .f-171, .f-172, .f-174, .f-175, .f-176, .f-177, .f-178, .f-179, .f-180, .f-181, .f-182, .f-183,
+.f-200, .f-201, .f-202, .f-204, .f-205, .f-206, .f-207, .f-208, .f-209, .f-210, .f-211, .f-212, .f-213,
+.f-230, .f-231, .f-232, .f-234, .f-235, .f-236, .f-237, .f-238, .f-239, .f-240, .f-241, .f-242, .f-243,
+.f-260, .f-261, .f-262, .f-264, .f-265, .f-266, .f-267, .f-268, .f-269, .f-270, .f-271, .f-272, .f-273,
+.f-290, .f-291, .f-292, .f-294, .f-295, .f-296, .f-297, .f-298, .f-299, .f-300, .f-301, .f-302, .f-303 {
+  background-color: #ffffff;
+  object-fit: cover;
+}
+
+/* ===== Pagination ===== */
+.f-305 {
+  position: relative;
+  width: 34.69%;
+  margin: 5.625rem auto 0;
+  height: 2rem;
+  z-index: 1;
+}
+.f-306 {
+  position: absolute;
+  left: 15.14%;
+  top: 0;
+  width: 5.77%;
+  height: 100%;
+  background-color: #f2f2f2;
+  border-radius: 2px;
+}
+.f-307 {
+  position: absolute;
+  left: 0;
+  top: 0.125rem;
+  width: 100%;
+  height: 1.6875rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+}
+.f-308 {
+  font-family: 'OFL Sorts Mill Goudy TT', Georgia, serif;
+  font-size: 1.125rem;
+  font-weight: 500;
+  line-height: 1.6875rem;
+  text-align: center;
+  color: #000000;
+  position: relative;
+  z-index: 1;
+}
+.f-309, .f-310, .f-311, .f-312, .f-313 {
+  font-family: 'OFL Sorts Mill Goudy TT', Georgia, serif;
+  font-size: 1.125rem;
+  font-weight: 500;
+  line-height: 1.6875rem;
+  text-align: center;
+  color: #ffffff;
+}
+.f-314 {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  overflow: hidden;
+}
+.f-315 { border: 1.5px solid #ffffff; object-fit: cover; }
+.f-316 {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  overflow: hidden;
+}
+.f-317 { border: 1.5px solid #ffffff; object-fit: cover; }
+
+/* ===== Footer ===== */
+.f-329 {
+  width: 100%;
+  position: relative;
+  min-height: 38.25rem;
+  margin-top: 8.75rem;
+  z-index: 1;
+}
+.f-330 {
+  position: absolute;
+  inset: 0;
+  background-color: #181818;
+}
+.f-329 > *:not(.f-330) {
+  position: relative;
+  z-index: 1;
+}
+
+/* Footer logo */
+.f-344 {
+  position: absolute;
+  left: 5.69%;
+  top: 3.125rem;
+  width: 9.56%;
+  height: 3.5rem;
+  z-index: 1;
+}
+.f-345 {
+  position: absolute;
+  left: 10.46%;
+  top: 2.3125rem;
+  width: 3.92%;
+  height: 0.375rem;
+  background-color: #ffffff;
+}
+.f-346 {
+  position: absolute;
+  left: 29.41%;
+  top: 2.3125rem;
+  width: 3.92%;
+  height: 0.375rem;
+  background-color: #ffffff;
+}
+.f-347 {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 3.5rem;
+}
+.f-348 {
+  font-family: 'OFL Sorts Mill Goudy TT', Georgia, serif;
+  font-size: 2.6875rem;
+  font-weight: 700;
+  line-height: 3.5rem;
+  letter-spacing: -1.3px;
+  text-align: center;
+  color: #ffffff;
+}
+.f-349 {
+  font-family: 'OFL Sorts Mill Goudy TT', Georgia, serif;
+  font-size: 0.8125rem;
+  font-weight: 300;
+  line-height: 1.0625rem;
+  text-align: center;
+  color: #ffffff;
+}
+
+/* Footer nav links */
+.f-351 {
+  position: absolute;
+  left: 5.69%;
+  top: 11rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  z-index: 1;
+}
+.f-352, .f-353, .f-354, .f-355, .f-356, .f-357 {
+  font-family: 'OFL Sorts Mill Goudy TT', Georgia, serif;
+  font-size: 1.125rem;
+  font-weight: 500;
+  line-height: 1.6875rem;
+  letter-spacing: -0.5px;
+  color: #ffffff;
+}
+
+/* Footer social */
+.f-358 {
+  position: absolute;
+  left: 5.44%;
+  top: 22.25rem;
+  z-index: 1;
+}
+.f-366 {
+  font-family: 'OFL Sorts Mill Goudy TT', Georgia, serif;
+  font-size: 1.125rem;
+  font-weight: 500;
+  line-height: 1.6875rem;
+  letter-spacing: -0.5px;
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+}
+.f-359 {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+.f-360, .f-363 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+  height: 2.6875rem;
+  padding: 0 1rem;
+}
+.f-361, .f-364 {
+  position: absolute;
+  inset: 0;
+  background-color: #000000;
+  border-radius: 0;
+}
+.f-362, .f-365 {
+  position: relative;
+  font-family: 'OFL Sorts Mill Goudy TT', Georgia, serif;
+  font-size: 1.125rem;
+  font-weight: 500;
+  line-height: 2.25rem;
+  letter-spacing: -0.5px;
+  color: #ffffff;
+}
+
+/* Footer contact CTA */
+.f-367 {
+  position: absolute;
+  left: 47.13%;
+  top: 10.5625rem;
+  width: 35.31%;
+  z-index: 1;
+  display: flex;
+  align-items: flex-start;
+  gap: 2rem;
+}
+.f-368 {
+  flex: 1;
+}
+.f-369 {
+  font-family: 'OFL Sorts Mill Goudy TT', Georgia, serif;
+  font-size: 5rem;
+  font-weight: 500;
+  line-height: 5.5rem;
+  letter-spacing: -2.4px;
+  color: #ffffff;
+}
+.f-370 {
+  font-family: 'Zen Kaku Gothic New', sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.75rem;
+  color: #ffffff;
+}
+.f-371 {
+  border: 1px solid #ffffff;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+/* Back to top */
+.f-372 {
+  position: absolute;
+  bottom: 6rem;
+  right: 47%;
+  font-family: 'OFL Sorts Mill Goudy TT', Georgia, serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 0.8125rem;
+  letter-spacing: 0.6px;
+  text-align: center;
+  color: #ffffff;
+  z-index: 1;
+}
+.f-373 {
+  position: absolute;
+  left: 47.38%;
+  top: -2.625rem;
+  width: 5.25%;
+  height: 5.25rem;
+  z-index: 1;
+}
+.f-374 {
+  position: absolute;
+  inset: 0;
+  background-color: #000000;
+}
+.f-375 {
+  position: relative;
+  border: 2px solid #ffffff;
+  object-fit: cover;
+}
+
+/* Footer copyright */
+.f-350 {
+  position: absolute;
+  bottom: 3rem;
+  left: 5.69%;
+  font-family: 'OFL Sorts Mill Goudy TT', Georgia, serif;
+  font-size: 0.625rem;
+  font-weight: 500;
+  line-height: 0.9375rem;
+  color: #ffffff;
+  z-index: 1;
+}
+
+/* Footer policy links */
+.f-331 {
+  position: absolute;
+  left: 32.88%;
+  bottom: 3rem;
+  display: flex;
+  gap: 1.5rem;
+  z-index: 1;
+}
+.f-332, .f-335, .f-338, .f-341 {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+.f-333, .f-336, .f-339, .f-342 {
+  font-family: 'OFL Sorts Mill Goudy TT', Georgia, serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.5rem;
+  color: #ffffff;
+  white-space: nowrap;
+}
+.f-334, .f-337, .f-340, .f-343 {
+  border: 1px solid #ffffff;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+/* ===== Tablet ===== */
+@media (max-width: 768px) {
+  .f-318 {
+    font-size: 3.5rem;
+    line-height: 5rem;
+    padding-top: 7rem;
+  }
+  .f-319 {
+    font-size: 1rem;
+  }
+
+  /* Stack header nav */
+  .f-376 {
+    left: 5%;
+    width: 90%;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+  }
+  .f-377, .f-378, .f-379, .f-380, .f-381 {
+    font-size: 0.9375rem;
+  }
+
+  /* Header buttons */
+  .f-401 { left: auto; right: 2%; width: auto; padding: 0 1rem; }
+  .f-404 { left: auto; right: 12%; width: auto; padding: 0 1rem; }
+
+  /* Filters full width */
+  .f-320 {
+    width: 60%;
+    align-self: center;
+    margin-right: 0;
+  }
+
+  /* News cards wider */
+  :is(.f-4, .f-34, .f-64, .f-94, .f-124, .f-154, .f-184, .f-214, .f-244, .f-274) {
+    width: 90%;
+    margin-left: 5%;
+    grid-template-columns: 15% 0 6% 0 10% 3% 1fr 3% 2%;
+    min-height: 7.5rem;
+  }
+
+  /* Pagination wider */
+  .f-305 { width: 50%; }
+
+  /* Footer CTA text smaller */
+  .f-369 { font-size: 3rem; line-height: 3.5rem; }
+
+  /* Footer elements */
+  .f-367 { width: 45%; }
+  .f-331 { left: 10%; flex-wrap: wrap; gap: 0.75rem; }
+}
+
+/* ===== Mobile ===== */
+@media (max-width: 480px) {
+  .f-318 {
+    font-size: 2.25rem;
+    line-height: 3.5rem;
+    padding-top: 6rem;
+    letter-spacing: -1px;
+  }
+  .f-319 {
+    font-size: 0.875rem;
+    line-height: 1.75rem;
+  }
+
+  /* Hide desktop header nav, show simplified */
+  .f-376 { display: none; }
+  .f-382 { left: 5%; }
+  .f-401 { right: 2%; width: auto; min-width: 4rem; padding: 0 0.75rem; }
+  .f-404 { right: calc(2% + 5rem); width: auto; min-width: 3.5rem; padding: 0 0.75rem; }
+  .f-403, .f-406 { font-size: 0.75rem; }
+
+  /* Filters stack */
+  .f-320 {
+    width: 90%;
+    align-self: center;
+    margin-right: 0;
+    height: auto;
+    min-height: 2.4375rem;
+  }
+
+  /* News cards single column layout */
+  :is(.f-4, .f-34, .f-64, .f-94, .f-124, .f-154, .f-184, .f-214, .f-244, .f-274) {
+    width: 92%;
+    margin-left: 4%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem;
+    min-height: auto;
+  }
+  /* Reset grid placement for mobile */
+  :is(.f-4, .f-34, .f-64, .f-94, .f-124, .f-154, .f-184, .f-214, .f-244, .f-274) > * {
+    grid-column: unset;
+    grid-row: unset;
+  }
+  /* Logo first */
+  :is(.f-4, .f-34, .f-64, .f-94, .f-124, .f-154, .f-184, .f-214, .f-244, .f-274) > :nth-child(9) {
+    order: -1;
+    width: 40%;
+    height: 3rem;
+  }
+  /* Labels row */
+  :is(.f-4, .f-34, .f-64, .f-94, .f-124, .f-154, .f-184, .f-214, .f-244, .f-274) > :nth-child(4),
+  :is(.f-4, .f-34, .f-64, .f-94, .f-124, .f-154, .f-184, .f-214, .f-244, .f-274) > :nth-child(6),
+  :is(.f-4, .f-34, .f-64, .f-94, .f-124, .f-154, .f-184, .f-214, .f-244, .f-274) > :nth-child(7) {
+    display: none;
+  }
+  /* Date and category inline */
+  :is(.f-4, .f-34, .f-64, .f-94, .f-124, .f-154, .f-184, .f-214, .f-244, .f-274) > :nth-child(3) {
+    order: 1;
+  }
+  :is(.f-4, .f-34, .f-64, .f-94, .f-124, .f-154, .f-184, .f-214, .f-244, .f-274) > :nth-child(5) {
+    order: 2;
+  }
+  :is(.f-4, .f-34, .f-64, .f-94, .f-124, .f-154, .f-184, .f-214, .f-244, .f-274) > :nth-child(2) {
+    order: 3;
+  }
+  /* Arrow at end */
+  :is(.f-4, .f-34, .f-64, .f-94, .f-124, .f-154, .f-184, .f-214, .f-244, .f-274) > :nth-child(1) {
+    order: 10;
+    align-self: flex-end;
+  }
+  /* Separator */
+  :is(.f-4, .f-34, .f-64, .f-94, .f-124, .f-154, .f-184, .f-214, .f-244, .f-274) > :nth-child(8) {
+    order: 20;
+  }
+  /* Tap targets */
+  .f-6, .f-36, .f-66, .f-96, .f-126, .f-156, .f-186, .f-216, .f-246, .f-276 {
+    font-size: 0.875rem;
+    line-height: 1.625rem;
+  }
+
+  /* News list title */
+  .f-304 {
+    font-size: 1.25rem;
+    padding-left: 5%;
+  }
+
+  /* Pagination */
+  .f-305 { width: 80%; }
+
+  /* Footer stacked */
+  .f-344 { left: 5%; top: 2rem; width: 30%; }
+  .f-351 { left: 5%; top: 7rem; }
+  .f-358 { left: 5%; top: 17rem; }
+  .f-367 {
+    left: 5%;
+    top: 25rem;
+    width: 90%;
+    flex-direction: column;
+  }
+  .f-369 { font-size: 2rem; line-height: 2.5rem; }
+  .f-329 { min-height: 50rem; }
+  .f-331 {
+    left: 5%;
+    bottom: 5rem;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .f-372 { bottom: 3rem; right: 5%; }
+  .f-350 { bottom: 1.5rem; }
+  .f-373 { left: auto; right: 5%; }
+
+  /* Background textures hidden on mobile */
+  .f-2, .f-3 { display: none; }
+}

@@ -1,0 +1,545 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body { background-color: #000000; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; overflow-x: hidden; }
+
+.f-2 { position: absolute; left: -0.59%; top: 219px; width: 11.13%; height: 37px; transform: rotate(-90deg); font-family: 'Sorts Mill Goudy', sans-serif; font-size: clamp(16px, 12.14px + 0.8036vw, 25px); font-weight: 500; line-height: clamp(23px, 17px + 1.25vw, 37px); letter-spacing: -1.3px; text-align: left; color: #ffffff; }
+
+.f-3 {
+  position: absolute;
+  left: 393px;
+  top: 193px;
+  width: auto;
+  height: auto;
+  z-index: 1;
+  font-family: 'Sorts Mill Goudy', sans-serif;
+  font-size: clamp(32px, 11.43px + 4.2857vw, 80px);
+  font-weight: 500;
+  line-height: clamp(48px, 17.57px + 6.3393vw, 119px);
+  letter-spacing: -2.4px;
+  text-align: left;
+  color: #ffffff;
+}
+
+.f-4 { background-color: #ffffff; position: absolute; left: 12.50%; top: 1495px; width: 75.00%; height: 50px; z-index: 2; }
+
+.f-5 { background-color: #595959; position: absolute; left: 12.50%; top: 1753px; width: 75.00%; height: 50px; z-index: 3; }
+
+.f-6 { position: absolute; left: 12.50%; top: 334px; width: 53.81%; height: 100px; z-index: 4; font-family: 'Zen Kaku Gothic New', sans-serif; font-size: clamp(16px, 12.14px + 0.8036vw, 25px); font-weight: 300; line-height: clamp(32px, 24.29px + 1.6071vw, 50px); letter-spacing: 1.3px; text-align: left; color: #ffffff; }
+
+.f-7 { position: absolute; left: 14.25%; top: 1254px; width: 23.56%; height: 40px; z-index: 5; font-family: 'A P-OTF A1Gothic Std', sans-serif; font-size: clamp(14px, 11.43px + 0.5357vw, 20px); font-weight: 300; line-height: clamp(29px, 24.29px + 0.9821vw, 40px); letter-spacing: 1.0px; text-align: left; color: #ffffff; }
+
+.f-8 { position: absolute; left: 13.50%; top: 1502px; width: 23.56%; height: 40px; z-index: 6; font-family: 'A P-OTF A1Gothic Std', sans-serif; font-size: clamp(14px, 11.43px + 0.5357vw, 20px); font-weight: 300; line-height: clamp(29px, 24.29px + 0.9821vw, 40px); letter-spacing: 1.0px; text-align: left; color: #1e1e1e; }
+
+.f-9 { position: absolute; left: 13.50%; top: 1760px; width: 23.56%; height: 40px; z-index: 7; font-family: 'A P-OTF A1Gothic Std', sans-serif; font-size: clamp(14px, 11.43px + 0.5357vw, 20px); font-weight: 300; line-height: clamp(29px, 24.29px + 0.9821vw, 40px); letter-spacing: 1.0px; text-align: left; color: #ffffff; }
+
+.f-10 {
+  position: absolute;
+  left: 393px;
+  top: 1308px;
+  width: 75.00%;
+  height: 144px;
+  z-index: 8;
+  font-family: 'A P-OTF A1Gothic Std', sans-serif;
+  font-size: clamp(14px, 12.29px + 0.3571vw, 18px);
+  font-weight: 300;
+  line-height: clamp(28px, 24.57px + 0.7143vw, 36px);
+  letter-spacing: 0.9px;
+  text-align: left;
+  color: #ffffff;
+}
+
+.f-11 { position: absolute; left: 12.50%; top: 1563px; width: 75.00%; height: 144px; z-index: 9; font-family: 'A P-OTF A1Gothic Std', sans-serif; font-size: clamp(14px, 12.29px + 0.3571vw, 18px); font-weight: 300; line-height: clamp(28px, 24.57px + 0.7143vw, 36px); letter-spacing: 0.9px; text-align: left; color: #ffffff; }
+
+.f-12 {
+  position: absolute;
+  left: 393px;
+  top: 1842px;
+  width: 75.00%;
+  height: 144px;
+  z-index: 10;
+  font-family: 'A P-OTF A1Gothic Std', sans-serif;
+  font-size: clamp(14px, 12.29px + 0.3571vw, 18px);
+  font-weight: 300;
+  line-height: clamp(28px, 24.57px + 0.7143vw, 36px);
+  letter-spacing: 0.9px;
+  text-align: left;
+  color: #ffffff;
+}
+
+.f-13 { position: absolute; left: 12.50%; top: 2194px; width: 81.00%; height: 110px; z-index: 11; font-family: 'A P-OTF A1Gothic Std', sans-serif; font-size: clamp(14px, 12.29px + 0.3571vw, 18px); font-weight: 300; line-height: clamp(17px, 14.86px + 0.4464vw, 22px); letter-spacing: 0.9px; text-align: left; color: #ffffff; }
+
+.f-14 { position: absolute; left: 14.06%; top: 2008px; width: 79.44%; height: 108px; z-index: 12; font-family: 'A P-OTF A1Gothic Std', sans-serif; font-size: clamp(14px, 12.29px + 0.3571vw, 18px); font-weight: 300; line-height: clamp(28px, 24.57px + 0.7143vw, 36px); letter-spacing: 0.9px; text-align: left; color: #ffffff; }
+
+.f-15 { position: absolute; left: 12.50%; top: 2008px; width: 1.13%; height: 108px; z-index: 13; font-family: 'A P-OTF A1Gothic Std', sans-serif; font-size: clamp(14px, 12.29px + 0.3571vw, 18px); font-weight: 300; line-height: clamp(28px, 24.57px + 0.7143vw, 36px); letter-spacing: 0.9px; text-align: left; color: #ffffff; }
+
+.f-16 { position: absolute; left: 12.50%; top: 462px; width: 75.00%; height: 0px; z-index: 14; object-fit: cover; }
+
+.f-17 { position: absolute; left: 12.50%; top: 1297px; width: 75.00%; height: 0px; z-index: 15; object-fit: cover; }
+
+.f-18 { background-color: #f5f5f5; position: absolute; left: 12.50%; top: 518px; width: 75.00%; height: 687px; z-index: 16; }
+
+.f-19 { position: absolute; left: 12.75%; top: 1270px; width: 0.56%; height: 9px; z-index: 17; object-fit: cover; }
+
+.f-23 { position: absolute; left: 0.00%; top: 0px; width: 100.00%; height: 13px; object-fit: cover; }
+
+.f-24 { position: absolute; left: 3.85%; top: 1px; width: 92.31%; height: 12px; z-index: 1; object-fit: cover; }
+
+.f-22 { position: relative; position: absolute; left: 31.58%; top: 0px; width: 68.42%; height: 13px; }
+
+.f-25 { position: absolute; left: 10.53%; top: 4px; width: 68.42%; height: 13px; z-index: 1; object-fit: cover; }
+
+.f-27 { position: absolute; left: 0.00%; top: 0px; width: 100.00%; height: 13px; object-fit: cover; }
+
+.f-28 { position: absolute; left: 3.85%; top: 1px; width: 92.31%; height: 12px; z-index: 1; object-fit: cover; }
+
+.f-26 { position: relative; position: absolute; left: 0.00%; top: 6px; width: 68.42%; height: 13px; z-index: 2; }
+
+.f-21 { position: relative; position: absolute; left: 0.00%; top: 0px; width: 100.00%; height: 19px; }
+
+.f-20 { position: relative; overflow: hidden; position: absolute; left: 30.50%; top: 2283px; width: 1.19%; height: 19px; z-index: 18; }
+
+.f-29 { position: absolute; left: 31.56%; top: 2240px; width: 0.87%; height: 19px; z-index: 19; object-fit: cover; }
+
+.f-32 { background-color: #1a1a1a; border-radius: 3px; position: absolute; left: 0.00%; top: 0px; width: 100.00%; height: 40px; }
+
+.f-33 { position: absolute; left: 42.28%; top: 7px; width: 26.83%; height: 27px; z-index: 1; font-family: 'Sorts Mill Goudy', sans-serif; font-size: clamp(14px, 12.29px + 0.3571vw, 18px); font-weight: 500; line-height: clamp(21px, 18.43px + 0.5357vw, 27px); letter-spacing: -0.5px; text-align: left; color: #ffffff; }
+
+.f-34 { position: absolute; left: 11.38%; top: 14px; width: 7.32%; height: 11px; transform: rotate(90deg); z-index: 2; object-fit: cover; }
+
+.f-31 { position: relative; border-radius: 0px 0px 0px 0px; position: absolute; left: 0.00%; top: 0px; width: 48.81%; height: 40px; }
+
+.f-36 { background-color: #1a1a1a; border-radius: 3px; position: absolute; left: 0.00%; top: 0px; width: 100.00%; height: 40px; }
+
+.f-37 { position: absolute; left: 82.11%; top: 14px; width: 7.32%; height: 11px; transform: rotate(-90deg); z-index: 1; object-fit: cover; }
+
+.f-38 { position: absolute; left: 27.64%; top: 7px; width: 30.08%; height: 27px; z-index: 2; font-family: 'Sorts Mill Goudy', sans-serif; font-size: clamp(14px, 12.29px + 0.3571vw, 18px); font-weight: 500; line-height: clamp(21px, 18.43px + 0.5357vw, 27px); letter-spacing: -0.5px; text-align: left; color: #ffffff; }
+
+.f-35 { position: relative; border-radius: 0px 0px 0px 0px; position: absolute; left: 51.19%; top: 0px; width: 48.81%; height: 40px; z-index: 1; }
+
+.f-30 { position: relative; border-radius: 0px 0px 0px 0px; position: absolute; left: 71.75%; top: 211px; width: 15.75%; height: 40px; z-index: 20; }
+
+.f-39 { position: absolute; left: 28.19%; top: 230px; width: 3.88%; height: 22px; z-index: 21; font-family: 'Zen Kaku Gothic New', sans-serif; font-size: clamp(13px, 12.14px + 0.1786vw, 15px); line-height: clamp(19px, 17.71px + 0.2679vw, 22px); text-align: center; color: #ffffff; }
+
+.f-40 { position: absolute; left: 28.19%; top: 210px; width: 1.38%; height: 18px; z-index: 22; font-family: 'Sorts Mill Goudy', sans-serif; font-size: 12px; font-weight: 500; line-height: 18px; text-align: left; color: #797979; }
+
+.f-41 { position: absolute; left: 35.44%; top: 230px; width: 6.25%; height: 30px; z-index: 23; font-family: 'Sorts Mill Goudy', sans-serif; font-size: clamp(14px, 11.43px + 0.5357vw, 20px); font-weight: 500; line-height: clamp(22px, 18.57px + 0.7143vw, 30px); letter-spacing: -1.0px; text-align: center; color: #ffffff; }
+
+.f-42 { position: absolute; left: 35.44%; top: 210px; width: 3.00%; height: 18px; z-index: 24; font-family: 'Sorts Mill Goudy', sans-serif; font-size: 12px; font-weight: 500; line-height: 18px; text-align: left; color: #797979; }
+
+.f-44 { border: 0.5px solid #ffffff; border-radius: 100px; position: absolute; left: 0.00%; top: 0px; width: 100.00%; height: 46px; }
+
+.f-45 { position: absolute; left: 31.00%; top: 12px; width: 38.30%; height: 21px; z-index: 1; font-family: 'Zen Kaku Gothic New', sans-serif; font-size: clamp(13px, 12.57px + 0.0893vw, 14px); line-height: clamp(19px, 18.14px + 0.1786vw, 21px); text-align: left; color: #ffffff; }
+
+.f-43 { position: relative; border-radius: 100px; position: absolute; left: 12.50%; top: 2382px; width: 20.56%; height: 46px; z-index: 25; }
+
+.f-47 { position: absolute; left: 0.00%; top: 62px; width: 100.00%; height: 0px; object-fit: cover; }
+
+.f-48 { background-color: #080808; position: absolute; left: 37.00%; top: 0px; width: 26.00%; height: 123px; z-index: 1; }
+
+.f-50 { position: absolute; left: 27.61%; top: 0px; width: 72.39%; height: 74px; font-family: 'Sorts Mill Goudy', sans-serif; font-size: clamp(23px, 11.43px + 2.4107vw, 50px); font-weight: 500; line-height: clamp(34px, 16.86px + 3.5714vw, 74px); letter-spacing: -1.5px; text-align: left; color: #ffffff; }
+
+.f-52 { background-color: #d9d9d9; position: absolute; left: 0.00%; top: 0px; width: 17.65%; height: 3px; }
+
+.f-53 { background-color: #d9d9d9; position: absolute; left: 0.00%; top: 7px; width: 17.65%; height: 3px; z-index: 1; }
+
+.f-54 { background-color: #d9d9d9; position: absolute; left: 0.00%; top: 14px; width: 17.65%; height: 3px; z-index: 2; }
+
+.f-55 { background-color: #d9d9d9; position: absolute; left: 41.18%; top: 0px; width: 17.65%; height: 3px; z-index: 3; }
+
+.f-56 { background-color: #d9d9d9; position: absolute; left: 41.18%; top: 7px; width: 17.65%; height: 3px; z-index: 4; }
+
+.f-57 { background-color: #d9d9d9; position: absolute; left: 41.18%; top: 14px; width: 17.65%; height: 3px; z-index: 5; }
+
+.f-58 { background-color: #d9d9d9; position: absolute; left: 82.35%; top: 0px; width: 17.65%; height: 3px; z-index: 6; }
+
+.f-59 { background-color: #d9d9d9; position: absolute; left: 82.35%; top: 7px; width: 17.65%; height: 3px; z-index: 7; }
+
+.f-60 { background-color: #d9d9d9; position: absolute; left: 82.35%; top: 14px; width: 17.65%; height: 3px; z-index: 8; }
+
+.f-51 { position: relative; position: absolute; left: 0.00%; top: 28px; width: 10.43%; height: 17px; z-index: 1; }
+
+.f-49 { position: relative; position: absolute; left: 43.25%; top: 26px; width: 13.58%; height: 74px; z-index: 2; }
+
+.f-46 { position: relative; position: absolute; left: 12.50%; top: 2553px; width: 75.00%; height: 123px; z-index: 26; }
+
+.f-61 { position: absolute; left: 11.56%; top: 2988px; width: 88.44%; height: 644px; z-index: 27; background-image: url('images/img-15.png'); background-size: cover; background-position: center; }
+
+.f-63 { position: absolute; left: 98.85%; top: 41px; width: 1.01%; height: 16px; transform: rotate(-90deg); object-fit: cover; }
+
+.f-64 { position: absolute; left: 40.77%; top: 20px; width: 48.23%; height: 64px; z-index: 1; font-family: 'Zen Kaku Gothic New', sans-serif; font-size: clamp(13px, 11.71px + 0.2679vw, 16px); line-height: clamp(26px, 23.43px + 0.5357vw, 32px); letter-spacing: 0.8px; text-align: left; color: #000000; }
+
+.f-65 { position: absolute; left: 18.70%; top: 20px; width: 4.87%; height: 22px; z-index: 2; font-family: 'Zen Kaku Gothic New', sans-serif; font-size: clamp(13px, 12.14px + 0.1786vw, 15px); line-height: clamp(19px, 17.71px + 0.2679vw, 22px); text-align: center; color: #000000; }
+
+.f-66 { position: absolute; left: 18.70%; top: 0px; width: 1.73%; height: 18px; z-index: 3; font-family: 'Sorts Mill Goudy', sans-serif; font-size: 12px; font-weight: 500; line-height: 18px; text-align: left; color: #797979; }
+
+.f-67 { position: absolute; left: 27.81%; top: 20px; width: 7.86%; height: 30px; z-index: 4; font-family: 'Sorts Mill Goudy', sans-serif; font-size: clamp(14px, 11.43px + 0.5357vw, 20px); font-weight: 500; line-height: clamp(22px, 18.57px + 0.7143vw, 30px); letter-spacing: -1.0px; text-align: center; color: #000000; }
+
+.f-68 { position: absolute; left: 27.81%; top: 0px; width: 3.77%; height: 18px; z-index: 5; font-family: 'Sorts Mill Goudy', sans-serif; font-size: 12px; font-weight: 500; line-height: 18px; text-align: left; color: #797979; }
+
+.f-69 { position: absolute; left: 40.77%; top: 0px; width: 1.96%; height: 18px; z-index: 6; font-family: 'Sorts Mill Goudy', sans-serif; font-size: 12px; font-weight: 500; line-height: 18px; text-align: left; color: #797979; }
+
+.f-70 { position: absolute; left: 0.00%; top: 136px; width: 100.00%; height: 0px; z-index: 7; object-fit: cover; }
+
+.f-72 { position: absolute; left: 0.00%; top: 0px; width: 100.00%; height: 99px; background-image: url('images/img-20.png'); background-size: cover; background-position: center; }
+
+.f-74 { position: absolute; left: 8.43%; top: 17px; width: 4.05%; height: 4px; object-fit: cover; }
+
+.f-75 { position: absolute; left: 28.02%; top: 17px; width: 4.05%; height: 4px; z-index: 1; object-fit: cover; }
+
+.f-78 { position: absolute; left: 69.44%; top: 0px; width: 30.56%; height: 21px; object-fit: cover; }
+
+.f-79 { position: absolute; left: 21.20%; top: 0px; width: 35.39%; height: 21px; z-index: 1; object-fit: cover; }
+
+.f-80 { position: absolute; left: 0.00%; top: 0px; width: 8.34%; height: 21px; z-index: 2; object-fit: cover; }
+
+.f-77 { position: relative; position: absolute; left: 0.00%; top: 0px; width: 52.95%; height: 21px; }
+
+.f-82 { position: absolute; left: 90.33%; top: 2px; width: 9.67%; height: 6px; object-fit: cover; }
+
+.f-83 { position: absolute; left: 79.23%; top: 2px; width: 8.64%; height: 5px; z-index: 1; object-fit: cover; }
+
+.f-84 { position: absolute; left: 74.16%; top: 0px; width: 1.48%; height: 6px; z-index: 2; object-fit: cover; }
+
+.f-85 { position: absolute; left: 65.79%; top: 1px; width: 6.04%; height: 6px; z-index: 3; object-fit: cover; }
+
+.f-86 { position: absolute; left: 61.62%; top: 0px; width: 3.13%; height: 6px; z-index: 4; object-fit: cover; }
+
+.f-87 { position: absolute; left: 49.59%; top: 2px; width: 8.55%; height: 5px; z-index: 5; object-fit: cover; }
+
+.f-88 { position: absolute; left: 38.09%; top: 2px; width: 9.02%; height: 5px; z-index: 6; object-fit: cover; }
+
+.f-89 { position: absolute; left: 26.99%; top: 2px; width: 8.64%; height: 5px; z-index: 7; object-fit: cover; }
+
+.f-90 { position: absolute; left: 14.50%; top: 2px; width: 9.99%; height: 5px; z-index: 8; object-fit: cover; }
+
+.f-91 { position: absolute; left: 0.00%; top: 0px; width: 12.78%; height: 7px; z-index: 9; object-fit: cover; }
+
+.f-81 { position: relative; position: absolute; left: 58.41%; top: 14px; width: 41.59%; height: 8px; z-index: 1; }
+
+.f-76 { position: relative; position: absolute; left: 0.00%; top: 0px; width: 100.00%; height: 22px; z-index: 2; }
+
+.f-73 { position: relative; position: absolute; left: 21.01%; top: 39px; width: 59.21%; height: 22px; z-index: 1; }
+
+.f-71 { position: relative; position: absolute; left: 0.00%; top: 0px; width: 13.37%; height: 99px; z-index: 8; }
+
+.f-62 { position: relative; position: absolute; left: 16.00%; top: 3076px; width: 79.56%; height: 136px; z-index: 28; }
+
+.f-93 { position: absolute; left: 98.85%; top: 41px; width: 1.01%; height: 16px; transform: rotate(-90deg); object-fit: cover; }
+
+.f-94 { position: absolute; left: 40.77%; top: 20px; width: 48.23%; height: 64px; z-index: 1; font-family: 'Zen Kaku Gothic New', sans-serif; font-size: clamp(13px, 11.71px + 0.2679vw, 16px); line-height: clamp(26px, 23.43px + 0.5357vw, 32px); letter-spacing: 0.8px; text-align: left; color: #000000; }
+
+.f-95 { position: absolute; left: 18.70%; top: 20px; width: 4.87%; height: 22px; z-index: 2; font-family: 'Zen Kaku Gothic New', sans-serif; font-size: clamp(13px, 12.14px + 0.1786vw, 15px); line-height: clamp(19px, 17.71px + 0.2679vw, 22px); text-align: center; color: #000000; }
+
+.f-96 { position: absolute; left: 18.70%; top: 0px; width: 1.73%; height: 18px; z-index: 3; font-family: 'Sorts Mill Goudy', sans-serif; font-size: 12px; font-weight: 500; line-height: 18px; text-align: left; color: #797979; }
+
+.f-97 { position: absolute; left: 27.81%; top: 20px; width: 7.86%; height: 30px; z-index: 4; font-family: 'Sorts Mill Goudy', sans-serif; font-size: clamp(14px, 11.43px + 0.5357vw, 20px); font-weight: 500; line-height: clamp(22px, 18.57px + 0.7143vw, 30px); letter-spacing: -1.0px; text-align: center; color: #000000; }
+
+.f-98 { position: absolute; left: 27.81%; top: 0px; width: 3.77%; height: 18px; z-index: 5; font-family: 'Sorts Mill Goudy', sans-serif; font-size: 12px; font-weight: 500; line-height: 18px; text-align: left; color: #797979; }
+
+.f-99 { position: absolute; left: 40.77%; top: 0px; width: 1.96%; height: 18px; z-index: 6; font-family: 'Sorts Mill Goudy', sans-serif; font-size: 12px; font-weight: 500; line-height: 18px; text-align: left; color: #797979; }
+
+.f-100 { position: absolute; left: 0.00%; top: 136px; width: 100.00%; height: 0px; z-index: 7; object-fit: cover; }
+
+.f-102 { position: absolute; left: 0.00%; top: 0px; width: 100.00%; height: 99px; background-image: url('images/img-35.png'); background-size: cover; background-position: center; }
+
+.f-104 { position: absolute; left: 8.43%; top: 17px; width: 4.05%; height: 4px; object-fit: cover; }
+
+.f-105 { position: absolute; left: 28.02%; top: 17px; width: 4.05%; height: 4px; z-index: 1; object-fit: cover; }
+
+.f-108 { position: absolute; left: 69.44%; top: 0px; width: 30.56%; height: 21px; object-fit: cover; }
+
+.f-109 { position: absolute; left: 21.20%; top: 0px; width: 35.39%; height: 21px; z-index: 1; object-fit: cover; }
+
+.f-110 { position: absolute; left: 0.00%; top: 0px; width: 8.34%; height: 21px; z-index: 2; object-fit: cover; }
+
+.f-107 { position: relative; position: absolute; left: 0.00%; top: 0px; width: 52.95%; height: 21px; }
+
+.f-112 { position: absolute; left: 90.33%; top: 2px; width: 9.67%; height: 6px; object-fit: cover; }
+
+.f-113 { position: absolute; left: 79.23%; top: 2px; width: 8.64%; height: 5px; z-index: 1; object-fit: cover; }
+
+.f-114 { position: absolute; left: 74.16%; top: 0px; width: 1.48%; height: 6px; z-index: 2; object-fit: cover; }
+
+.f-115 { position: absolute; left: 65.79%; top: 1px; width: 6.04%; height: 6px; z-index: 3; object-fit: cover; }
+
+.f-116 { position: absolute; left: 61.62%; top: 0px; width: 3.13%; height: 6px; z-index: 4; object-fit: cover; }
+
+.f-117 { position: absolute; left: 49.59%; top: 2px; width: 8.55%; height: 5px; z-index: 5; object-fit: cover; }
+
+.f-118 { position: absolute; left: 38.09%; top: 2px; width: 9.02%; height: 5px; z-index: 6; object-fit: cover; }
+
+.f-119 { position: absolute; left: 26.99%; top: 2px; width: 8.64%; height: 5px; z-index: 7; object-fit: cover; }
+
+.f-120 { position: absolute; left: 14.50%; top: 2px; width: 9.99%; height: 5px; z-index: 8; object-fit: cover; }
+
+.f-121 { position: absolute; left: 0.00%; top: 0px; width: 12.78%; height: 7px; z-index: 9; object-fit: cover; }
+
+.f-111 { position: relative; position: absolute; left: 58.41%; top: 14px; width: 41.59%; height: 8px; z-index: 1; }
+
+.f-106 { position: relative; position: absolute; left: 0.00%; top: 0px; width: 100.00%; height: 22px; z-index: 2; }
+
+.f-103 { position: relative; position: absolute; left: 21.01%; top: 39px; width: 59.21%; height: 22px; z-index: 1; }
+
+.f-101 { position: relative; position: absolute; left: 0.00%; top: 0px; width: 13.37%; height: 99px; z-index: 8; }
+
+.f-92 { position: relative; position: absolute; left: 16.00%; top: 3242px; width: 79.56%; height: 136px; z-index: 29; }
+
+.f-123 { position: absolute; left: 98.85%; top: 41px; width: 1.01%; height: 16px; transform: rotate(-90deg); object-fit: cover; }
+
+.f-124 { position: absolute; left: 40.77%; top: 20px; width: 48.23%; height: 64px; z-index: 1; font-family: 'Zen Kaku Gothic New', sans-serif; font-size: clamp(13px, 11.71px + 0.2679vw, 16px); line-height: clamp(26px, 23.43px + 0.5357vw, 32px); letter-spacing: 0.8px; text-align: left; color: #000000; }
+
+.f-125 { position: absolute; left: 18.70%; top: 20px; width: 4.87%; height: 22px; z-index: 2; font-family: 'Zen Kaku Gothic New', sans-serif; font-size: clamp(13px, 12.14px + 0.1786vw, 15px); line-height: clamp(19px, 17.71px + 0.2679vw, 22px); text-align: center; color: #000000; }
+
+.f-126 { position: absolute; left: 18.70%; top: 0px; width: 1.73%; height: 18px; z-index: 3; font-family: 'Sorts Mill Goudy', sans-serif; font-size: 12px; font-weight: 500; line-height: 18px; text-align: left; color: #797979; }
+
+.f-127 { position: absolute; left: 27.81%; top: 20px; width: 7.86%; height: 30px; z-index: 4; font-family: 'Sorts Mill Goudy', sans-serif; font-size: clamp(14px, 11.43px + 0.5357vw, 20px); font-weight: 500; line-height: clamp(22px, 18.57px + 0.7143vw, 30px); letter-spacing: -1.0px; text-align: center; color: #000000; }
+
+.f-128 { position: absolute; left: 27.81%; top: 0px; width: 3.77%; height: 18px; z-index: 5; font-family: 'Sorts Mill Goudy', sans-serif; font-size: 12px; font-weight: 500; line-height: 18px; text-align: left; color: #797979; }
+
+.f-129 { position: absolute; left: 40.77%; top: 0px; width: 1.96%; height: 18px; z-index: 6; font-family: 'Sorts Mill Goudy', sans-serif; font-size: 12px; font-weight: 500; line-height: 18px; text-align: left; color: #797979; }
+
+.f-130 { position: absolute; left: 0.00%; top: 136px; width: 100.00%; height: 0px; z-index: 7; object-fit: cover; }
+
+.f-132 { position: absolute; left: 0.00%; top: 0px; width: 100.00%; height: 99px; background-image: url('images/img-55.png'); background-size: cover; background-position: center; }
+
+.f-134 { position: absolute; left: 8.43%; top: 17px; width: 4.05%; height: 4px; object-fit: cover; }
+
+.f-135 { position: absolute; left: 28.02%; top: 17px; width: 4.05%; height: 4px; z-index: 1; object-fit: cover; }
+
+.f-138 { position: absolute; left: 69.44%; top: 0px; width: 30.56%; height: 21px; object-fit: cover; }
+
+.f-139 { position: absolute; left: 21.20%; top: 0px; width: 35.39%; height: 21px; z-index: 1; object-fit: cover; }
+
+.f-140 { position: absolute; left: 0.00%; top: 0px; width: 8.34%; height: 21px; z-index: 2; object-fit: cover; }
+
+.f-137 { position: relative; position: absolute; left: 0.00%; top: 0px; width: 52.95%; height: 21px; }
+
+.f-142 { position: absolute; left: 90.33%; top: 2px; width: 9.67%; height: 6px; object-fit: cover; }
+
+.f-143 { position: absolute; left: 79.23%; top: 2px; width: 8.64%; height: 5px; z-index: 1; object-fit: cover; }
+
+.f-144 { position: absolute; left: 74.16%; top: 0px; width: 1.48%; height: 6px; z-index: 2; object-fit: cover; }
+
+.f-145 { position: absolute; left: 65.79%; top: 1px; width: 6.04%; height: 6px; z-index: 3; object-fit: cover; }
+
+.f-146 { position: absolute; left: 61.62%; top: 0px; width: 3.13%; height: 6px; z-index: 4; object-fit: cover; }
+
+.f-147 { position: absolute; left: 49.59%; top: 2px; width: 8.55%; height: 5px; z-index: 5; object-fit: cover; }
+
+.f-148 { position: absolute; left: 38.09%; top: 2px; width: 9.02%; height: 5px; z-index: 6; object-fit: cover; }
+
+.f-149 { position: absolute; left: 26.99%; top: 2px; width: 8.64%; height: 5px; z-index: 7; object-fit: cover; }
+
+.f-150 { position: absolute; left: 14.50%; top: 2px; width: 9.99%; height: 5px; z-index: 8; object-fit: cover; }
+
+.f-151 { position: absolute; left: 0.00%; top: 0px; width: 12.78%; height: 7px; z-index: 9; object-fit: cover; }
+
+.f-141 { position: relative; position: absolute; left: 58.41%; top: 14px; width: 41.59%; height: 8px; z-index: 1; }
+
+.f-136 { position: relative; position: absolute; left: 0.00%; top: 0px; width: 100.00%; height: 22px; z-index: 2; }
+
+.f-133 { position: relative; position: absolute; left: 21.01%; top: 39px; width: 59.21%; height: 22px; z-index: 1; }
+
+.f-131 { position: relative; position: absolute; left: 0.00%; top: 0px; width: 13.37%; height: 99px; z-index: 8; }
+
+.f-122 { position: relative; position: absolute; left: 16.00%; top: 3408px; width: 79.56%; height: 136px; z-index: 30; }
+
+.f-152 { position: absolute; left: 11.56%; top: 2852px; width: 27.56%; height: 119px; z-index: 31; font-family: 'Sorts Mill Goudy', sans-serif; font-size: clamp(32px, 11.43px + 4.2857vw, 80px); font-weight: 500; line-height: clamp(48px, 17.57px + 6.3393vw, 119px); letter-spacing: -2.4px; text-align: left; color: #ffffff; }
+
+.f-153 { position: absolute; left: 41.13%; top: 2904px; width: 9.00%; height: 36px; z-index: 32; font-family: 'Zen Kaku Gothic New', sans-serif; font-size: clamp(14px, 12.29px + 0.3571vw, 18px); line-height: clamp(28px, 24.57px + 0.7143vw, 36px); text-align: left; color: #ffffff; }
+
+.f-155 { background-color: #181818; position: absolute; left: 0.00%; top: 0px; width: 100.00%; height: 612px; }
+
+.f-158 { position: absolute; left: 0.00%; top: 0px; width: 76.57%; height: 24px; font-family: 'Sorts Mill Goudy', sans-serif; font-size: 12px; font-weight: 500; line-height: 24px; text-align: left; color: #ffffff; }
+
+.f-159 { position: absolute; left: 86.27%; top: 7px; width: 13.73%; height: 13px; transform: rotate(-45deg); z-index: 1; object-fit: cover; }
+
+.f-157 { position: relative; position: absolute; left: 0.00%; top: 1px; width: 16.93%; height: 24px; }
+
+.f-161 { position: absolute; left: 0.00%; top: 0px; width: 82.95%; height: 24px; font-family: 'Sorts Mill Goudy', sans-serif; font-size: 12px; font-weight: 500; line-height: 24px; text-align: left; color: #ffffff; }
+
+.f-162 { position: absolute; left: 89.00%; top: 7px; width: 11.00%; height: 13px; transform: rotate(-45deg); z-index: 1; object-fit: cover; }
+
+.f-160 { position: relative; position: absolute; left: 22.27%; top: 1px; width: 21.13%; height: 24px; z-index: 1; }
+
+.f-164 { position: absolute; left: 0.00%; top: 0px; width: 87.80%; height: 24px; font-family: 'Sorts Mill Goudy', sans-serif; font-size: 12px; font-weight: 500; line-height: 24px; text-align: left; color: #ffffff; }
+
+.f-165 { position: absolute; left: 92.13%; top: 8px; width: 7.87%; height: 13px; transform: rotate(-45deg); z-index: 1; object-fit: cover; }
+
+.f-163 { position: relative; position: absolute; left: 48.75%; top: 0px; width: 29.53%; height: 24px; z-index: 2; }
+
+.f-167 { position: absolute; left: 0.00%; top: 0px; width: 79.13%; height: 24px; font-family: 'Sorts Mill Goudy', sans-serif; font-size: 12px; font-weight: 500; line-height: 24px; text-align: left; color: #ffffff; }
+
+.f-168 { position: absolute; left: 85.82%; top: 8px; width: 14.18%; height: 13px; transform: rotate(-45deg); z-index: 1; object-fit: cover; }
+
+.f-166 { position: relative; position: absolute; left: 83.62%; top: 0px; width: 16.38%; height: 24px; z-index: 3; }
+
+.f-156 { position: relative; position: absolute; left: 32.88%; top: 533px; width: 34.23%; height: 25px; z-index: 1; }
+
+.f-170 { background-color: #ffffff; position: absolute; left: 10.46%; top: 37px; width: 3.92%; height: 6px; }
+
+.f-171 { background-color: #ffffff; position: absolute; left: 29.41%; top: 37px; width: 3.92%; height: 6px; z-index: 1; }
+
+.f-173 { position: absolute; left: 0.00%; top: 0px; width: 54.90%; height: 56px; font-family: 'Geist', sans-serif; font-size: clamp(21px, 11.57px + 1.9643vw, 43px); font-weight: 700; line-height: clamp(28px, 16px + 2.5vw, 56px); letter-spacing: -1.3px; text-align: center; color: #ffffff; }
+
+.f-174 { position: absolute; left: 58.17%; top: 30px; width: 41.83%; height: 17px; z-index: 1; font-family: 'Geist', sans-serif; font-size: clamp(12px, 11.57px + 0.0893vw, 13px); font-weight: 300; line-height: clamp(16px, 15.57px + 0.0893vw, 17px); text-align: center; color: #ffffff; }
+
+.f-172 { position: relative; border-radius: 0px 0px 0px 0px; position: absolute; left: 0.00%; top: 0px; width: 100.00%; height: 56px; z-index: 2; }
+
+.f-169 { position: relative; position: absolute; left: 5.69%; top: 50px; width: 9.56%; height: 56px; z-index: 2; }
+
+.f-175 { position: absolute; left: 93.97%; top: 260px; width: 6.13%; height: 15px; transform: rotate(-90deg); z-index: 3; font-family: 'Sorts Mill Goudy', sans-serif; font-size: 10px; font-weight: 500; line-height: 15px; text-align: left; color: #ffffff; }
+
+.f-177 { position: absolute; left: 0.00%; top: 0px; width: 34.43%; height: 27px; font-family: 'Sorts Mill Goudy', sans-serif; font-size: clamp(14px, 12.29px + 0.3571vw, 18px); font-weight: 500; line-height: clamp(21px, 18.43px + 0.5357vw, 27px); letter-spacing: -0.5px; text-align: left; color: #ffffff; }
+
+.f-178 { position: absolute; left: 71.70%; top: 35px; width: 25.47%; height: 27px; z-index: 1; font-family: 'Sorts Mill Goudy', sans-serif; font-size: clamp(14px, 12.29px + 0.3571vw, 18px); font-weight: 500; line-height: clamp(21px, 18.43px + 0.5357vw, 27px); letter-spacing: -0.5px; text-align: left; color: #ffffff; }
+
+.f-179 { position: absolute; left: 71.70%; top: 70px; width: 28.30%; height: 27px; z-index: 2; font-family: 'Sorts Mill Goudy', sans-serif; font-size: clamp(14px, 12.29px + 0.3571vw, 18px); font-weight: 500; line-height: clamp(21px, 18.43px + 0.5357vw, 27px); letter-spacing: -0.5px; text-align: left; color: #ffffff; }
+
+.f-180 { position: absolute; left: 71.70%; top: 0px; width: 19.81%; height: 27px; z-index: 3; font-family: 'Sorts Mill Goudy', sans-serif; font-size: clamp(14px, 12.29px + 0.3571vw, 18px); font-weight: 500; line-height: clamp(21px, 18.43px + 0.5357vw, 27px); letter-spacing: -0.5px; text-align: left; color: #ffffff; }
+
+.f-181 { position: absolute; left: 0.00%; top: 70px; width: 39.62%; height: 27px; z-index: 4; font-family: 'Sorts Mill Goudy', sans-serif; font-size: clamp(14px, 12.29px + 0.3571vw, 18px); font-weight: 500; line-height: clamp(21px, 18.43px + 0.5357vw, 27px); letter-spacing: -0.5px; text-align: left; color: #ffffff; }
+
+.f-182 { position: absolute; left: 0.00%; top: 35px; width: 25.47%; height: 27px; z-index: 5; font-family: 'Sorts Mill Goudy', sans-serif; font-size: clamp(14px, 12.29px + 0.3571vw, 18px); font-weight: 500; line-height: clamp(21px, 18.43px + 0.5357vw, 27px); letter-spacing: -0.5px; text-align: left; color: #ffffff; }
+
+.f-176 { position: relative; border-radius: 0px 0px 0px 0px; position: absolute; left: 5.69%; top: 176px; width: 13.25%; height: 97px; z-index: 4; }
+
+.f-186 { background-color: #000000; position: absolute; left: 0.00%; top: 0px; width: 100.00%; height: 43px; }
+
+.f-187 { position: absolute; left: 17.59%; top: 4px; width: 64.81%; height: 36px; z-index: 1; font-family: 'Sorts Mill Goudy', sans-serif; font-size: clamp(14px, 12.29px + 0.3571vw, 18px); font-weight: 500; line-height: clamp(28px, 24.57px + 0.7143vw, 36px); letter-spacing: -0.5px; text-align: left; color: #ffffff; }
+
+.f-185 { position: relative; position: absolute; left: 0.00%; top: 0px; width: 64.29%; height: 43px; }
+
+.f-189 { background-color: #000000; position: absolute; left: 0.00%; top: 0px; width: 100.00%; height: 43px; }
+
+.f-190 { position: absolute; left: 33.33%; top: 4px; width: 33.33%; height: 36px; z-index: 1; font-family: 'Sorts Mill Goudy', sans-serif; font-size: clamp(14px, 12.29px + 0.3571vw, 18px); font-weight: 500; line-height: clamp(28px, 24.57px + 0.7143vw, 36px); letter-spacing: -0.5px; text-align: left; color: #ffffff; }
+
+.f-188 { position: relative; position: absolute; left: 75.00%; top: 0px; width: 25.00%; height: 43px; z-index: 1; }
+
+.f-184 { position: relative; position: absolute; left: 0.00%; top: 41px; width: 100.00%; height: 43px; }
+
+.f-191 { position: absolute; left: 0.00%; top: 0px; width: 54.17%; height: 27px; z-index: 1; font-family: 'Sorts Mill Goudy', sans-serif; font-size: clamp(14px, 12.29px + 0.3571vw, 18px); font-weight: 500; line-height: clamp(21px, 18.43px + 0.5357vw, 27px); letter-spacing: -0.5px; text-align: left; color: #ffffff; }
+
+.f-183 { position: relative; position: absolute; left: 5.44%; top: 356px; width: 10.50%; height: 84px; z-index: 5; }
+
+.f-194 { position: absolute; left: 0.00%; top: 0px; width: 100.00%; height: 176px; font-family: 'Sorts Mill Goudy', sans-serif; font-size: clamp(32px, 11.43px + 4.2857vw, 80px); font-weight: 500; line-height: clamp(35px, 12.29px + 4.7321vw, 88px); letter-spacing: -2.4px; text-align: left; color: #ffffff; }
+
+.f-195 { position: absolute; left: 1.68%; top: 186px; width: 53.85%; height: 28px; z-index: 1; font-family: 'Zen Kaku Gothic New', sans-serif; font-size: clamp(13px, 12.57px + 0.0893vw, 14px); line-height: clamp(25px, 23.71px + 0.2679vw, 28px); text-align: left; color: #ffffff; }
+
+.f-193 { position: relative; border-radius: 0px 0px 0px 0px; position: absolute; left: 0.00%; top: 0px; width: 73.63%; height: 214px; }
+
+.f-196 { position: absolute; left: 80.97%; top: 47px; width: 16.64%; height: 121px; transform: rotate(-90deg); z-index: 1; object-fit: cover; }
+
+.f-192 { position: relative; position: absolute; left: 47.13%; top: 169px; width: 35.31%; height: 214px; z-index: 6; }
+
+.f-197 { position: absolute; left: 47.19%; top: 56px; width: 5.63%; height: 13px; z-index: 7; font-family: 'Sorts Mill Goudy', sans-serif; font-size: 12px; font-weight: 500; line-height: 13px; letter-spacing: 0.6px; text-align: center; color: #ffffff; }
+
+.f-199 { background-color: #000000; position: absolute; left: 0.00%; top: 0px; width: 100.00%; height: 84px; }
+
+.f-200 { position: absolute; left: 36.90%; top: 29px; width: 26.19%; height: 27px; z-index: 1; object-fit: cover; }
+
+.f-198 { position: relative; position: absolute; left: 47.38%; top: -42px; width: 5.25%; height: 84px; z-index: 8; }
+
+.f-154 { position: relative; position: absolute; left: 0.00%; top: 3862px; width: 100.00%; height: 612px; z-index: 33; }
+
+.f-202 { position: absolute; left: 0.00%; top: 0px; width: 13.76%; height: 27px; font-family: 'Sorts Mill Goudy', sans-serif; font-size: clamp(14px, 12.29px + 0.3571vw, 18px); font-weight: 500; line-height: clamp(21px, 18.43px + 0.5357vw, 27px); letter-spacing: -0.9px; text-align: left; color: #ffffff; }
+
+.f-203 { position: absolute; left: 24.42%; top: 0px; width: 10.08%; height: 27px; z-index: 1; font-family: 'Sorts Mill Goudy', sans-serif; font-size: clamp(14px, 12.29px + 0.3571vw, 18px); font-weight: 500; line-height: clamp(21px, 18.43px + 0.5357vw, 27px); letter-spacing: -0.9px; text-align: left; color: #ffffff; }
+
+.f-204 { position: absolute; left: 45.16%; top: 0px; width: 15.50%; height: 27px; z-index: 2; font-family: 'Sorts Mill Goudy', sans-serif; font-size: clamp(14px, 12.29px + 0.3571vw, 18px); font-weight: 500; line-height: clamp(21px, 18.43px + 0.5357vw, 27px); letter-spacing: -0.9px; text-align: left; color: #ffffff; }
+
+.f-205 { position: absolute; left: 71.32%; top: 0px; width: 7.95%; height: 27px; z-index: 3; font-family: 'Sorts Mill Goudy', sans-serif; font-size: clamp(14px, 12.29px + 0.3571vw, 18px); font-weight: 500; line-height: clamp(21px, 18.43px + 0.5357vw, 27px); letter-spacing: -0.9px; text-align: left; color: #ffffff; }
+
+.f-206 { position: absolute; left: 89.92%; top: 0px; width: 10.08%; height: 27px; z-index: 4; font-family: 'Sorts Mill Goudy', sans-serif; font-size: clamp(14px, 12.29px + 0.3571vw, 18px); font-weight: 500; line-height: clamp(21px, 18.43px + 0.5357vw, 27px); letter-spacing: -0.9px; text-align: left; color: #ffffff; }
+
+.f-201 { position: relative; position: absolute; left: 33.88%; top: 44px; width: 32.25%; height: 27px; z-index: 34; }
+
+.f-208 { position: absolute; left: 3.57%; top: 50px; width: 1.43%; height: 10px; object-fit: cover; }
+
+.f-209 { position: absolute; left: 11.68%; top: 50px; width: 1.43%; height: 10px; z-index: 1; object-fit: cover; }
+
+.f-212 { position: absolute; left: 69.44%; top: 0px; width: 30.56%; height: 58px; object-fit: cover; }
+
+.f-213 { position: absolute; left: 21.20%; top: 0px; width: 35.39%; height: 58px; z-index: 1; object-fit: cover; }
+
+.f-214 { position: absolute; left: 0.00%; top: 0px; width: 8.34%; height: 58px; z-index: 2; object-fit: cover; }
+
+.f-211 { position: relative; position: absolute; left: 0.00%; top: 1px; width: 22.33%; height: 58px; }
+
+.f-216 { position: absolute; left: 90.02%; top: 0px; width: 9.98%; height: 61px; object-fit: cover; }
+
+.f-217 { position: absolute; left: 78.67%; top: 1px; width: 9.19%; height: 58px; z-index: 1; object-fit: cover; }
+
+.f-218 { position: absolute; left: 74.66%; top: 1px; width: 1.14%; height: 58px; z-index: 2; object-fit: cover; }
+
+.f-219 { position: absolute; left: 64.58%; top: 1px; width: 8.82%; height: 58px; z-index: 3; object-fit: cover; }
+
+.f-220 { position: absolute; left: 58.80%; top: 1px; width: 7.27%; height: 58px; z-index: 4; object-fit: cover; }
+
+.f-221 { position: absolute; left: 47.10%; top: 1px; width: 8.82%; height: 60px; z-index: 5; object-fit: cover; }
+
+.f-222 { position: absolute; left: 36.08%; top: 0px; width: 8.77%; height: 61px; z-index: 6; object-fit: cover; }
+
+.f-223 { position: absolute; left: 24.57%; top: 1px; width: 9.19%; height: 58px; z-index: 7; object-fit: cover; }
+
+.f-224 { position: absolute; left: 11.69%; top: 0px; width: 10.72%; height: 61px; z-index: 8; object-fit: cover; }
+
+.f-225 { position: absolute; left: 0.00%; top: 0px; width: 10.19%; height: 61px; z-index: 9; object-fit: cover; }
+
+.f-215 { position: relative; position: absolute; left: 27.25%; top: 0px; width: 72.75%; height: 61px; z-index: 1; }
+
+.f-210 { position: relative; position: absolute; left: 0.00%; top: 0px; width: 100.00%; height: 61px; z-index: 2; }
+
+.f-207 { position: relative; position: absolute; left: 29.13%; top: 831px; width: 41.78%; height: 61px; z-index: 35; }
+
+.f-227 { position: absolute; left: 3.57%; top: 16px; width: 1.43%; height: 3px; object-fit: cover; }
+
+.f-228 { position: absolute; left: 11.68%; top: 16px; width: 1.43%; height: 3px; z-index: 1; object-fit: cover; }
+
+.f-231 { position: absolute; left: 69.44%; top: 0px; width: 30.56%; height: 18px; object-fit: cover; }
+
+.f-232 { position: absolute; left: 21.20%; top: 0px; width: 35.39%; height: 18px; z-index: 1; object-fit: cover; }
+
+.f-233 { position: absolute; left: 0.00%; top: 0px; width: 8.34%; height: 18px; z-index: 2; object-fit: cover; }
+
+.f-230 { position: relative; position: absolute; left: 0.00%; top: 0px; width: 22.33%; height: 18px; }
+
+.f-235 { position: absolute; left: 90.02%; top: 0px; width: 9.98%; height: 19px; object-fit: cover; }
+
+.f-236 { position: absolute; left: 78.67%; top: 0px; width: 9.19%; height: 18px; z-index: 1; object-fit: cover; }
+
+.f-237 { position: absolute; left: 74.66%; top: 0px; width: 1.14%; height: 18px; z-index: 2; object-fit: cover; }
+
+.f-238 { position: absolute; left: 64.58%; top: 0px; width: 8.82%; height: 18px; z-index: 3; object-fit: cover; }
+
+.f-239 { position: absolute; left: 58.80%; top: 0px; width: 7.27%; height: 18px; z-index: 4; object-fit: cover; }
+
+.f-240 { position: absolute; left: 47.10%; top: 0px; width: 8.82%; height: 19px; z-index: 5; object-fit: cover; }
+
+.f-241 { position: absolute; left: 36.08%; top: 0px; width: 8.77%; height: 19px; z-index: 6; object-fit: cover; }
+
+.f-242 { position: absolute; left: 24.56%; top: 0px; width: 9.19%; height: 18px; z-index: 7; object-fit: cover; }
+
+.f-243 { position: absolute; left: 11.69%; top: 0px; width: 10.72%; height: 19px; z-index: 8; object-fit: cover; }
+
+.f-244 { position: absolute; left: 0.00%; top: 0px; width: 10.19%; height: 19px; z-index: 9; object-fit: cover; }
+
+.f-234 { position: relative; position: absolute; left: 27.25%; top: 0px; width: 72.75%; height: 19px; z-index: 1; }
+
+.f-229 { position: relative; position: absolute; left: 0.00%; top: 0px; width: 100.00%; height: 19px; z-index: 2; }
+
+.f-226 { position: relative; position: absolute; left: 3.35%; top: 47px; width: 13.09%; height: 19px; z-index: 36; }
+
+.f-246 { background-color: rgba(53, 53, 53, 0.60); border-radius: 100px; position: absolute; left: 0.00%; top: 0px; width: 100.00%; height: 46px; }
+
+.f-247 { position: absolute; left: 30.08%; top: 14px; width: 39.84%; height: 21px; z-index: 1; font-family: 'Sorts Mill Goudy', sans-serif; font-size: clamp(13px, 12.57px + 0.0893vw, 14px); font-weight: 500; line-height: clamp(19px, 18.14px + 0.1786vw, 21px); text-align: left; color: #ffffff; }
+
+.f-245 { position: relative; border-radius: 100px; position: absolute; left: 90.19%; top: 34px; width: 7.69%; height: 46px; z-index: 37; }
+
+.f-249 { background-color: rgba(53, 53, 53, 0.60); border-radius: 100px; position: absolute; left: 0.00%; top: 0px; width: 100.00%; height: 46px; }
+
+.f-250 { position: absolute; left: 34.29%; top: 14px; width: 32.38%; height: 21px; z-index: 1; font-family: 'Sorts Mill Goudy', sans-serif; font-size: clamp(13px, 12.57px + 0.0893vw, 14px); font-weight: 500; line-height: clamp(19px, 18.14px + 0.1786vw, 21px); text-align: left; color: #ffffff; }
+
+.f-248 { position: relative; border-radius: 100px; position: absolute; left: 82.81%; top: 34px; width: 6.56%; height: 46px; z-index: 38; }
+
+.f-1 { width: 100%; position: relative; width: 100%; min-height: 4474px; background-color: #000000; }

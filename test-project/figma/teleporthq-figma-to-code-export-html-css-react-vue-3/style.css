@@ -1,0 +1,249 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; overflow-x: hidden; }
+
+.f-5 { width: 62px; height: 16px; width: auto; background-color: #1e1e1e; font-size: 16px; line-height: 16px; text-align: left; color: #1e1e1e; }
+
+.f-4 { width: 78px; height: 32px; display: flex; flex-direction: row; gap: 8px; justify-content: center; align-items: center; padding: 8px 8px 8px 8px; width: auto; background-color: #f5f5f5; border-radius: 8px; }
+
+.f-7 { width: 47px; height: 16px; width: auto; background-color: #1e1e1e; font-size: 16px; line-height: 16px; text-align: left; color: #1e1e1e; }
+
+.f-6 { width: 63px; height: 32px; display: flex; flex-direction: row; gap: 8px; justify-content: center; align-items: center; padding: 8px 8px 8px 8px; width: auto; border-radius: 8px; }
+
+.f-9 { width: 31px; height: 16px; width: auto; background-color: #1e1e1e; font-size: 16px; line-height: 16px; text-align: left; color: #1e1e1e; }
+
+.f-8 { width: 47px; height: 32px; display: flex; flex-direction: row; gap: 8px; justify-content: center; align-items: center; padding: 8px 8px 8px 8px; width: auto; border-radius: 8px; }
+
+.f-3 { width: 204px; height: 32px; display: flex; flex-direction: row; gap: 8px; width: auto; }
+
+.f-14 { width: 149px; height: 29px; flex: 1; background-color: #1e1e1e; font-size: 24px; font-weight: 600; line-height: 29px; letter-spacing: -0.5px; text-align: center; color: #1e1e1e; }
+
+.f-13 { width: 149px; height: 29px; display: flex; flex-direction: row; }
+
+.f-17 { width: 16px; height: 24px; width: auto; background-color: #1e1e1e; font-size: 24px; font-weight: 700; line-height: 24px; letter-spacing: -0.5px; text-align: left; color: #1e1e1e; }
+
+.f-18 { width: 64px; height: 48px; width: auto; background-color: #1e1e1e; font-size: 48px; font-weight: 700; line-height: 48px; letter-spacing: -1.0px; text-align: left; color: #1e1e1e; }
+
+.f-16 { width: 80px; height: 48px; display: flex; flex-direction: row; width: auto; }
+
+.f-19 { width: 30px; height: 25px; width: auto; background-color: #1e1e1e; font-size: 14px; line-height: 25px; text-align: left; color: #1e1e1e; }
+
+.f-15 { width: 110px; height: 48px; display: flex; flex-direction: row; justify-content: center; align-items: flex-end; width: auto; }
+
+.f-22 { width: 89px; height: 22px; width: auto; background-color: #757575; font-size: 16px; line-height: 22px; text-align: left; color: #757575; }
+
+.f-21 { width: 89px; height: 22px; display: flex; flex-direction: row; justify-content: center; align-items: center; width: auto; }
+
+.f-24 { width: 89px; height: 22px; width: auto; background-color: #757575; font-size: 16px; line-height: 22px; text-align: left; color: #757575; }
+
+.f-23 { width: 89px; height: 22px; display: flex; flex-direction: row; justify-content: center; align-items: center; width: auto; }
+
+.f-26 { width: 89px; height: 22px; width: auto; background-color: #757575; font-size: 16px; line-height: 22px; text-align: left; color: #757575; }
+
+.f-25 { width: 89px; height: 22px; display: flex; flex-direction: row; justify-content: center; align-items: center; width: auto; }
+
+.f-28 { width: 89px; height: 22px; width: auto; background-color: #757575; font-size: 16px; line-height: 22px; text-align: left; color: #757575; }
+
+.f-27 { width: 89px; height: 22px; display: flex; flex-direction: row; justify-content: center; align-items: center; width: auto; }
+
+.f-30 { width: 89px; height: 22px; width: auto; background-color: #757575; font-size: 16px; line-height: 22px; text-align: left; color: #757575; }
+
+.f-29 { width: 89px; height: 22px; display: flex; flex-direction: row; justify-content: center; align-items: center; width: auto; }
+
+.f-20 { width: 251px; height: 158px; display: flex; flex-direction: column; gap: 12px; flex: 1; }
+
+.f-12 { width: 251px; height: 267px; display: flex; flex-direction: column; gap: 16px; justify-content: flex-end; align-items: center; flex: 1; }
+
+.f-32 { width: 51px; height: 16px; width: auto; background-color: #f5f5f5; font-size: 16px; line-height: 16px; text-align: left; color: #f5f5f5; }
+
+.f-31 { width: 251px; height: 40px; display: flex; flex-direction: row; gap: 8px; justify-content: center; align-items: center; padding: 12px 12px 12px 12px; flex: 1; background-color: #2c2c2c; border: 1px solid #2c2c2c; border-radius: 8px; overflow: hidden; }
+
+.f-11 { width: 315px; height: 395px; display: flex; flex-direction: column; gap: 24px; align-items: center; padding: 32px 32px 32px 32px; flex: 1; background-color: #ffffff; border: 1px solid #d9d9d9; border-radius: 8px; overflow: hidden; }
+
+.f-36 { width: 149px; height: 29px; flex: 1; background-color: #f5f5f5; font-size: 24px; font-weight: 600; line-height: 29px; letter-spacing: -0.5px; text-align: center; color: #f5f5f5; }
+
+.f-35 { width: 149px; height: 29px; display: flex; flex-direction: row; }
+
+.f-39 { width: 16px; height: 24px; width: auto; background-color: #f5f5f5; font-size: 24px; font-weight: 700; line-height: 24px; letter-spacing: -0.5px; text-align: left; color: #f5f5f5; }
+
+.f-40 { width: 64px; height: 48px; width: auto; background-color: #f5f5f5; font-size: 48px; font-weight: 700; line-height: 48px; letter-spacing: -1.0px; text-align: left; color: #f5f5f5; }
+
+.f-38 { width: 80px; height: 48px; display: flex; flex-direction: row; width: auto; }
+
+.f-41 { width: 30px; height: 25px; width: auto; background-color: #f5f5f5; font-size: 14px; line-height: 25px; text-align: left; color: #f5f5f5; }
+
+.f-37 { width: 110px; height: 48px; display: flex; flex-direction: row; justify-content: center; align-items: flex-end; width: auto; }
+
+.f-44 { width: 89px; height: 22px; width: auto; background-color: #f5f5f5; font-size: 16px; line-height: 22px; text-align: left; color: #f5f5f5; }
+
+.f-43 { width: 89px; height: 22px; display: flex; flex-direction: row; justify-content: center; align-items: center; width: auto; }
+
+.f-46 { width: 89px; height: 22px; width: auto; background-color: #f5f5f5; font-size: 16px; line-height: 22px; text-align: left; color: #f5f5f5; }
+
+.f-45 { width: 89px; height: 22px; display: flex; flex-direction: row; justify-content: center; align-items: center; width: auto; }
+
+.f-48 { width: 89px; height: 22px; width: auto; background-color: #f5f5f5; font-size: 16px; line-height: 22px; text-align: left; color: #f5f5f5; }
+
+.f-47 { width: 89px; height: 22px; display: flex; flex-direction: row; justify-content: center; align-items: center; width: auto; }
+
+.f-50 { width: 89px; height: 22px; width: auto; background-color: #f5f5f5; font-size: 16px; line-height: 22px; text-align: left; color: #f5f5f5; }
+
+.f-49 { width: 89px; height: 22px; display: flex; flex-direction: row; justify-content: center; align-items: center; width: auto; }
+
+.f-52 { width: 89px; height: 22px; width: auto; background-color: #f5f5f5; font-size: 16px; line-height: 22px; text-align: left; color: #f5f5f5; }
+
+.f-51 { width: 89px; height: 22px; display: flex; flex-direction: row; justify-content: center; align-items: center; width: auto; }
+
+.f-42 { width: 251px; height: 158px; display: flex; flex-direction: column; gap: 12px; flex: 1; }
+
+.f-34 { width: 251px; height: 267px; display: flex; flex-direction: column; gap: 16px; justify-content: flex-end; align-items: center; flex: 1; }
+
+.f-54 { width: 51px; height: 16px; width: auto; background-color: #1e1e1e; font-size: 16px; line-height: 16px; text-align: left; color: #1e1e1e; }
+
+.f-53 { width: 251px; height: 40px; display: flex; flex-direction: row; gap: 8px; justify-content: center; align-items: center; padding: 12px 12px 12px 12px; flex: 1; background-color: #e3e3e3; border: 1px solid #767676; border-radius: 8px; overflow: hidden; }
+
+.f-33 { width: 315px; height: 395px; display: flex; flex-direction: column; gap: 24px; align-items: center; padding: 32px 32px 32px 32px; flex: 1; background-color: #2c2c2c; border: 1px solid #2c2c2c; border-radius: 8px; overflow: hidden; }
+
+.f-58 { width: 149px; height: 29px; flex: 1; background-color: #1e1e1e; font-size: 24px; font-weight: 600; line-height: 29px; letter-spacing: -0.5px; text-align: center; color: #1e1e1e; }
+
+.f-57 { width: 149px; height: 29px; display: flex; flex-direction: row; }
+
+.f-61 { width: 16px; height: 24px; width: auto; background-color: #1e1e1e; font-size: 24px; font-weight: 700; line-height: 24px; letter-spacing: -0.5px; text-align: left; color: #1e1e1e; }
+
+.f-62 { width: 64px; height: 48px; width: auto; background-color: #1e1e1e; font-size: 48px; font-weight: 700; line-height: 48px; letter-spacing: -1.0px; text-align: left; color: #1e1e1e; }
+
+.f-60 { width: 80px; height: 48px; display: flex; flex-direction: row; width: auto; }
+
+.f-63 { width: 30px; height: 25px; width: auto; background-color: #1e1e1e; font-size: 14px; line-height: 25px; text-align: left; color: #1e1e1e; }
+
+.f-59 { width: 110px; height: 48px; display: flex; flex-direction: row; justify-content: center; align-items: flex-end; width: auto; }
+
+.f-66 { width: 89px; height: 22px; width: auto; background-color: #757575; font-size: 16px; line-height: 22px; text-align: left; color: #757575; }
+
+.f-65 { width: 89px; height: 22px; display: flex; flex-direction: row; justify-content: center; align-items: center; width: auto; }
+
+.f-68 { width: 89px; height: 22px; width: auto; background-color: #757575; font-size: 16px; line-height: 22px; text-align: left; color: #757575; }
+
+.f-67 { width: 89px; height: 22px; display: flex; flex-direction: row; justify-content: center; align-items: center; width: auto; }
+
+.f-70 { width: 89px; height: 22px; width: auto; background-color: #757575; font-size: 16px; line-height: 22px; text-align: left; color: #757575; }
+
+.f-69 { width: 89px; height: 22px; display: flex; flex-direction: row; justify-content: center; align-items: center; width: auto; }
+
+.f-72 { width: 89px; height: 22px; width: auto; background-color: #757575; font-size: 16px; line-height: 22px; text-align: left; color: #757575; }
+
+.f-71 { width: 89px; height: 22px; display: flex; flex-direction: row; justify-content: center; align-items: center; width: auto; }
+
+.f-74 { width: 89px; height: 22px; width: auto; background-color: #757575; font-size: 16px; line-height: 22px; text-align: left; color: #757575; }
+
+.f-73 { width: 89px; height: 22px; display: flex; flex-direction: row; justify-content: center; align-items: center; width: auto; }
+
+.f-64 { width: 251px; height: 158px; display: flex; flex-direction: column; gap: 12px; flex: 1; }
+
+.f-56 { width: 251px; height: 267px; display: flex; flex-direction: column; gap: 16px; justify-content: flex-end; align-items: center; flex: 1; }
+
+.f-76 { width: 51px; height: 16px; width: auto; background-color: #f5f5f5; font-size: 16px; line-height: 16px; text-align: left; color: #f5f5f5; }
+
+.f-75 { width: 251px; height: 40px; display: flex; flex-direction: row; gap: 8px; justify-content: center; align-items: center; padding: 12px 12px 12px 12px; flex: 1; background-color: #2c2c2c; border: 1px solid #2c2c2c; border-radius: 8px; overflow: hidden; }
+
+.f-55 { width: 315px; height: 395px; display: flex; flex-direction: column; gap: 24px; align-items: center; padding: 32px 32px 32px 32px; flex: 1; background-color: #ffffff; border: 1px solid #d9d9d9; border-radius: 8px; overflow: hidden; }
+
+.f-10 { width: 1072px; height: 395px; display: flex; flex-direction: row; gap: 64px; flex: 1; }
+
+.f-2 { width: 1200px; height: 1289px; display: flex; flex-direction: column; gap: 48px; align-items: center; padding: 64px 64px 64px 64px; background-color: #ffffff; }
+
+.f-79 { width: 113px; height: 29px; flex: 1; background-color: #1e1e1e; font-size: 24px; font-weight: 600; line-height: 29px; letter-spacing: -0.5px; text-align: left; color: #1e1e1e; }
+
+.f-80 { width: 113px; height: 24px; flex: 1; background-color: #757575; font-size: 20px; line-height: 24px; text-align: left; color: #757575; }
+
+.f-78 { width: 113px; height: 61px; display: flex; flex-direction: column; gap: 8px; width: auto; }
+
+.f-84 { width: 27px; height: 27px; border: 3px solid #1e1e1e; }
+
+.f-83 { width: 32px; height: 32px; display: flex; flex-direction: column; align-items: center; overflow: hidden; }
+
+.f-87 { width: 245px; height: 29px; flex: 1; background-color: #1e1e1e; font-size: 24px; font-weight: 600; line-height: 29px; letter-spacing: -0.5px; text-align: left; color: #1e1e1e; }
+
+.f-88 { width: 245px; height: 88px; flex: 1; background-color: #757575; font-size: 16px; line-height: 22px; text-align: left; color: #757575; }
+
+.f-86 { width: 245px; height: 125px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+
+.f-85 { width: 245px; height: 125px; display: flex; flex-direction: column; gap: 16px; flex: 1; }
+
+.f-82 { width: 301px; height: 125px; display: flex; flex-direction: row; gap: 24px; }
+
+.f-91 { width: 27px; height: 27px; border: 3px solid #1e1e1e; }
+
+.f-90 { width: 32px; height: 32px; display: flex; flex-direction: column; align-items: center; overflow: hidden; }
+
+.f-94 { width: 265px; height: 29px; flex: 1; background-color: #1e1e1e; font-size: 24px; font-weight: 600; line-height: 29px; letter-spacing: -0.5px; text-align: left; color: #1e1e1e; }
+
+.f-95 { width: 265px; height: 88px; flex: 1; background-color: #757575; font-size: 16px; line-height: 22px; text-align: left; color: #757575; }
+
+.f-93 { width: 265px; height: 125px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+
+.f-92 { width: 265px; height: 125px; display: flex; flex-direction: column; gap: 16px; flex: 1; }
+
+.f-89 { width: 321px; height: 125px; display: flex; flex-direction: row; gap: 24px; flex: 1; }
+
+.f-98 { width: 27px; height: 27px; border: 3px solid #1e1e1e; }
+
+.f-97 { width: 32px; height: 32px; display: flex; flex-direction: column; align-items: center; overflow: hidden; }
+
+.f-101 { width: 265px; height: 29px; flex: 1; background-color: #1e1e1e; font-size: 24px; font-weight: 600; line-height: 29px; letter-spacing: -0.5px; text-align: left; color: #1e1e1e; }
+
+.f-102 { width: 265px; height: 88px; flex: 1; background-color: #757575; font-size: 16px; line-height: 22px; text-align: left; color: #757575; }
+
+.f-100 { width: 265px; height: 125px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+
+.f-99 { width: 265px; height: 125px; display: flex; flex-direction: column; gap: 16px; flex: 1; }
+
+.f-96 { width: 321px; height: 125px; display: flex; flex-direction: row; gap: 24px; flex: 1; }
+
+.f-105 { width: 27px; height: 27px; border: 3px solid #1e1e1e; }
+
+.f-104 { width: 32px; height: 32px; display: flex; flex-direction: column; align-items: center; overflow: hidden; }
+
+.f-108 { width: 259px; height: 29px; flex: 1; background-color: #1e1e1e; font-size: 24px; font-weight: 600; line-height: 29px; letter-spacing: -0.5px; text-align: left; color: #1e1e1e; }
+
+.f-109 { width: 259px; height: 88px; flex: 1; background-color: #757575; font-size: 16px; line-height: 22px; text-align: left; color: #757575; }
+
+.f-107 { width: 259px; height: 125px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+
+.f-106 { width: 259px; height: 125px; display: flex; flex-direction: column; gap: 16px; flex: 1; }
+
+.f-103 { width: 315px; height: 125px; display: flex; flex-direction: row; gap: 24px; flex: 1; }
+
+.f-112 { width: 27px; height: 27px; border: 3px solid #1e1e1e; }
+
+.f-111 { width: 32px; height: 32px; display: flex; flex-direction: column; align-items: center; overflow: hidden; }
+
+.f-115 { width: 259px; height: 29px; flex: 1; background-color: #1e1e1e; font-size: 24px; font-weight: 600; line-height: 29px; letter-spacing: -0.5px; text-align: left; color: #1e1e1e; }
+
+.f-116 { width: 259px; height: 88px; flex: 1; background-color: #757575; font-size: 16px; line-height: 22px; text-align: left; color: #757575; }
+
+.f-114 { width: 259px; height: 125px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+
+.f-113 { width: 259px; height: 125px; display: flex; flex-direction: column; gap: 16px; flex: 1; }
+
+.f-110 { width: 315px; height: 125px; display: flex; flex-direction: row; gap: 24px; flex: 1; }
+
+.f-119 { width: 27px; height: 27px; border: 3px solid #1e1e1e; }
+
+.f-118 { width: 32px; height: 32px; display: flex; flex-direction: column; align-items: center; overflow: hidden; }
+
+.f-122 { width: 259px; height: 29px; flex: 1; background-color: #1e1e1e; font-size: 24px; font-weight: 600; line-height: 29px; letter-spacing: -0.5px; text-align: left; color: #1e1e1e; }
+
+.f-123 { width: 259px; height: 88px; flex: 1; background-color: #757575; font-size: 16px; line-height: 22px; text-align: left; color: #757575; }
+
+.f-121 { width: 259px; height: 125px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+
+.f-120 { width: 259px; height: 125px; display: flex; flex-direction: column; gap: 16px; flex: 1; }
+
+.f-117 { width: 315px; height: 125px; display: flex; flex-direction: row; gap: 24px; flex: 1; }
+
+.f-81 { width: 1072px; height: 314px; display: flex; flex-direction: row; gap: 64px; align-items: center; flex: 1; }
+
+.f-77 { width: 1200px; height: 551px; display: flex; flex-direction: column; gap: 48px; padding: 64px 64px 64px 64px; background-color: #ffffff; }
+
+.f-1 { ; }

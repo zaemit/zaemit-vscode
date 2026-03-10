@@ -1,0 +1,5 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; overflow-x: hidden; }
+
+.f-1 { max-width: 846px; width: 100%; margin: 0 auto; display: flex; flex-direction: column; font-size: 18px; line-height: 36px; text-align: left; color: #000000; }

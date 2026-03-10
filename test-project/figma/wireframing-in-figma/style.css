@@ -1,0 +1,18 @@
+Done. Here's what changed:
+
+**Layout conversion (absolute → modern CSS):**
+- **Header**: Flexbox row with `margin-left: auto` to push buttons right, `order` to swap Login/Register
+- **Hero**: Kept `position: absolute` (genuine overlay on image) but converted to percentage-based positioning for responsiveness
+- **Features**: CSS Grid with explicit `grid-column`/`grid-row` to reconstruct the 2-column layout from scattered HTML order
+- **Image+Text sections**: 2-column CSS Grid with image spanning 2 rows
+- **Brand logos**: 4-column grid with `order: -1` to move title above logos
+- **CTA**: Flexbox with `flex: 1` on text, buttons shrink-proof
+- **Footer**: 6-column grid for desktop (left links, 4 social icon columns, right links)
+
+**Section reordering**: `order` properties fix f-85 appearing before f-52 (matching original Figma vertical order)
+
+**Cleaned up Figma artifacts**: Removed `background-color` on text elements (was duplicating `color`), removed fixed `width`/`height` on text, converted font sizes to `rem`
+
+**Responsive breakpoints:**
+- **Tablet (768px)**: Features → single column, image+text → stacked, logos → 2 columns, CTA → vertical
+- **Mobile (480px)**: Nav wraps below logo, hero decorative hidden, full-width buttons with 44px min tap targets, footer uses 4-col grid for social icon row

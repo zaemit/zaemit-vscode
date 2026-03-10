@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//d/www/basic/src/editor/**)",
+      "Read(//d/www/basic/**)",
+      "Read(//d/www/**)"
+    ]
+  }
+}

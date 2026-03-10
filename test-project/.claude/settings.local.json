@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__zaemit-editor__zaemit_toggle_viewport"
+    ]
+  }
+}

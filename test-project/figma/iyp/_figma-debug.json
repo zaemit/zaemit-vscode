@@ -1,0 +1,86 @@
+{
+  "_meta": {
+    "fileKey": "Slg4urAZ1uMihGo8xvKXOA",
+    "nodeId": "16-148",
+    "fileName": "IYP",
+    "timestamp": "2026-03-07T09:27:04.976Z",
+    "nodeCount": 1,
+    "imageIds": 0,
+    "imagesDownloaded": 0
+  },
+  "nodes": {
+    "id": "16:148",
+    "name": "ホテルの開発・企画・設計から運営全般までを手掛けています。 お客様に心地よい空間と特別な体験を提供するために、常に創造的なアプローチを取り入れています。",
+    "type": "TEXT",
+    "scrollBehavior": "SCROLLS",
+    "blendMode": "PASS_THROUGH",
+    "fills": [
+      {
+        "blendMode": "NORMAL",
+        "type": "SOLID",
+        "color": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 1
+        }
+      }
+    ],
+    "strokes": [],
+    "strokeWeight": 1,
+    "strokeAlign": "OUTSIDE",
+    "styles": {
+      "fill": "16:14"
+    },
+    "absoluteBoundingBox": {
+      "x": 100,
+      "y": 5811,
+      "width": 846,
+      "height": 72
+    },
+    "absoluteRenderBounds": {
+      "x": 101.63800048828125,
+      "y": 5821.80810546875,
+      "width": 814.4459838867188,
+      "height": 52.5419921875
+    },
+    "constraints": {
+      "vertical": "TOP",
+      "horizontal": "CENTER"
+    },
+    "characters": "ホテルの開発・企画・設計から運営全般までを手掛けています。\nお客様に心地よい空間と特別な体験を提供するために、常に創造的なアプローチを取り入れています。",
+    "characterStyleOverrides": [],
+    "styleOverrideTable": {},
+    "lineTypes": [
+      "NONE",
+      "NONE"
+    ],
+    "lineIndentations": [
+      0,
+      0
+    ],
+    "style": {
+      "fontFamily": "Zen Kaku Gothic New",
+      "fontPostScriptName": "ZenKakuGothicNew-Regular",
+      "fontStyle": "Regular",
+      "fontWeight": 400,
+      "textAutoResize": "HEIGHT",
+      "fontSize": 18,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": 0,
+      "lineHeightPx": 36,
+      "lineHeightPercent": 138.12155151367188,
+      "lineHeightPercentFontSize": 200,
+      "lineHeightUnit": "FONT_SIZE_%"
+    },
+    "layoutVersion": 4,
+    "effects": [],
+    "interactions": [],
+    "complexStrokeProperties": {
+      "strokeType": "BASIC"
+    }
+  },
+  "imageMap": {},
+  "localImageMap": {}
+}
