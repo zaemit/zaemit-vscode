@@ -5,5 +5,9 @@
       "Read(//d/www/basic/**)",
       "Read(//d/www/**)"
     ]
-  }
+  },
+  "enabledMcpjsonServers": [
+    "zaemit-editor"
+  ],
+  "enableAllProjectMcpServers": true
 }

@@ -246,15 +246,13 @@ class ViewModeManager extends EventEmitter {
             const btn = e.target.closest('.view-btn');
             if (!btn) return;
 
-            // Handle delete button click with confirmation
+            // Handle delete button click
             // ★ e.target이 span 내부 텍스트 노드일 수 있으므로 closest() 사용
+            // ★ VS Code WebView은 allow-modals가 없어 confirm()이 항상 false → 바로 삭제
             const deleteBtn = e.target.closest?.('.view-delete-btn, .view-remove');
             if (deleteBtn) {
                 e.stopPropagation();
-                const width = btn.dataset.width;
-                if (confirm(`${width}px 브레이크포인트를 삭제하시겠습니까?`)) {
-                    this.removeBreakpoint(wrapper || btn);
-                }
+                this.removeBreakpoint(wrapper || btn);
                 return;
             }
 

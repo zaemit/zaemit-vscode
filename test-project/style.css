@@ -457,3 +457,27 @@ body { background-color: #000; font-family: -apple-system, BlinkMacSystemFont, '
   left: 352px;
   top: 58px;
 }
+
+.hero p {
+  color: rgb(255, 0, 0);
+}
+
+@media (max-width: 769px) {.hero p {
+  color: rgb(110, 173, 221);
+}
+
+.why-section .section-desc {
+  color: rgb(149, 149, 184);
+}}
+
+@media (max-width: 481px) {.hero p {
+  color: rgb(255, 0, 0);
+}
+
+.why-section .section-desc {
+  color: rgb(149, 149, 184);
+}}
+
+.why-section .section-desc {
+  color: rgb(10, 10, 255);
+}

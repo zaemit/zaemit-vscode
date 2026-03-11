@@ -31,3 +31,11 @@ This project is the **Zaemit Visual HTML/CSS Editor** VS Code extension.
 - `src/apiSpec.ts` - OpenAPI/Functions schema and API docs
 - `mcp-server.js` - Stdio MCP server (Claude Code spawns this)
 - `.mcp.json` - MCP server configuration
+
+
+## 작업 규칙
+
+- 모든 답변은 한국어로 해줘
+- 기존 기능에 영향을 주지 않는 범위 내에서만 수정해줘
+- 수정 전에 어떤 파일을 왜 수정하는지 먼저 설명하고 진행 여부 물어봐줘
+- 영향받는 파일이 있으면 먼저 알려줘

@@ -3014,6 +3014,52 @@ class EditorApp extends EventEmitter {
                 // 임시 태그는 유지 (새로고침 시 자동 제거됨)
             }
 
+            // ★ 내부 <style> 태그에서 style.css에 저장된 속성과 충돌하는 속성 제거
+            // HTML의 <style>이 <link href="style.css"> 뒤에 오면 cascade에서 내부 스타일이 우선
+            // → style.css에 저장한 변경사항이 브라우저에서 무시되는 문제 방지
+            if (tempStyleTag?.sheet?.cssRules) {
+                const savedProps = new Map();
+                const editorPfx = ['.editor-', '.zaemit-', '.quick-text-edit', '[data-zaemit-'];
+                const collectRule = (r) => {
+                    if (r.type !== 1 || !r.selectorText) return;
+                    if (editorPfx.some(p => r.selectorText.includes(p))) return;
+                    if (!r.style?.length) return;
+                    if (!savedProps.has(r.selectorText)) savedProps.set(r.selectorText, new Set());
+                    for (let j = 0; j < r.style.length; j++) savedProps.get(r.selectorText).add(r.style[j]);
+                };
+                for (const rule of tempStyleTag.sheet.cssRules) {
+                    if (rule.type === 4) { for (const ir of rule.cssRules) collectRule(ir); }
+                    else collectRule(rule);
+                }
+                if (savedProps.size > 0) {
+                    const internalStyles = doc.querySelectorAll('style:not(#zaemit-temp-styles):not(#zaemit-injected-css)');
+                    for (const st of internalStyles) {
+                        if (!st.sheet?.cssRules) continue;
+                        let modified = false;
+                        const cleanRule = (r) => {
+                            if (r.type !== 1) return;
+                            const ps = savedProps.get(r.selectorText);
+                            if (!ps) return;
+                            for (const p of ps) {
+                                if (r.style.getPropertyValue(p)) {
+                                    r.style.removeProperty(p);
+                                    modified = true;
+                                }
+                            }
+                        };
+                        for (const rule of st.sheet.cssRules) {
+                            if (rule.type === 4) { for (const ir of rule.cssRules) cleanRule(ir); }
+                            else cleanRule(rule);
+                        }
+                        if (modified) {
+                            let newCSS = '';
+                            for (const rule of st.sheet.cssRules) newCSS += rule.cssText + '\n';
+                            st.textContent = newCSS;
+                        }
+                    }
+                }
+            }
+
             // ★ 추적된 CSS 속성 제거 반영 (applyStyleChange에서 속성 제거 시 추적됨)
             if (this._cssPropertyRemovals?.length > 0) {
                 for (const removal of this._cssPropertyRemovals) {

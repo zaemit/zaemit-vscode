@@ -1688,8 +1688,8 @@ class MultiCanvasManager extends EventEmitter {
 
         const activeIdx = this.getActiveIndex();
 
-        // 소스 요소에서 경로 직접 생성
-        const elementPath = this._getElementPath(sourceElement);
+        // 소스 요소에서 경로 직접 생성 (ownerDocument 전달 필수)
+        const elementPath = this._getElementPath(sourceElement, sourceElement.ownerDocument);
         if (!elementPath) return;
 
         // 에디터 클래스 제외한 클래스 목록
@@ -1730,8 +1730,8 @@ class MultiCanvasManager extends EventEmitter {
             return;
         }
 
-        // 소스 요소에서 경로 직접 생성
-        const elementPath = this._getElementPath(sourceElement);
+        // 소스 요소에서 경로 직접 생성 (ownerDocument 전달 필수)
+        const elementPath = this._getElementPath(sourceElement, sourceElement.ownerDocument);
         console.log('[syncElementStyleFromElement] Element path:', elementPath);
         if (!elementPath) return;
 
@@ -1783,32 +1783,9 @@ class MultiCanvasManager extends EventEmitter {
         });
     }
 
-    /**
-     * 요소에서 경로 생성 (body 기준)
-     * @param {HTMLElement} element
-     * @returns {Array|null} 경로 배열 [{ tag, index }, ...]
-     */
-    _getElementPath(element) {
-        if (!element) return null;
-
-        const path = [];
-        let current = element;
-
-        while (current && current.tagName !== 'BODY') {
-            const parent = current.parentElement;
-            if (!parent) break;
-
-            const siblings = Array.from(parent.children).filter(
-                el => el.tagName === current.tagName
-            );
-            const index = siblings.indexOf(current);
-
-            path.unshift({ tag: current.tagName.toLowerCase(), index });
-            current = parent;
-        }
-
-        return path;
-    }
+    // ★ _getElementPath(element) 1-파라미터 버전 제거됨
+    // 2-파라미터 버전 _getElementPath(element, doc)만 사용 (line ~1900)
+    // 호출 시 반드시 ownerDocument 전달: this._getElementPath(el, el.ownerDocument)
 
     /**
      * 에디터 클래스를 제외한 클래스 목록 반환

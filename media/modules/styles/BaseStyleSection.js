@@ -402,15 +402,14 @@ class BaseStyleSection {
         // ★ 실제 변경 적용
         let changeApplied = false;
 
-        // ★ 멀티뷰 활성 + non-PC 뷰포트 편집 시 자동 미디어쿼리 타겟팅
+        // ★ non-PC 뷰포트 편집 시 자동 미디어쿼리 타겟팅 (멀티뷰/싱글뷰 공통)
         // non-PC 뷰포트에서 편집하면 해당 뷰포트의 미디어쿼리만 타겟
         // (PC base 규칙은 변경하지 않음 → 해당 뷰포트 이하에만 영향)
         let effectiveMediaBreakpoints = [...mediaBreakpoints];
         let effectiveIsPCSelected = this.isPCSelected;
 
         const currentViewport = this.editor?.styleManager?.currentViewport;
-        const multiCanvas = this.editor?.modules?.multiCanvas;
-        if (multiCanvas?._isInitialized && currentViewport && currentViewport !== 'pc') {
+        if (currentViewport && currentViewport !== 'pc') {
             const vpWidth = parseInt(currentViewport);
             if (vpWidth) {
                 // non-PC 뷰포트 편집 → 현재 뷰포트의 미디어쿼리만 타겟 (PC base 제외)
@@ -1024,12 +1023,11 @@ class BaseStyleSection {
         let mediaBreakpoints = [...this.mediaQueryBreakpoints];
         const kebabProperty = this.toKebabCase(styleProp);
 
-        // ★ 멀티뷰 활성 + non-PC 뷰포트 편집 시 자동 미디어쿼리 타겟팅
+        // ★ non-PC 뷰포트 편집 시 자동 미디어쿼리 타겟팅 (멀티뷰/싱글뷰 공통)
         // non-PC 뷰포트에서 편집하면 해당 뷰포트의 미디어쿼리만 타겟
         let effectiveIsPCSelected = this.isPCSelected;
         const currentViewport = this.editor?.styleManager?.currentViewport;
-        const multiCanvas = this.editor?.modules?.multiCanvas;
-        if (multiCanvas?._isInitialized && currentViewport && currentViewport !== 'pc') {
+        if (currentViewport && currentViewport !== 'pc') {
             const vpWidth = parseInt(currentViewport);
             if (vpWidth) {
                 mediaBreakpoints = [vpWidth];
@@ -1082,8 +1080,22 @@ class BaseStyleSection {
             // ★ base 규칙에서 사용 중인 셀렉터 확인 (boosted 포함)
             // ★ generic 셀렉터(*, h2 등)는 미디어쿼리에 사용하지 않음
             const baseRuleInfo = this.getCSSRuleInfo(styleProp);
-            const mediaSelector = (baseRuleInfo?.selector && !this.isGenericSelector(baseRuleInfo.selector))
+            let mediaSelector = (baseRuleInfo?.selector && !this.isGenericSelector(baseRuleInfo.selector))
                 ? baseRuleInfo.selector : this.getBestSelector();
+
+            // ★ 셀렉터가 없으면 고유 셀렉터 생성 (plain 요소 대응)
+            if (!mediaSelector) {
+                mediaSelector = this.getOrCreateUniqueSelector(null);
+                if (!mediaSelector) {
+                    const cls = this.generateUniqueClass();
+                    this.selectedElement.classList.add(cls);
+                    mediaSelector = '.' + cls;
+                }
+                // 멀티뷰: 새 클래스를 모든 iframe에 동기화
+                if (this.editor?.modules?.multiCanvas?._isInitialized) {
+                    this.editor.modules.multiCanvas.syncElementClassesFromElement?.(this.selectedElement);
+                }
+            }
 
             for (const maxWidth of mediaBreakpoints) {
                 if (maxWidth === 'pc') continue;
