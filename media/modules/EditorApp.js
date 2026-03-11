@@ -2977,6 +2977,25 @@ class EditorApp extends EventEmitter {
             const tempStyleTag = doc.getElementById('zaemit-temp-styles');
             if (tempStyleTag && tempStyleTag.sheet && tempStyleTag.sheet.cssRules.length > 0) {
                 for (const rule of tempStyleTag.sheet.cssRules) {
+                    // ★ CSSMediaRule (type 4) 처리: 미디어쿼리 내부 규칙을 CSS 파일에 병합
+                    if (rule.type === 4) {
+                        const conditionText = (rule.conditionText || rule.media?.mediaText || '').trim();
+                        if (!conditionText) continue;
+
+                        for (const innerRule of rule.cssRules) {
+                            const innerSelector = innerRule.selectorText || '';
+                            const isInnerEditorRule = editorSelectors.some(sel => innerSelector.includes(sel));
+                            if (!isInnerEditorRule && innerRule.cssText && innerRule.style?.length > 0) {
+                                let cleanInnerText = innerRule.cssText;
+                                if (window.vscBridge) {
+                                    cleanInnerText = this._restoreImageUrlsInCssText(cleanInnerText, innerSelector, doc);
+                                }
+                                cssContent = this._mergeRuleIntoMediaQuery(cssContent, conditionText, innerSelector, cleanInnerText);
+                            }
+                        }
+                        continue;
+                    }
+
                     const selectorText = rule.selectorText || '';
                     const isEditorRule = editorSelectors.some(sel =>
                         selectorText.includes(sel)
@@ -3244,6 +3263,47 @@ class EditorApp extends EventEmitter {
         return Object.entries(props)
             .map(([prop, val]) => `${prop}: ${val}`)
             .join(';\n  ') + ';';
+    }
+
+    /**
+     * Merge a CSS rule into a @media block in CSS text
+     * If the @media block exists, merge the rule into it
+     * If not, create a new @media block and append
+     * @param {string} cssContent - Full CSS file content
+     * @param {string} conditionText - Media query condition (e.g., "(max-width: 769px)")
+     * @param {string} selector - CSS selector for the inner rule
+     * @param {string} ruleText - Full CSS rule text (e.g., ".title { color: red; }")
+     * @returns {string} Updated CSS content
+     */
+    _mergeRuleIntoMediaQuery(cssContent, conditionText, selector, ruleText) {
+        const normalizedCondition = conditionText.replace(/\s+/g, ' ').trim();
+        const escapedCondition = normalizedCondition.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+        // Find existing @media block with matching condition
+        const regex = new RegExp(`@media\\s+${escapedCondition}\\s*\\{`);
+        const match = regex.exec(cssContent);
+
+        if (match) {
+            // Found existing block - find matching closing brace via brace counting
+            const openBracePos = match.index + match[0].length - 1;
+            let depth = 1;
+            let pos = openBracePos + 1;
+            while (pos < cssContent.length && depth > 0) {
+                if (cssContent[pos] === '{') depth++;
+                if (cssContent[pos] === '}') depth--;
+                pos++;
+            }
+            const closeBracePos = pos - 1;
+
+            // Extract inner content and merge the rule into it
+            let innerContent = cssContent.substring(openBracePos + 1, closeBracePos);
+            innerContent = this.mergeCSSRule(innerContent, selector, ruleText);
+
+            return cssContent.substring(0, openBracePos + 1) + innerContent + cssContent.substring(closeBracePos);
+        } else {
+            // No existing block - create new @media block
+            return cssContent.trimEnd() + `\n\n@media ${normalizedCondition} {\n  ${ruleText}\n}`;
+        }
     }
 
     /**

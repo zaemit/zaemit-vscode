@@ -369,7 +369,6 @@ class BaseStyleSection {
         if (preCollectedOldRules) {
             // ★ 색상 피커 등에서 미리 수집된 oldRules 사용 (실시간 미리보기로 이미 CSS가 변경된 경우)
             oldRules = preCollectedOldRules;
-            console.log('[applyStyleChange] Using preCollectedOldRules:', oldRules);
         } else if (mainDoc && undoRedo && targetSelector) {
             oldRules = undoRedo.collectAllRulesForSelector(targetSelector, styleProp, mainDoc);
             // ★ 셀렉터가 부스팅/변경된 경우, 원래 셀렉터의 값도 수집 (undo 복원용)
@@ -404,8 +403,8 @@ class BaseStyleSection {
         let changeApplied = false;
 
         // ★ 멀티뷰 활성 + non-PC 뷰포트 편집 시 자동 미디어쿼리 타겟팅
-        // 체크박스로 non-PC 브레이크포인트를 명시적으로 선택하지 않았어도,
-        // 현재 편집 중인 뷰포트의 미디어쿼리를 자동 생성
+        // non-PC 뷰포트에서 편집하면 해당 뷰포트의 미디어쿼리만 타겟
+        // (PC base 규칙은 변경하지 않음 → 해당 뷰포트 이하에만 영향)
         let effectiveMediaBreakpoints = [...mediaBreakpoints];
         let effectiveIsPCSelected = this.isPCSelected;
 
@@ -413,8 +412,8 @@ class BaseStyleSection {
         const multiCanvas = this.editor?.modules?.multiCanvas;
         if (multiCanvas?._isInitialized && currentViewport && currentViewport !== 'pc') {
             const vpWidth = parseInt(currentViewport);
-            if (vpWidth && effectiveMediaBreakpoints.length === 0) {
-                // non-PC 뷰포트에서 편집 중이지만 체크박스 미선택 → 현재 뷰포트 자동 타겟
+            if (vpWidth) {
+                // non-PC 뷰포트 편집 → 현재 뷰포트의 미디어쿼리만 타겟 (PC base 제외)
                 effectiveMediaBreakpoints = [vpWidth];
                 effectiveIsPCSelected = false;
             }
@@ -495,14 +494,12 @@ class BaseStyleSection {
 
             // Apply to CSS rule
             const rule = this.findOrCreateRule(targetSelector);
-            console.log('[applyStyleChange] PC rule:', { targetSelector, rule: !!rule, newValue });
             if (rule) {
                 if (newValue) {
                     // ★ gap shorthand/longhand 충돌 정리
                     // gap shorthand 설정 시 기존 longhand 제거, longhand 설정 시 기존 shorthand 분리
                     this._cleanupGapConflict(rule, kebabProperty);
                     rule.style.setProperty(kebabProperty, newValue);
-                    console.log('[applyStyleChange] Set PC value:', rule.style.getPropertyValue(kebabProperty));
                 } else {
                     rule.style.removeProperty(kebabProperty);
                     // ★ 다른 stylesheet(zaemit-injected-css, style.css <link> 등)의 동일 selector 규칙에서도 제거
@@ -563,10 +560,8 @@ class BaseStyleSection {
 
         // ★ 변경 후: mainIframe에서 모든 미디어쿼리 규칙 수집 → newRules
         // 그리고 cssRuleSnapshot으로 기록
-        console.log('[applyStyleChange] Recording:', { changeApplied, mainDoc: !!mainDoc, undoRedo: !!undoRedo, targetSelector });
         if (changeApplied && mainDoc && undoRedo && targetSelector) {
             const newRules = undoRedo.collectAllRulesForSelector(targetSelector, styleProp, mainDoc);
-            console.log('[applyStyleChange] oldRules:', oldRules, 'newRules:', newRules);
             undoRedo.recordCSSRuleSnapshot(
                 this.selectedElement,
                 targetSelector,
@@ -1026,8 +1021,21 @@ class BaseStyleSection {
         if (!this.selectedElement) return;
 
         const state = this.currentState;
-        let mediaBreakpoints = this.mediaQueryBreakpoints;
+        let mediaBreakpoints = [...this.mediaQueryBreakpoints];
         const kebabProperty = this.toKebabCase(styleProp);
+
+        // ★ 멀티뷰 활성 + non-PC 뷰포트 편집 시 자동 미디어쿼리 타겟팅
+        // non-PC 뷰포트에서 편집하면 해당 뷰포트의 미디어쿼리만 타겟
+        let effectiveIsPCSelected = this.isPCSelected;
+        const currentViewport = this.editor?.styleManager?.currentViewport;
+        const multiCanvas = this.editor?.modules?.multiCanvas;
+        if (multiCanvas?._isInitialized && currentViewport && currentViewport !== 'pc') {
+            const vpWidth = parseInt(currentViewport);
+            if (vpWidth) {
+                mediaBreakpoints = [vpWidth];
+                effectiveIsPCSelected = false;
+            }
+        }
 
         // ★ Pseudo-class 상태이면 :hover/:focus/:active 규칙만 수정하고 반환
         // inline 스타일이나 base CSS 규칙은 건드리지 않음
@@ -1058,7 +1066,7 @@ class BaseStyleSection {
         // ★ PC 규칙 수정 전에 oldValue 저장 (preventCascade에서 사용)
         // newValue 적용 후에는 computed style이 변경되므로 미리 저장해야 함
         let oldValueForCascade = '';
-        if (this.isPCSelected && this.previewWindow && this.selectedElement) {
+        if (effectiveIsPCSelected && this.previewWindow && this.selectedElement) {
             const computed = this.previewWindow.getComputedStyle(this.selectedElement);
             oldValueForCascade = computed[styleProp] || '';
         }
@@ -1081,7 +1089,7 @@ class BaseStyleSection {
                 if (maxWidth === 'pc') continue;
 
                 if (newValue) {
-                    await this.addCSSRuleInMediaQueryNoSave(styleProp, newValue, maxWidth);
+                    await this.addCSSRuleInMediaQueryNoSave(styleProp, newValue, maxWidth, mediaSelector);
                 } else {
                     if (mediaSelector) {
                         const rule = this.findOrCreateRuleInMediaQuery(mediaSelector, maxWidth);
@@ -1104,7 +1112,7 @@ class BaseStyleSection {
         }
 
         // PC 미선택이면 동기화만 하고 반환
-        if (!this.isPCSelected) {
+        if (!effectiveIsPCSelected) {
             if (this.editor?.modules?.multiCanvas?._isInitialized) {
                 this.editor.modules.multiCanvas.syncCSSToAllCanvases();
             }
@@ -3580,7 +3588,9 @@ class BaseStyleSection {
      * @returns {boolean} Whether rule was added/updated
      */
     async addCSSRuleInMediaQueryNoSave(property, value, maxWidth, targetSelector = null) {
-        if (!this.selectedElement || !value) return false;
+        if (!this.selectedElement || !value) {
+            return false;
+        }
 
         // ★ 호출자가 부스팅 완료된 셀렉터를 전달한 경우 그대로 사용
         let selector = targetSelector;
@@ -3596,7 +3606,9 @@ class BaseStyleSection {
             }
         }
 
-        if (!selector) return false;
+        if (!selector) {
+            return false;
+        }
 
         const kebabProperty = this.toKebabCase(property);
         const rule = this.findOrCreateRuleInMediaQuery(selector, maxWidth);

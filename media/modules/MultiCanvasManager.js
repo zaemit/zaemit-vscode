@@ -68,6 +68,7 @@ class MultiCanvasManager extends EventEmitter {
         // 뷰모드 변경 시 리사이즈 핸들 위치 업데이트
         vm.on('view:changed', ({ flash }) => {
             this._updateResizeHandles();
+            this._updateActiveIframeHighlight();
 
             // 뷰모드 변경 시 활성 iframe 동기화 (AI 서비스 등에서 올바른 iframe 사용)
             const activeIdx = this.getActiveIndex();
@@ -647,6 +648,9 @@ class MultiCanvasManager extends EventEmitter {
         if (this.iframes[activeIdx] && this.previewManager) {
             this.previewManager.setActiveIframe(this.iframes[activeIdx]);
         }
+
+        // 활성 iframe 테두리 표시
+        this._updateActiveIframeHighlight();
 
         this.emit('multiview:enabled');
     }
@@ -2405,6 +2409,10 @@ class MultiCanvasManager extends EventEmitter {
                 f.onload = () => {
                     const w = parseInt(f.style.width);
                     try {
+                        // ★ 선택 하이라이트가 동기화된 iframe에 따라오지 않도록 제거
+                        f.contentDocument.querySelectorAll('.editor-highlight').forEach(
+                            el => el.classList.remove('editor-highlight')
+                        );
                         this.previewManager?.injectStylesTo(f.contentDocument);
                         this.limitViewportHeightElements(f, w);
                         this._hideIframeScrollbar(f);
@@ -2814,6 +2822,25 @@ class MultiCanvasManager extends EventEmitter {
         }
     }
 
+    /**
+     * 활성 iframe에 테두리 하이라이트 표시
+     * 멀티뷰 모드에서 현재 편집 중인 iframe을 시각적으로 구분
+     */
+    _updateActiveIframeHighlight() {
+        if (!this.isMultiViewEnabled || !this.iframes?.length) return;
+
+        const activeIdx = this.getActiveIndex();
+        this.iframes.forEach((iframe, i) => {
+            if (i === activeIdx) {
+                iframe.style.outline = '3px solid #3b82f6';
+                iframe.style.outlineOffset = '-3px';
+            } else {
+                iframe.style.outline = '';
+                iframe.style.outlineOffset = '';
+            }
+        });
+    }
+
     // iframe 선택 시 viewmode 버튼과 동기화
     _selectIframe(index) {
         const buttons = this.viewModeManager?.getViewModeButtons();
@@ -2938,6 +2965,11 @@ class MultiCanvasManager extends EventEmitter {
             this._loadIframeContent(iframe, html);
             iframe.onload = () => {
                 try {
+                    // ★ 선택 하이라이트가 새 iframe에 따라오지 않도록 제거
+                    iframe.contentDocument.querySelectorAll('.editor-highlight').forEach(
+                        el => el.classList.remove('editor-highlight')
+                    );
+
                     this.previewManager?.injectStylesTo(iframe.contentDocument);
 
                     // ★ 메인 iframe의 CSSOM 규칙을 새 iframe에 주입
@@ -3033,6 +3065,9 @@ class MultiCanvasManager extends EventEmitter {
         });
 
         this._recalculateIframePositions();
+
+        // 새 iframe에 활성 하이라이트 표시
+        this._updateActiveIframeHighlight();
     }
 
     // breakpoint 삭제 시 iframe 삭제
@@ -3074,6 +3109,9 @@ class MultiCanvasManager extends EventEmitter {
         });
 
         this._recalculateIframePositions();
+
+        // 삭제 후 활성 iframe 하이라이트 업데이트
+        this._updateActiveIframeHighlight();
     }
 
     // 활성 뷰모드 설정 (외부에서 호출)
@@ -3191,9 +3229,10 @@ class MultiCanvasManager extends EventEmitter {
         const activeIdx = this.getActiveIndex();
         const activeIframe = this.iframes[activeIdx];
 
-        // 선택된 뷰모드 외 iframe들만 숨김 (display: none)
-        // absolute 배치이므로 다른 iframe이 숨겨져도 레이아웃 변동 없음
+        // 활성 iframe 하이라이트 제거 + 선택된 뷰모드 외 iframe들만 숨김
         this.iframes.forEach((iframe, i) => {
+            iframe.style.outline = '';
+            iframe.style.outlineOffset = '';
             if (i !== activeIdx) {
                 iframe.style.display = 'none';
             }
