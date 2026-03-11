@@ -507,10 +507,14 @@ class ViewModeManager extends EventEmitter {
     addBreakpoint(width) {
         if (!this.viewModes) return;
 
+        // 중복 체크 (같은 너비의 breakpoint가 이미 있으면 추가하지 않음)
+        const existing = this.viewModes.querySelector(`.view-btn[data-width="${width}"]`);
+        if (existing) return;
+
         // Find correct position (sorted by width descending)
+        // "+" 버튼 뒤에 있는 wrapper(480 fixed 등)도 포함하여 정렬
         const wrappers = Array.from(this.viewModes.querySelectorAll('.view-btn-wrapper'));
-        const addBtn = this.viewModes.querySelector('.view-add-btn');
-        let insertBefore = addBtn;
+        let insertBefore = null;
 
         for (const wrapper of wrappers) {
             const btn = wrapper.querySelector('.view-btn');
@@ -519,6 +523,12 @@ class ViewModeManager extends EventEmitter {
                 insertBefore = wrapper;
                 break;
             }
+        }
+
+        // 삽입 위치가 없으면 (모든 기존 버튼보다 작은 너비) 맨 끝에 추가
+        if (!insertBefore) {
+            const lastWrapper = wrappers[wrappers.length - 1];
+            insertBefore = lastWrapper ? lastWrapper.nextSibling : null;
         }
 
         // Create wrapper with checkbox and button (checkbox before button, indicator inside button)
@@ -536,7 +546,11 @@ class ViewModeManager extends EventEmitter {
             </button>
         `;
 
-        this.viewModes.insertBefore(wrapper, insertBefore);
+        if (insertBefore) {
+            this.viewModes.insertBefore(wrapper, insertBefore);
+        } else {
+            this.viewModes.appendChild(wrapper);
+        }
 
         // Activate the new breakpoint
         const newBtn = wrapper.querySelector('.view-btn');
@@ -837,9 +851,9 @@ class ViewModeManager extends EventEmitter {
         if (existing) return;
 
         // Find correct position (sorted by width descending)
+        // "+" 버튼 뒤에 있는 wrapper(480 fixed 등)도 포함하여 정렬
         const wrappers = Array.from(this.viewModes.querySelectorAll('.view-btn-wrapper'));
-        const addBtn = this.viewModes.querySelector('.view-add-btn');
-        let insertBefore = addBtn;
+        let insertBefore = null;
 
         for (const wrapper of wrappers) {
             const btn = wrapper.querySelector('.view-btn');
@@ -848,6 +862,12 @@ class ViewModeManager extends EventEmitter {
                 insertBefore = wrapper;
                 break;
             }
+        }
+
+        // 삽입 위치가 없으면 (모든 기존 버튼보다 작은 너비) 맨 끝에 추가
+        if (!insertBefore) {
+            const lastWrapper = wrappers[wrappers.length - 1];
+            insertBefore = lastWrapper ? lastWrapper.nextSibling : null;
         }
 
         // Create wrapper with checkbox and button
@@ -865,7 +885,11 @@ class ViewModeManager extends EventEmitter {
             </button>
         `;
 
-        this.viewModes.insertBefore(wrapper, insertBefore);
+        if (insertBefore) {
+            this.viewModes.insertBefore(wrapper, insertBefore);
+        } else {
+            this.viewModes.appendChild(wrapper);
+        }
     }
 
     /**
