@@ -191,7 +191,7 @@
                     </svg>
                 </button>
             </div>
-            <button id="reloadPageBtn" class="btn btn-primary" title="Reload Preview (Ctrl+Shift+R)">
+            <button id="reloadPageBtn" class="btn btn-primary" title="Reload Preview (Ctrl+Shift+R)" onclick="if(this.classList.contains('reloading'))return;this.classList.add('reloading');var b=this;var f=document.getElementById('previewFrame');if(f)f.style.visibility='hidden';setTimeout(function(){if(window.editor){window.editor.loadInitialData().catch(function(){})}if(f){f.addEventListener('load',function(){setTimeout(function(){f.style.visibility='visible';b.classList.remove('reloading')},80)},{once:true})}setTimeout(function(){if(f)f.style.visibility='visible';b.classList.remove('reloading')},5000)},250)">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <polyline points="23,4 23,10 17,10"/>
                     <path d="M1 12a11 11 0 0 1 21-4.3"/>

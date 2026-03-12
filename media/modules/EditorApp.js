@@ -1269,8 +1269,19 @@ class EditorApp extends EventEmitter {
         });
 
         // 리로드 버튼
-        document.getElementById('reloadPageBtn')?.addEventListener('click', () => {
+        const reloadBtn = document.getElementById('reloadPageBtn');
+        reloadBtn?.addEventListener('click', () => {
+            if (reloadBtn.classList.contains('reloading')) return;
+            reloadBtn.classList.add('reloading');
             this.modules.preview?.refresh();
+            // 리로드 완료 후 애니메이션 제거
+            const onLoaded = () => {
+                reloadBtn.classList.remove('reloading');
+                this.modules.preview?.off?.('preview:loaded', onLoaded);
+            };
+            this.modules.preview?.on?.('preview:loaded', onLoaded);
+            // fallback: 3초 후 자동 제거
+            setTimeout(() => reloadBtn.classList.remove('reloading'), 3000);
         });
 
         this.modules.keyboard.on('shortcut:resetZoom', () => {

@@ -155,8 +155,8 @@
   },
   "scripts": {
     "sync": "node scripts/sync-modules.mjs",
-    "build": "npm run sync && node esbuild.config.mjs",
-    "dev": "npm run sync && node esbuild.config.mjs --watch",
+    "build": "node esbuild.config.mjs",
+    "dev": "node esbuild.config.mjs --watch",
     "vscode:prepublish": "npm run build"
   },
   "devDependencies": {

@@ -417,6 +417,26 @@ body {
     background: var(--primary-hover);
 }
 
+/* Reload 버튼 애니메이션 */
+#reloadPageBtn.reloading {
+    background: var(--primary-hover);
+    pointer-events: none;
+}
+
+#reloadPageBtn.reloading svg {
+    animation: spin-reload 0.6s linear infinite;
+}
+
+@keyframes spin-reload {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* iframe 리로드 페이드 효과 */
+.preview-wrapper {
+    transition: opacity 0.2s ease;
+}
+
 .btn-secondary {
     background: var(--input-bg);
     color: var(--text-primary);

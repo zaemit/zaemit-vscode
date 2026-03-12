@@ -785,7 +785,18 @@ class PreviewManager extends EventEmitter {
         // Reset ready state so load event will re-initialize
         this.isReady = false;
 
-        // 캐시 방지를 위해 타임스탬프 추가
+        // ★ srcdoc 모드 (VS Code Extension): src 변경 대신 srcdoc 재설정
+        if (this.previewFrame.srcdoc) {
+            const currentSrcdoc = this.previewFrame.srcdoc;
+            this.previewFrame.removeAttribute('srcdoc');
+            setTimeout(() => {
+                this.previewFrame.srcdoc = currentSrcdoc;
+                this.emit('preview:refresh');
+            }, 50);
+            return;
+        }
+
+        // URL 모드: 캐시 방지를 위해 타임스탬프 추가
         const timestamp = Date.now();
         let targetUrl = this.originalUrl || this.previewFrame.src;
 
