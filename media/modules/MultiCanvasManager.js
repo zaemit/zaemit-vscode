@@ -288,6 +288,9 @@ class MultiCanvasManager extends EventEmitter {
                 if (this._isEditorUI(e.target)) return;
                 if (e.button !== 0) return; // left button only
 
+                // 텍스트 편집 모드에서는 브라우저 기본 동작 허용 (커서 이동, 텍스트 드래그 선택)
+                if (e.target.closest && e.target.closest('.editor-editable')) return;
+
                 e.preventDefault();
                 e.stopPropagation();
 
@@ -348,6 +351,8 @@ class MultiCanvasManager extends EventEmitter {
             doc.addEventListener('dblclick', (e) => {
                 if (this.isPanningMode || this._isSpaceDown || this.zoomManager?.isSpacePressed) return;
                 if (this._isEditorUI(e.target)) return;
+                // 텍스트 편집 모드에서는 더블클릭으로 단어 선택 허용
+                if (e.target.closest && e.target.closest('.editor-editable')) return;
                 e.preventDefault();
                 e.stopPropagation();
                 this.emit('element:dblclick', e.target, {
@@ -3190,23 +3195,11 @@ class MultiCanvasManager extends EventEmitter {
         if (!this.isMultiViewEnabled) return;
         this.isMultiViewEnabled = false;
 
-        // ★ 멀티뷰 중 변경된 CSS를 원본 previewFrame에 반영 (복원 전)
-        if (this._originalMainIframe && this.mainIframe !== this._originalMainIframe) {
-            this._syncTempStylesTo(this._originalMainIframe);
-        }
-
-        // ★ mainIframe을 원본으로 복원 (싱글뷰에서도 CSS 적용이 정상 동작하도록)
-        if (this._originalMainIframe) {
-            this.mainIframe = this._originalMainIframe;
-            this._originalMainIframe = null;
-            console.log('[MultiCanvasManager] mainIframe restored to original');
-        }
-
         // 현재 선택된 뷰모드 인덱스 가져오기
         const activeIdx = this.getActiveIndex();
         const activeIframe = this.iframes[activeIdx];
 
-        // 활성 iframe 하이라이트 제거 + 선택된 뷰모드 외 iframe들만 숨김
+        // 선택된 iframe 외 나머지만 숨김 (위치·줌·컨테이너 등은 그대로 유지)
         this.iframes.forEach((iframe, i) => {
             iframe.style.outline = '';
             iframe.style.outlineOffset = '';
@@ -3214,45 +3207,6 @@ class MultiCanvasManager extends EventEmitter {
                 iframe.style.display = 'none';
             }
         });
-
-        // ★ preview-wrapper 복원 (enableMultiView에서 display:none 처리됨)
-        const wrapper = document.querySelector('.preview-wrapper');
-        if (wrapper) wrapper.style.display = '';
-
-        // ★ multi-view-active 클래스 제거 (enableMultiView에서 추가됨)
-        const panel = document.querySelector('.preview-panel');
-        if (panel) panel.classList.remove('multi-view-active');
-
-        // ★ previewFrame inline 스타일 리셋 (멀티뷰 중 적용된 position/left/top 제거)
-        const previewFrame = document.getElementById('previewFrame');
-        if (previewFrame) {
-            previewFrame.style.position = '';
-            previewFrame.style.left = '';
-            previewFrame.style.top = '';
-        }
-
-        // ★ 멀티뷰 container 숨기기
-        if (this.container) this.container.style.display = 'none';
-
-        // ★ 현재 활성 뷰포트 너비 복원 + ZoomManager 동기화
-        if (this.viewModeManager) {
-            const currentWidth = this.viewModeManager.currentViewWidth;
-            if (previewFrame) {
-                if (currentWidth === '100%') {
-                    previewFrame.style.width = '';
-                } else {
-                    previewFrame.style.width = currentWidth + 'px';
-                }
-            }
-        }
-
-        if (this.zoomManager) {
-            this.zoomManager.panOffsetX = this.panX || 0;
-            this.zoomManager.panOffsetY = this.panY || 0;
-            this.zoomManager.previewFrame.style.transformOrigin = '0 0';
-            this.zoomManager.previewFrame.style.transform =
-                `translate(${this.panX || 0}px, ${this.panY || 0}px) scale(${this.zoomManager.zoomLevel})`;
-        }
 
         // 현재 선택된 iframe 정보와 함께 이벤트 발생
         // (각 모듈이 현재 보이는 iframe을 계속 참조해야 선택/오버레이 등이 정상 동작)
