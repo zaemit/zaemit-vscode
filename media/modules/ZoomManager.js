@@ -1244,6 +1244,39 @@ class ZoomManager extends EventEmitter {
     }
 
     /**
+     * iframe 전체가 preview-wrapper 안에 보이도록 자동 zoom fit
+     * 비PC 뷰포트 전환 시 사용 (싱글뷰 iframe 잘림 방지)
+     */
+    fitToWrapper() {
+        if (!this.previewWrapper || !this.previewFrame) return;
+        if (this.multiCanvasManager?.isEnabled()) return;
+
+        const wrapperRect = this.previewWrapper.getBoundingClientRect();
+        const frameWidth = this.previewFrame.offsetWidth;
+        const frameHeight = this.previewFrame.offsetHeight;
+        if (!frameWidth || !frameHeight) return;
+
+        const padding = 20;
+        const scaleX = (wrapperRect.width - padding * 2) / frameWidth;
+        const scaleY = (wrapperRect.height - padding * 2) / frameHeight;
+        const scale = Math.min(scaleX, scaleY, 1);
+
+        // transformOrigin '0 0' 기준으로 scale 후 수평 중앙 정렬 보정
+        const translateX = frameWidth * (1 - scale) / 2;
+        const translateY = padding;
+
+        this.zoomLevel = scale;
+        this.panOffsetX = translateX;
+        this.panOffsetY = translateY;
+
+        this.previewFrame.style.transformOrigin = '0 0';
+        this.previewFrame.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+
+        this.updateZoomIndicator();
+        requestAnimationFrame(() => this.updateResizeHandles());
+    }
+
+    /**
      * Reset zoom with smooth animation (for view mode transitions)
      * Sets transform to identity first, then cleans up after transition
      */

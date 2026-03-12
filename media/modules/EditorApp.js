@@ -3552,6 +3552,24 @@ class EditorApp extends EventEmitter {
     }
 
     /**
+     * Reload page — 싱글뷰/멀티뷰 공통 리로드
+     */
+    async reloadPage() {
+        await this.loadInitialData();
+
+        // 멀티뷰가 활성화되어 있으면 모든 iframe에 새 HTML 전파
+        const mc = this.modules.multiCanvas;
+        if (mc && mc.isMultiViewEnabled && mc.iframes.length > 0) {
+            const html = this.modules.preview?.getHTML();
+            if (html) {
+                mc.iframes.forEach(iframe => {
+                    mc._loadIframeContent(iframe, html);
+                });
+            }
+        }
+    }
+
+    /**
      * Check if element is primarily a text content element
      * (has only text children and is a typical text container)
      */
@@ -6372,6 +6390,11 @@ class EditorApp extends EventEmitter {
             setTimeout(() => {
                 iframeWin.scrollTo(0, 0);
                 this.modules.zoom?.setCanvasHeightToContent();
+                // 비PC 모드: 초기 로드 시 전체 높이가 보이도록 zoom fit
+                const currentWidth = this.modules.viewMode?.currentViewWidth;
+                if (currentWidth && currentWidth !== '100%' && !this.modules.multiCanvas?.isEnabled()) {
+                    this.modules.zoom?.fitToWrapper();
+                }
             }, 100);
         } catch (err) {
             console.error('[EditorApp] triggerFullPageScroll error:', err);

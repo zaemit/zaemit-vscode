@@ -475,6 +475,13 @@ class ViewModeManager extends EventEmitter {
         // JavaScript 애니메이션으로 너비와 transform 동시 변경 (중심 유지)
         if (this.zoomManager && savedCenter) {
             this.zoomManager.animateViewModeChange(width, isFullscreen, savedCenter, oldWidth);
+            // 비PC 모드: 애니메이션 완료 후 높이 재계산 + zoom fit (잘림 방지)
+            if (!isFullscreen) {
+                setTimeout(() => {
+                    this.zoomManager.setCanvasHeightToContent();
+                    this.zoomManager.fitToWrapper();
+                }, 130);
+            }
         } else {
             // zoomManager 없으면 직접 너비 설정
             if (width === '100%') {
