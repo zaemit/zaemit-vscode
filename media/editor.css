@@ -6062,8 +6062,17 @@ body.panning-mode .multicanvas-resize-handle {
     color: #ff6b6b;
 }
 .editor-context-menu-item .icon {
-    width: 20px;
+    width: 16px;
+    height: 16px;
     margin-right: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.editor-context-menu-item .icon svg {
+    width: 16px;
+    height: 16px;
 }
 .editor-context-menu-item .shortcut {
     margin-left: auto;

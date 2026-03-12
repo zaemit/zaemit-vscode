@@ -354,6 +354,11 @@ class EditorApp extends EventEmitter {
             };
             this.modules.layerPanel.refresh();
 
+            // ★ 사용자 HTML에 포함된 contenteditable="true" 중립화
+            // 편집기에서 클릭 시 커서가 즉시 활성화되는 것을 방지
+            // 저장 시 _getCleanHTML()에서 원본 값 복원
+            this._neutralizeContentEditable(doc);
+
             // DOM 스냅샷 캡처 (JS 실행 전, data-* 속성 추적용)
             // 약간의 딜레이를 두어 초기 렌더링이 완료된 후 캡처
             setTimeout(() => {
@@ -5906,6 +5911,24 @@ class EditorApp extends EventEmitter {
     }
 
     /**
+     * 사용자 HTML에 포함된 contenteditable="true"를 중립화
+     * data-zaemit-original-contenteditable 마킹 후 속성 제거
+     */
+    _neutralizeContentEditable(doc) {
+        if (!doc) return;
+        const els = doc.querySelectorAll('[contenteditable="true"]');
+        els.forEach(el => {
+            // 에디터가 추가한 것은 건드리지 않음
+            if (el.classList.contains('editor-editable')) return;
+            el.setAttribute('data-zaemit-original-contenteditable', 'true');
+            el.removeAttribute('contenteditable');
+        });
+        if (els.length > 0) {
+            console.log(`[EditorApp] Neutralized ${els.length} contenteditable element(s)`);
+        }
+    }
+
+    /**
      * Get clean HTML for saving (removes editor elements)
      */
     _getCleanHTML() {
@@ -6040,11 +6063,15 @@ class EditorApp extends EventEmitter {
                 }
             });
 
-            // Remove contenteditable attributes
+            // Remove editor-added contenteditable (편집 중 추가된 것만 제거)
             clonedDoc.querySelectorAll('[contenteditable="true"]').forEach(el => {
-                if (!el.classList.contains('editor-editable')) {
-                    el.removeAttribute('contenteditable');
-                }
+                el.removeAttribute('contenteditable');
+            });
+
+            // Restore original contenteditable (사용자 HTML에 원래 있던 것 복원)
+            clonedDoc.querySelectorAll('[data-zaemit-original-contenteditable]').forEach(el => {
+                el.setAttribute('contenteditable', 'true');
+                el.removeAttribute('data-zaemit-original-contenteditable');
             });
 
             // Remove script initialization flags set by JS
