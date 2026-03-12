@@ -411,11 +411,11 @@ class OverlayManager extends EventEmitter {
             position: absolute !important;
             top: 50% !important;
             left: 50% !important;
-            width: ${isVertical ? '20px' : '4px'} !important;
-            height: ${isVertical ? '4px' : '20px'} !important;
+            width: ${isVertical ? '16px' : '3px'} !important;
+            height: ${isVertical ? '3px' : '16px'} !important;
             background: ${color} !important;
-            border: 1px solid ${borderColor} !important;
-            border-radius: 3px !important;
+            border: none !important;
+            border-radius: 1px !important;
             transform: translate(-50%, -50%) !important;
             transition: opacity 0.3s ease !important;
             pointer-events: none !important;
@@ -918,13 +918,15 @@ class OverlayManager extends EventEmitter {
                 }
             }
 
-            // Spacing dot zoom compensation
+            // Spacing dot zoom compensation (리사이즈 핸들과 동일한 inv 방식)
             const zoom = this._currentZoom || 1;
-            if (zoom !== 1) {
-                const dot = handle.querySelector('div');
-                if (dot) {
-                    dot.style.setProperty('transform', `translate(-50%, -50%) scale(${1 / zoom})`, 'important');
-                }
+            const inv = 1 / zoom;
+            const dot = handle.querySelector('div');
+            if (dot) {
+                const isVert = side === 'top' || side === 'bottom';
+                dot.style.setProperty('width', (isVert ? 16 : 3) * inv + 'px', 'important');
+                dot.style.setProperty('height', (isVert ? 3 : 16) * inv + 'px', 'important');
+                dot.style.setProperty('border-radius', 1 * inv + 'px', 'important');
             }
         });
     }
