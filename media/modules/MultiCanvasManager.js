@@ -3219,10 +3219,33 @@ class MultiCanvasManager extends EventEmitter {
         const wrapper = document.querySelector('.preview-wrapper');
         if (wrapper) wrapper.style.display = '';
 
+        // ★ multi-view-active 클래스 제거 (enableMultiView에서 추가됨)
+        const panel = document.querySelector('.preview-panel');
+        if (panel) panel.classList.remove('multi-view-active');
+
+        // ★ previewFrame inline 스타일 리셋 (멀티뷰 중 적용된 position/left/top 제거)
+        const previewFrame = document.getElementById('previewFrame');
+        if (previewFrame) {
+            previewFrame.style.position = '';
+            previewFrame.style.left = '';
+            previewFrame.style.top = '';
+        }
+
         // ★ 멀티뷰 container 숨기기
         if (this.container) this.container.style.display = 'none';
 
-        // ★ ZoomManager pan 상태 동기화 (MCM의 pan 상태 → ZoomManager)
+        // ★ 현재 활성 뷰포트 너비 복원 + ZoomManager 동기화
+        if (this.viewModeManager) {
+            const currentWidth = this.viewModeManager.currentViewWidth;
+            if (previewFrame) {
+                if (currentWidth === '100%') {
+                    previewFrame.style.width = '';
+                } else {
+                    previewFrame.style.width = currentWidth + 'px';
+                }
+            }
+        }
+
         if (this.zoomManager) {
             this.zoomManager.panOffsetX = this.panX || 0;
             this.zoomManager.panOffsetY = this.panY || 0;

@@ -433,7 +433,8 @@ body {
 }
 
 /* iframe 리로드 페이드 효과 */
-.preview-wrapper {
+#previewFrame,
+.multi-canvas-container {
     transition: opacity 0.2s ease;
 }
 
