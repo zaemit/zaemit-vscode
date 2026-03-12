@@ -52,8 +52,8 @@ body { background-color: #000000; font-family: -apple-system, BlinkMacSystemFont
 
 .f-12 {
   position: absolute;
-  left: 393px;
-  top: 1842px;
+  left: 346px;
+  top: 1828px;
   width: 75.00%;
   height: 144px;
   z-index: 10;
@@ -68,7 +68,21 @@ body { background-color: #000000; font-family: -apple-system, BlinkMacSystemFont
 
 .f-13 { position: absolute; left: 12.50%; top: 2194px; width: 81.00%; height: 110px; z-index: 11; font-family: 'A P-OTF A1Gothic Std', sans-serif; font-size: clamp(14px, 12.29px + 0.3571vw, 18px); font-weight: 300; line-height: clamp(17px, 14.86px + 0.4464vw, 22px); letter-spacing: 0.9px; text-align: left; color: #ffffff; }
 
-.f-14 { position: absolute; left: 14.06%; top: 2008px; width: 79.44%; height: 108px; z-index: 12; font-family: 'A P-OTF A1Gothic Std', sans-serif; font-size: clamp(14px, 12.29px + 0.3571vw, 18px); font-weight: 300; line-height: clamp(28px, 24.57px + 0.7143vw, 36px); letter-spacing: 0.9px; text-align: left; color: #ffffff; }
+.f-14 {
+  position: absolute;
+  left: 346px;
+  top: 2008px;
+  width: 79.44%;
+  height: 108px;
+  z-index: 12;
+  font-family: 'A P-OTF A1Gothic Std', sans-serif;
+  font-size: clamp(14px, 12.29px + 0.3571vw, 18px);
+  font-weight: 300;
+  line-height: clamp(28px, 24.57px + 0.7143vw, 36px);
+  letter-spacing: 0.9px;
+  text-align: left;
+  color: #ffffff;
+}
 
 .f-15 { position: absolute; left: 12.50%; top: 2008px; width: 1.13%; height: 108px; z-index: 13; font-family: 'A P-OTF A1Gothic Std', sans-serif; font-size: clamp(14px, 12.29px + 0.3571vw, 18px); font-weight: 300; line-height: clamp(28px, 24.57px + 0.7143vw, 36px); letter-spacing: 0.9px; text-align: left; color: #ffffff; }
 
@@ -543,3 +557,15 @@ body { background-color: #000000; font-family: -apple-system, BlinkMacSystemFont
 .f-248 { position: relative; border-radius: 100px; position: absolute; left: 82.81%; top: 34px; width: 6.56%; height: 46px; z-index: 38; }
 
 .f-1 { width: 100%; position: relative; width: 100%; min-height: 4474px; background-color: #000000; }
+
+@media (max-width: 769px) {.f-14 {
+  left: 340.953px;
+}
+
+.f-12 { left: 393px; top: 1842px; }}
+
+@media (max-width: 481px) {.f-14 {
+  left: 340.953px;
+}
+
+.f-12 { left: 393px; top: 1842px; }}

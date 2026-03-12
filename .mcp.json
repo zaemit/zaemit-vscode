@@ -2,7 +2,9 @@
   "mcpServers": {
     "zaemit-editor": {
       "command": "node",
-      "args": ["dist/mcp-server.js"]
+      "args": [
+        "c:\\Users\\kjhbo\\.vscode\\extensions\\zaemit.zaemit-visual-editor-0.0.13\\dist\\mcp-server.js"
+      ]
     }
   }
 }

@@ -3,7 +3,7 @@
     "zaemit-editor": {
       "command": "node",
       "args": [
-        "c:\\Users\\roain\\OneDrive\\Desktop\\pp\\zaemit-vscode\\bazix-vscode\\dist\\mcp-server.js"
+        "d:\\www\\bazix-vscode\\dist\\mcp-server.js"
       ]
     }
   }

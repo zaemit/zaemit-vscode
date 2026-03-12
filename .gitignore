@@ -7,3 +7,5 @@ node_modules/
 *.cmd
 *.sed
 CLAUDE.md
+# Zaemit AI tool config (auto-generated)
+.mcp.json

@@ -1,0 +1,75 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body { background-color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; overflow-x: hidden; }
+
+.f-2 { position: absolute; left: 0.00%; top: 0px; width: 100.00%; height: 747px; background-image: url('images/img-4.png'); background-size: cover; background-position: center; }
+
+.f-3 { background-color: #ffffff; position: absolute; left: 4.13%; top: 63px; width: 24.79%; height: 17px; z-index: 1; }
+
+.f-4 { position: absolute; left: 5.23%; top: 66px; width: 7.71%; height: 15px; z-index: 2; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 700; line-height: 15px; text-align: left; color: #acc1d2; }
+
+.f-5 { position: absolute; left: 15.84%; top: 66px; width: 6.20%; height: 15px; z-index: 3; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 700; line-height: 15px; text-align: left; color: #000000; }
+
+.f-6 { position: absolute; left: 33.88%; top: 416px; width: 20.11%; height: 22px; z-index: 4; font-family: 'Pretendard', sans-serif; font-size: 9px; line-height: 11px; text-align: left; color: #000000; }
+
+.f-7 { position: absolute; left: 33.88%; top: 443px; width: 31.27%; height: 11px; z-index: 5; font-family: 'Pretendard', sans-serif; font-size: 9px; line-height: 11px; text-align: left; color: #000000; }
+
+.f-8 { position: absolute; left: 32.51%; top: 416px; width: 0.55%; height: 11px; z-index: 6; font-family: 'Pretendard', sans-serif; font-size: 9px; line-height: 11px; text-align: left; color: #000000; }
+
+.f-9 { position: absolute; left: 32.51%; top: 443px; width: 0.55%; height: 11px; z-index: 7; font-family: 'Pretendard', sans-serif; font-size: 9px; line-height: 11px; text-align: left; color: #000000; }
+
+.f-10 { background-color: #ffffff; position: absolute; left: 4.68%; top: 306px; width: 14.19%; height: 25px; z-index: 8; }
+
+.f-11 { position: absolute; left: 5.23%; top: 302px; width: 8.26%; height: 16px; z-index: 9; font-family: 'Pretendard', sans-serif; font-size: clamp(12px, 11.57px + 0.0893vw, 13px); font-weight: 700; line-height: clamp(15px, 14.57px + 0.0893vw, 16px); text-align: left; color: #000000; }
+
+.f-12 { position: absolute; left: 5.23%; top: 518px; width: 6.61%; height: 16px; z-index: 10; font-family: 'Pretendard', sans-serif; font-size: clamp(12px, 11.57px + 0.0893vw, 13px); font-weight: 700; line-height: clamp(15px, 14.57px + 0.0893vw, 16px); text-align: left; color: #000000; }
+
+.f-13 { border-radius: 7px; position: absolute; left: 5.23%; top: 328px; width: 24.52%; height: 169px; z-index: 11; background-image: url('images/img-3.png'); background-size: cover; background-position: center; }
+
+.f-15 { position: absolute; left: 30.12%; top: 10px; width: 40.96%; height: 11px; font-family: 'Pretendard', sans-serif; font-size: 9px; font-weight: 700; line-height: 11px; text-align: left; color: #ffffff; }
+
+.f-14 { position: relative; background-color: #000000; border-radius: 100px; overflow: hidden; position: absolute; left: 32.51%; top: 465px; width: 11.43%; height: 32px; z-index: 12; }
+
+.f-17 { position: absolute; left: 2.47%; top: 13px; width: 17.47%; height: 13px; font-family: 'Pretendard', sans-serif; font-size: 11px; font-weight: 700; line-height: 13px; text-align: left; color: #c1d1dd; }
+
+.f-16 { position: relative; background-color: #ffffff; border: 1px solid #dee2e5; border-radius: 4px; overflow: hidden; position: absolute; left: 5.23%; top: 543px; width: 89.12%; height: 121px; z-index: 13; }
+
+.f-19 { position: absolute; left: 2.47%; top: 15px; width: 15.61%; height: 13px; font-family: 'Pretendard', sans-serif; font-size: 11px; font-weight: 700; line-height: 13px; text-align: left; color: #c1d1dd; }
+
+.f-18 { position: relative; background-color: #ffffff; border: 1px solid #dee2e5; border-radius: 4px; overflow: hidden; position: absolute; left: 5.23%; top: 237px; width: 89.12%; height: 44px; z-index: 14; }
+
+.f-21 { position: absolute; left: 2.34%; top: 3px; width: 19.88%; height: 16px; font-family: 'Pretendard', sans-serif; font-size: clamp(12px, 11.57px + 0.0893vw, 13px); font-weight: 700; line-height: clamp(15px, 14.57px + 0.0893vw, 16px); text-align: left; color: #000000; }
+
+.f-22 { position: absolute; left: 24.56%; top: 5px; width: 3.51%; height: 13px; z-index: 1; font-family: 'Pretendard', sans-serif; font-size: 11px; line-height: 13px; text-align: left; color: #4dfbc0; }
+
+.f-20 { position: relative; background-color: #ffffff; overflow: hidden; position: absolute; left: 4.68%; top: 104px; width: 23.55%; height: 23px; z-index: 15; }
+
+.f-23 { background-color: #000000; position: absolute; left: 15.84%; top: 86px; width: 6.06%; height: 2px; z-index: 16; }
+
+.f-25 { position: absolute; left: 2.34%; top: 3px; width: 19.88%; height: 16px; font-family: 'Pretendard', sans-serif; font-size: clamp(12px, 11.57px + 0.0893vw, 13px); font-weight: 700; line-height: clamp(15px, 14.57px + 0.0893vw, 16px); text-align: left; color: #000000; }
+
+.f-26 { position: absolute; left: 24.56%; top: 5px; width: 3.51%; height: 13px; z-index: 1; font-family: 'Pretendard', sans-serif; font-size: 11px; line-height: 13px; text-align: left; color: #4dfbc0; }
+
+.f-24 { position: relative; background-color: #ffffff; overflow: hidden; position: absolute; left: 4.68%; top: 208px; width: 23.55%; height: 23px; z-index: 17; }
+
+.f-28 { position: absolute; left: 8.00%; top: 6px; width: 38.67%; height: 13px; font-family: 'Pretendard', sans-serif; font-size: 11px; font-weight: 700; line-height: 13px; text-align: left; color: #000000; }
+
+.f-27 { position: relative; background-color: #ffffff; overflow: hidden; position: absolute; left: 6.20%; top: 148px; width: 10.33%; height: 22px; z-index: 18; }
+
+.f-30 { background-color: #4dfbc0; border-radius: 20px; position: absolute; left: 0.00%; top: 0px; width: 100.00%; height: 40px; }
+
+.f-32 { position: absolute; left: 0.00%; top: 0px; width: 100.00%; height: 28px; object-fit: cover; }
+
+.f-33 { position: absolute; left: 30.36%; top: 10px; width: 39.29%; height: 8px; z-index: 1; object-fit: cover; }
+
+.f-31 { position: relative; position: absolute; left: 70.43%; top: 6px; width: 24.35%; height: 28px; z-index: 1; }
+
+.f-34 { position: absolute; left: 18.26%; top: 12px; width: 42.61%; height: 17px; z-index: 2; font-family: 'Pretendard', sans-serif; font-size: clamp(13px, 12.57px + 0.0893vw, 14px); font-weight: 700; line-height: clamp(15px, 14.14px + 0.1786vw, 17px); text-align: left; color: #28282d; }
+
+.f-29 { position: relative; position: absolute; left: 42.01%; top: 686px; width: 15.84%; height: 40px; z-index: 19; }
+
+.f-35 { background-color: #000000; position: absolute; left: 1.24%; top: 6px; width: 16.25%; height: 19px; z-index: 20; }
+
+.f-36 { position: absolute; left: 5.23%; top: 13px; width: 6.47%; height: 15px; z-index: 21; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 700; line-height: 15px; text-align: left; color: #ffffff; }
+
+.f-1 { width: 100%; position: relative; width: 100%; min-height: 747px; background-color: #ffffff; }

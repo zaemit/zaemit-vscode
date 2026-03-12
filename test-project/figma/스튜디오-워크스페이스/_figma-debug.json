@@ -1,0 +1,146 @@
+{
+  "_meta": {
+    "fileKey": "zzFjZ1k3tEBNqwcPLe3sY0",
+    "nodeId": "8-108",
+    "fileName": "스튜디오 워크스페이스",
+    "timestamp": "2026-03-12T11:12:55.626Z",
+    "nodeCount": 2,
+    "imageIds": 0,
+    "imagesDownloaded": 0
+  },
+  "nodes": {
+    "id": "8:120",
+    "name": "Frame 1",
+    "type": "FRAME",
+    "scrollBehavior": "SCROLLS",
+    "children": [
+      {
+        "id": "8:121",
+        "name": "로고 변경",
+        "type": "TEXT",
+        "scrollBehavior": "SCROLLS",
+        "blendMode": "PASS_THROUGH",
+        "fills": [
+          {
+            "blendMode": "NORMAL",
+            "type": "SOLID",
+            "color": {
+              "r": 1,
+              "g": 1,
+              "b": 1,
+              "a": 1
+            }
+          }
+        ],
+        "strokes": [],
+        "strokeWeight": 1,
+        "strokeAlign": "OUTSIDE",
+        "absoluteBoundingBox": {
+          "x": 2353,
+          "y": 20,
+          "width": 34,
+          "height": 11
+        },
+        "absoluteRenderBounds": {
+          "x": 2353.2373046875,
+          "y": 21.8193359375,
+          "width": 32.2119140625,
+          "height": 7.9541015625
+        },
+        "constraints": {
+          "vertical": "CENTER",
+          "horizontal": "CENTER"
+        },
+        "characters": "로고 변경",
+        "characterStyleOverrides": [],
+        "styleOverrideTable": {},
+        "lineTypes": [
+          "NONE"
+        ],
+        "lineIndentations": [
+          0
+        ],
+        "style": {
+          "fontFamily": "Pretendard",
+          "fontPostScriptName": "Pretendard-Bold",
+          "fontStyle": "Bold",
+          "fontWeight": 700,
+          "textAutoResize": "WIDTH_AND_HEIGHT",
+          "fontSize": 9,
+          "textAlignHorizontal": "LEFT",
+          "textAlignVertical": "TOP",
+          "letterSpacing": 0,
+          "lineHeightPx": 10.740234375,
+          "lineHeightPercent": 100,
+          "lineHeightUnit": "INTRINSIC_%"
+        },
+        "layoutVersion": 5,
+        "effects": [],
+        "interactions": [],
+        "complexStrokeProperties": {
+          "strokeType": "BASIC"
+        }
+      }
+    ],
+    "blendMode": "PASS_THROUGH",
+    "clipsContent": true,
+    "background": [
+      {
+        "blendMode": "NORMAL",
+        "type": "SOLID",
+        "color": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 1
+        }
+      }
+    ],
+    "fills": [
+      {
+        "blendMode": "NORMAL",
+        "type": "SOLID",
+        "color": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 1
+        }
+      }
+    ],
+    "strokes": [],
+    "cornerRadius": 100,
+    "cornerSmoothing": 0,
+    "strokeWeight": 1,
+    "strokeAlign": "INSIDE",
+    "backgroundColor": {
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "a": 1
+    },
+    "absoluteBoundingBox": {
+      "x": 2328,
+      "y": 10,
+      "width": 83,
+      "height": 32
+    },
+    "absoluteRenderBounds": {
+      "x": 2328,
+      "y": 10,
+      "width": 83,
+      "height": 32
+    },
+    "constraints": {
+      "vertical": "TOP",
+      "horizontal": "LEFT"
+    },
+    "effects": [],
+    "interactions": [],
+    "complexStrokeProperties": {
+      "strokeType": "BASIC"
+    }
+  },
+  "imageMap": {},
+  "localImageMap": {}
+}

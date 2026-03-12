@@ -621,9 +621,10 @@ img { max-width: 100%; display: block; }
 }
 
 .features-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  column-gap: 20px;
 }
 
 .feature-card {
@@ -1205,6 +1206,7 @@ img { max-width: 100%; display: block; }
 .why-grid {
   display: grid;
   flex-direction: row;
+  column-gap: 21px;
 }
 
 .why-card.div-pffrbz {
@@ -1222,6 +1224,28 @@ img { max-width: 100%; display: block; }
 .why-icon.div-9f8iw8 {
   text-align: left;
   height: 48px;
+}
+
+.animate-on-scroll.visible.why-card {
+  left: -128px;
+  top: 154px;
+}
+
+.animate-on-scroll.visible.why-card.why-card {
+  left: 13px;
+  top: -7px;
+}
+
+.animate-on-scroll.visible.why-card.why-card.why-card { left: -44px; top: -168px; }
+
+.animate-on-scroll.visible.why-card.why-card.why-card.div-fx7syy {
+  left: 21px;
+  top: 8px;
+}
+
+.animate-on-scroll.visible.h2-oway2a {
+  margin-right: 0px;
+  margin-left: auto;
 }
 
 @media (max-width: 1024px) {
@@ -1730,8 +1754,12 @@ body { background-color: #000; font-family: -apple-system, BlinkMacSystemFont, '
 
 .features-section .section-desc {
   position: static;
-  left: 352px;
+  left: -252px;
   top: 58px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  height: 60px;
 }
 
 .hero p {
@@ -1753,6 +1781,7 @@ body { background-color: #000; font-family: -apple-system, BlinkMacSystemFont, '
 .why-grid {
   display: grid;
   flex-direction: row;
+  column-gap: 20px;
 }
 
 .why-card.div-pffrbz {
@@ -1761,6 +1790,7 @@ body { background-color: #000; font-family: -apple-system, BlinkMacSystemFont, '
 
 .why-card.div-je5zvw {
   text-align: center;
+  position: relative;
 }
 
 .why-card h3.h3-padt6n {
@@ -1773,6 +1803,45 @@ body { background-color: #000; font-family: -apple-system, BlinkMacSystemFont, '
 
 .why-icon {
   height: 51px;
+}
+
+.animate-on-scroll.visible.why-card {
+  left: 0px;
+  top: 0px;
+}
+
+.animate-on-scroll.visible.why-card.why-card {
+  left: -128px;
+  top: 154px;
+  right: -13px;
+  inset: 154px -13px 7px -128px;
+}
+
+.animate-on-scroll.visible.why-card.why-card.why-card {
+  top: 0px;
+  left: 0px;
+}
+
+.features-grid {
+  column-gap: 20px;
+}
+
+.animate-on-scroll.visible.why-card.why-card.why-card.div-fx7syy {
+  left: 0px;
+  top: 0px;
+}
+
+.animate-on-scroll.visible.h2-oway2a {
+  margin-right: 0px;
+  margin-left: 0px;
+}
+
+.features-section .section-desc {
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  height: 777.562px;
+  left: 352px;
 }}
 
 @media (max-width: 481px) {.hero p {
@@ -1781,11 +1850,14 @@ body { background-color: #000; font-family: -apple-system, BlinkMacSystemFont, '
 
 .why-section .section-desc {
   color: rgb(10, 10, 255);
+  width: 115px;
+  height: 778px;
 }
 
 .why-grid {
   display: grid;
   flex-direction: row;
+  column-gap: 20px;
 }
 
 .why-card.div-pffrbz {
@@ -1794,6 +1866,7 @@ body { background-color: #000; font-family: -apple-system, BlinkMacSystemFont, '
 
 .why-card.div-je5zvw {
   text-align: left;
+  position: relative;
 }
 
 .why-card h3.h3-padt6n {
@@ -1803,6 +1876,45 @@ body { background-color: #000; font-family: -apple-system, BlinkMacSystemFont, '
 .why-icon.div-9f8iw8 {
   text-align: left;
   height: 48px;
+}
+
+.animate-on-scroll.visible.why-card {
+  left: 0px;
+  top: 0px;
+}
+
+.animate-on-scroll.visible.why-card.why-card {
+  left: -128px;
+  top: 154px;
+  right: -13px;
+  inset: 154px -13px 7px -128px;
+}
+
+.animate-on-scroll.visible.why-card.why-card.why-card {
+  top: 0px;
+  left: 0px;
+}
+
+.features-grid {
+  column-gap: 20px;
+}
+
+.animate-on-scroll.visible.why-card.why-card.why-card.div-fx7syy {
+  left: 0px;
+  top: 0px;
+}
+
+.animate-on-scroll.visible.h2-oway2a {
+  margin-right: 0px;
+  margin-left: 0px;
+}
+
+.features-section .section-desc {
+  margin-left: auto;
+  margin-right: auto;
+  left: 9px;
+  width: 115px;
+  height: 778px;
 }}
 
 @media (max-width: 1441px) {.hero p {
@@ -1830,3 +1942,24 @@ body { background-color: #000; font-family: -apple-system, BlinkMacSystemFont, '
   text-align: left;
   height: 48px;
 }}
+
+@media (max-width: 3129px) {.animate-on-scroll.visible.why-card.why-card.why-card {
+  top: 0px;
+  left: 0px;
+}
+
+.animate-on-scroll.visible.why-card.why-card {
+  right: 0px;
+  bottom: 0px;
+}
+
+.animate-on-scroll.visible.why-card.why-card.why-card.div-fx7syy {
+  left: 0px;
+  top: 0px;
+}}
+
+@media (max-width: 2027px) {
+  .why-card.div-je5zvw {
+  position: static;
+}
+}
