@@ -2956,7 +2956,6 @@ class EditorApp extends EventEmitter {
     async saveCSS() {
         try {
             // 멀티뷰 모드일 때: 활성 iframe의 CSS를 메인 iframe으로 먼저 동기화
-            // (syncCSSRuleToAllCanvases는 기본 규칙만 동기화하므로 미디어쿼리가 누락될 수 있음)
             // _skipSyncOnSave 플래그가 true면 동기화 스킵 (미디어쿼리 너비 변경 시)
             if (this.modules.multiCanvas?.isEnabled() && !this._skipSyncOnSave) {
                 this._syncActiveToMainCSS();
@@ -4851,8 +4850,17 @@ class EditorApp extends EventEmitter {
         // 멀티뷰에서 selectedBreakpoints 업데이트
         // 체크박스 자동 ON은 하지 않음 (사용자가 OFF로 설정한 의도 존중)
         // 대신 현재 체크된 상태만 반영
-        if (this.modules.multiCanvas?.isMultiViewEnabled) {
+        if (this.modules.multiCanvas?.isEnabled()) {
             this.modules.stylePanel?.styleManager?.updateSelectedBreakpointsFromCheckboxes?.();
+
+            // ★ 멀티뷰에서 활성 iframe의 width로 currentViewport 업데이트
+            // iframe 전환 시 currentViewport가 업데이트되지 않으면 스타일이
+            // 미디어쿼리 대신 base rule에 저장되는 버그 방지
+            const iframeWidth = iframe.style.width;
+            const viewport = (!iframeWidth || iframeWidth === '100%') ? 'pc' : parseInt(iframeWidth);
+            if (this.modules.stylePanel?.styleManager) {
+                this.modules.stylePanel.styleManager.setCurrentViewport(viewport);
+            }
         }
     }
 
