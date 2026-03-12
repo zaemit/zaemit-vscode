@@ -664,21 +664,20 @@ class MultiCanvasManager extends EventEmitter {
         // 이미 핸들러가 있으면 건너뜀
         if (this._globalWheelHandler) return;
 
-        // 전역 휠 이벤트 - Ctrl+휠은 멀티뷰 활성 시에만 줌
+        // 전역 휠 이벤트 - 멀티캔버스 초기화 후 항상 작동 (싱글뷰 포함)
         this._globalWheelHandler = e => {
-            // Ctrl+휠: 멀티뷰 활성 상태에서만 MCM 줌 처리
-            // 멀티뷰 비활성 시 ZoomManager가 처리하도록 패스
+            if (!this._isInitialized) return;
+
+            // Ctrl+휠: 줌
             if (e.ctrlKey || e.metaKey) {
-                if (!this.isMultiViewEnabled) return;
+                const panel = document.querySelector('.preview-panel');
+                if (!panel?.contains(e.target) && e.target !== panel) return;
                 e.preventDefault();
                 e.stopPropagation();
                 e.stopImmediatePropagation();
                 this.zoom(e.deltaY, e.clientX, e.clientY);
                 return;
             }
-
-            // 일반 휠 패닝은 멀티뷰 모드에서만
-            if (!this.isMultiViewEnabled) return;
 
             // 일반 휠: preview-panel 영역 내에서만 패닝
             const panel = document.querySelector('.preview-panel');

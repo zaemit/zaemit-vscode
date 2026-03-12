@@ -661,6 +661,11 @@ class PreviewManager extends EventEmitter {
                     return;
                 }
 
+                // 텍스트 편집 모드에서는 브라우저 기본 동작 허용 (커서 이동, 텍스트 선택)
+                if (e.target.closest && e.target.closest('.editor-editable')) {
+                    return;
+                }
+
                 e.preventDefault();
                 e.stopPropagation();
 
@@ -686,6 +691,11 @@ class PreviewManager extends EventEmitter {
 
                 // Ignore double clicks on editor UI
                 if (isEditorUI(e.target)) {
+                    return;
+                }
+
+                // 텍스트 편집 모드에서는 더블클릭으로 단어 선택 허용
+                if (e.target.closest && e.target.closest('.editor-editable')) {
                     return;
                 }
 
