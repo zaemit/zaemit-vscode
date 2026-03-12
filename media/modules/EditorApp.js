@@ -3014,51 +3014,8 @@ class EditorApp extends EventEmitter {
                 // 임시 태그는 유지 (새로고침 시 자동 제거됨)
             }
 
-            // ★ 내부 <style> 태그에서 style.css에 저장된 속성과 충돌하는 속성 제거
-            // HTML의 <style>이 <link href="style.css"> 뒤에 오면 cascade에서 내부 스타일이 우선
-            // → style.css에 저장한 변경사항이 브라우저에서 무시되는 문제 방지
-            if (tempStyleTag?.sheet?.cssRules) {
-                const savedProps = new Map();
-                const editorPfx = ['.editor-', '.zaemit-', '.quick-text-edit', '[data-zaemit-'];
-                const collectRule = (r) => {
-                    if (r.type !== 1 || !r.selectorText) return;
-                    if (editorPfx.some(p => r.selectorText.includes(p))) return;
-                    if (!r.style?.length) return;
-                    if (!savedProps.has(r.selectorText)) savedProps.set(r.selectorText, new Set());
-                    for (let j = 0; j < r.style.length; j++) savedProps.get(r.selectorText).add(r.style[j]);
-                };
-                for (const rule of tempStyleTag.sheet.cssRules) {
-                    if (rule.type === 4) { for (const ir of rule.cssRules) collectRule(ir); }
-                    else collectRule(rule);
-                }
-                if (savedProps.size > 0) {
-                    const internalStyles = doc.querySelectorAll('style:not(#zaemit-temp-styles):not(#zaemit-injected-css)');
-                    for (const st of internalStyles) {
-                        if (!st.sheet?.cssRules) continue;
-                        let modified = false;
-                        const cleanRule = (r) => {
-                            if (r.type !== 1) return;
-                            const ps = savedProps.get(r.selectorText);
-                            if (!ps) return;
-                            for (const p of ps) {
-                                if (r.style.getPropertyValue(p)) {
-                                    r.style.removeProperty(p);
-                                    modified = true;
-                                }
-                            }
-                        };
-                        for (const rule of st.sheet.cssRules) {
-                            if (rule.type === 4) { for (const ir of rule.cssRules) cleanRule(ir); }
-                            else cleanRule(rule);
-                        }
-                        if (modified) {
-                            let newCSS = '';
-                            for (const rule of st.sheet.cssRules) newCSS += rule.cssText + '\n';
-                            st.textContent = newCSS;
-                        }
-                    }
-                }
-            }
+            // ★ 충돌 해결은 _getCleanHTML()에서 save/restore 패턴으로 처리
+            // saveCSS()에서는 라이브 DOM을 수정하지 않음 (에디터 화면 손상 방지)
 
             // ★ 추적된 CSS 속성 제거 반영 (applyStyleChange에서 속성 제거 시 추적됨)
             if (this._cssPropertyRemovals?.length > 0) {
@@ -3256,7 +3213,33 @@ class EditorApp extends EventEmitter {
         if (!propsMatch) return existingCSS;
         const newProps = propsMatch[1].trim();
 
-        // 기존 CSS에서 같은 선택자 찾기
+        // ★ Step 1: @media 블록을 플레이스홀더로 치환 (base rule 병합이 media query 내부를 덮어쓰는 버그 방지)
+        const mediaBlocks = [];
+        const mediaHeaderRegex = /@media\s+[^{]+\{/g;
+        let mm;
+        const ranges = [];
+        while ((mm = mediaHeaderRegex.exec(existingCSS)) !== null) {
+            const start = mm.index;
+            let depth = 1;
+            let pos = start + mm[0].length;
+            while (pos < existingCSS.length && depth > 0) {
+                if (existingCSS[pos] === '{') depth++;
+                else if (existingCSS[pos] === '}') depth--;
+                pos++;
+            }
+            // 중첩된 @media는 스킵 (상위 블록에 이미 포함됨)
+            const isNested = ranges.some(r => start >= r.start && start < r.end);
+            if (!isNested) ranges.push({ start, end: pos });
+        }
+        let safeCss = existingCSS;
+        for (let i = ranges.length - 1; i >= 0; i--) {
+            const block = existingCSS.substring(ranges[i].start, ranges[i].end);
+            const placeholder = `/*__MP${i}__*/`;
+            mediaBlocks.unshift({ placeholder, block });
+            safeCss = safeCss.substring(0, ranges[i].start) + placeholder + safeCss.substring(ranges[i].end);
+        }
+
+        // ★ Step 2: @media 블록 없이 base rule만 있는 CSS에서 선택자 병합
         const escapedSelector = selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
         const selectorRegex = new RegExp(
             `(${escapedSelector})\\s*\\{([^}]*)\\}`,
@@ -3264,19 +3247,34 @@ class EditorApp extends EventEmitter {
         );
 
         let found = false;
-        const mergedCSS = existingCSS.replace(selectorRegex, (match, sel, existingProps) => {
+        safeCss = safeCss.replace(selectorRegex, (match, sel, existingProps) => {
             found = true;
             // 기존 속성과 새 속성 병합
             const mergedProps = this.mergeCSSProperties(existingProps, newProps);
             return `${sel} {\n  ${mergedProps}\n}`;
         });
 
-        if (found) {
-            return mergedCSS;
-        } else {
-            // 새 규칙 추가
-            return existingCSS.trim() + '\n\n' + ruleText;
+        if (!found) {
+            // ★ 새 규칙을 첫 @media 블록 앞에 삽입 (뒤에 가면 cascade 깨짐)
+            const firstPH = mediaBlocks.length > 0 ? mediaBlocks[0].placeholder : null;
+            if (firstPH) {
+                const phIdx = safeCss.indexOf(firstPH);
+                if (phIdx > -1) {
+                    safeCss = safeCss.substring(0, phIdx).trimEnd() + '\n\n' + ruleText + '\n\n' + safeCss.substring(phIdx);
+                } else {
+                    safeCss = safeCss.trim() + '\n\n' + ruleText;
+                }
+            } else {
+                safeCss = safeCss.trim() + '\n\n' + ruleText;
+            }
         }
+
+        // ★ Step 3: @media 블록 복원
+        for (const { placeholder, block } of mediaBlocks) {
+            safeCss = safeCss.replace(placeholder, block);
+        }
+
+        return safeCss;
     }
 
     /**
@@ -5887,8 +5885,73 @@ class EditorApp extends EventEmitter {
                 doc = this.modules.preview.getDocument();
             }
 
+            // ★ Clone 전에 내부 <style> 태그의 충돌 속성 제거 (save/restore 패턴)
+            // 라이브 DOM을 임시로 수정 → clone → 즉시 원본 복원 (에디터 화면 손상 방지)
+            const _savedStyleTexts = new Map(); // styleEl → original textContent
+            {
+                const tempStyleTag = doc.getElementById('zaemit-temp-styles');
+                if (tempStyleTag?.sheet?.cssRules) {
+                    const modifiedEls = new Map();
+                    const editorUiPfx = ['.editor-highlight', '.editor-hover', '.editor-multi-select', '[data-zaemit-selected'];
+                    const collectFromRule = (r) => {
+                        if (r.type !== 1 || !r.selectorText || !r.style?.length) return;
+                        if (editorUiPfx.some(p => r.selectorText.includes(p))) return;
+                        try {
+                            const els = doc.querySelectorAll(r.selectorText);
+                            for (const el of els) {
+                                if (!modifiedEls.has(el)) modifiedEls.set(el, new Set());
+                                for (let j = 0; j < r.style.length; j++) modifiedEls.get(el).add(r.style[j]);
+                            }
+                        } catch (e) {}
+                    };
+                    for (const r of tempStyleTag.sheet.cssRules) {
+                        r.type === 4 ? [...r.cssRules].forEach(collectFromRule) : collectFromRule(r);
+                    }
+                    if (modifiedEls.size > 0) {
+                        const internalStyles = doc.querySelectorAll('style:not(#zaemit-temp-styles):not(#zaemit-injected-css)');
+                        for (const styleEl of internalStyles) {
+                            if (!styleEl.sheet?.cssRules) continue;
+                            let modified = false;
+                            const cleanRule = (rule) => {
+                                if (rule.type !== 1 || !rule.selectorText) return;
+                                if (editorUiPfx.some(p => rule.selectorText.includes(p))) return;
+                                if (/^[a-z][a-z0-9]*$/i.test(rule.selectorText.trim())) return;
+                                try {
+                                    const els = doc.querySelectorAll(rule.selectorText);
+                                    for (const el of els) {
+                                        const props = modifiedEls.get(el);
+                                        if (!props) continue;
+                                        for (const prop of props) {
+                                            if (rule.style.getPropertyValue(prop)) {
+                                                rule.style.removeProperty(prop);
+                                                modified = true;
+                                            }
+                                        }
+                                    }
+                                } catch (e) {}
+                            };
+                            for (const rule of styleEl.sheet.cssRules) {
+                                rule.type === 4 ? [...rule.cssRules].forEach(cleanRule) : cleanRule(rule);
+                            }
+                            if (modified) {
+                                // 원본 저장 (나중에 복원용)
+                                _savedStyleTexts.set(styleEl, styleEl.textContent);
+                                let css = '';
+                                for (const rule of styleEl.sheet.cssRules) css += rule.cssText + '\n';
+                                styleEl.textContent = css;
+                            }
+                        }
+                    }
+                }
+            }
+
             // Clone the document element to avoid modifying the live DOM
             const clonedDoc = doc.documentElement.cloneNode(true);
+
+            // ★ 라이브 DOM 원본 복원 (충돌 해결로 수정된 내부 style 태그를 원래대로)
+            for (const [styleEl, originalText] of _savedStyleTexts) {
+                styleEl.textContent = originalText;
+            }
 
             // Remove editor-related classes from clone
             clonedDoc.querySelectorAll('.editor-highlight, .editor-hover, .editor-multi-select').forEach(el => {
@@ -6107,22 +6170,27 @@ class EditorApp extends EventEmitter {
                 clonedDoc.querySelectorAll('#zaemit-temp-styles').forEach(el => el.remove());
 
                 // 3. CSS 파일이 존재하면 <link> 태그 확실히 복원
-                // ★ _fileNames.css가 null이면 CSS를 아직 저장한 적 없으므로 <link> 미삽입
-                //    saveCSS() 최초 호출 시 _fileNames.css가 동적으로 설정됨
+                // ★ <link>를 모든 <style> 태그 뒤에 배치하여 style.css가 cascade에서 우선하도록 함
+                // (내부 <style> 태그가 style.css의 변경사항을 덮어쓰는 문제 방지)
                 const cssName = this._fileNames?.css;
                 if (head && cssName) {
+                    // 기존 <link> 태그가 있으면 제거 (위치 재배치를 위해)
                     const existingLink = clonedDoc.querySelector(`link[rel="stylesheet"][href="${cssName}"]`);
-                    if (!existingLink) {
-                        const link = (clonedDoc.ownerDocument || doc).createElement('link');
-                        link.rel = 'stylesheet';
-                        link.href = cssName;
-                        // <title> 다음 또는 <head> 끝에 삽입
-                        const title = head.querySelector('title');
-                        if (title && title.nextSibling) {
-                            head.insertBefore(link, title.nextSibling);
-                        } else {
-                            head.appendChild(link);
-                        }
+                    if (existingLink) existingLink.remove();
+
+                    const link = (clonedDoc.ownerDocument || doc).createElement('link');
+                    link.rel = 'stylesheet';
+                    link.href = cssName;
+
+                    // 마지막 <style> 태그 뒤에 삽입 (cascade 우선순위 확보)
+                    const lastStyle = [...head.querySelectorAll('style')].pop();
+                    if (lastStyle && lastStyle.nextSibling) {
+                        head.insertBefore(link, lastStyle.nextSibling);
+                    } else if (lastStyle) {
+                        head.appendChild(link);
+                    } else {
+                        // <style> 태그가 없으면 <head> 끝에 삽입
+                        head.appendChild(link);
                     }
                 }
 
