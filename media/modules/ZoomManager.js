@@ -1251,7 +1251,12 @@ class ZoomManager extends EventEmitter {
         if (!this.previewWrapper || !this.previewFrame) return;
         if (this.multiCanvasManager?.isEnabled()) return;
 
+        // transform 초기화 후 실제 레이아웃 위치 측정 (정확한 translate 계산용)
+        this.previewFrame.style.transform = '';
+        this.previewFrame.style.transformOrigin = '';
+
         const wrapperRect = this.previewWrapper.getBoundingClientRect();
+        const frameRect = this.previewFrame.getBoundingClientRect();
         const frameWidth = this.previewFrame.offsetWidth;
         const frameHeight = this.previewFrame.offsetHeight;
         if (!frameWidth || !frameHeight) return;
@@ -1261,8 +1266,11 @@ class ZoomManager extends EventEmitter {
         const scaleY = (wrapperRect.height - padding * 2) / frameHeight;
         const scale = Math.min(scaleX, scaleY, 1);
 
-        // transformOrigin '0 0' 기준으로 scale 후 수평 중앙 정렬 보정
-        const translateX = frameWidth * (1 - scale) / 2;
+        // 실제 레이아웃 위치 기반 translate 계산 → wrapper 경계를 넘지 않음
+        const frameLeftInWrapper = frameRect.left - wrapperRect.left;
+        const scaledWidth = frameWidth * scale;
+        const targetLeft = (wrapperRect.width - scaledWidth) / 2;
+        const translateX = targetLeft - frameLeftInWrapper;
         const translateY = padding;
 
         this.zoomLevel = scale;
