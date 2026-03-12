@@ -49,6 +49,25 @@ Hold `Ctrl` and click to select multiple elements. Apply styles, move, or delete
 ### Zoom & Pan
 `Ctrl+Scroll` to zoom in/out. `Space+Drag` to pan across the canvas. `Ctrl+0` to reset zoom to 100%.
 
+### AI Integration (MCP Server)
+Zaemit includes a built-in [MCP (Model Context Protocol)](https://modelcontextprotocol.io) server, enabling AI coding tools to interact with the visual editor directly.
+
+- **Claude Code**, **Cursor**, **Copilot**, and other MCP-compatible tools can connect automatically
+- AI can read the current page structure, inspect selected elements, and modify styles or HTML in real time
+- The editor exposes a REST API so any AI tool that supports HTTP calls can integrate seamlessly
+
+Just open an HTML file with Zaemit — the MCP server starts automatically. No extra setup required.
+
+### Figma Import
+Import Figma designs directly into your project as clean HTML/CSS.
+
+1. Generate a **Personal Access Token** in Figma (Settings → Security)
+2. Run **"Zaemit: Set Figma Token"** from the Command Palette
+3. Run **"Zaemit: Import from Figma"** and paste a Figma URL
+4. Zaemit converts the selected frame into HTML/CSS and adds it to your project folder
+
+Supports frames, components, images, and text layers. Imported files are fully editable in the visual editor.
+
 ---
 
 ## Getting Started
