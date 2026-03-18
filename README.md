@@ -49,6 +49,42 @@ Hold `Ctrl` and click to select multiple elements. Apply styles, move, or delete
 ### Zoom & Pan
 `Ctrl+Scroll` to zoom in/out. `Space+Drag` to pan across the canvas. `Ctrl+0` to reset zoom to 100%.
 
+### AI Integration (MCP Server)
+Zaemit includes a built-in **MCP (Model Context Protocol) server** that connects with AI coding assistants like **Claude Code**. Ask your AI to edit elements, change styles, or restructure your page — and see the results applied directly in the visual editor.
+
+- **Read page structure** — AI can inspect the full DOM tree and element properties
+- **Edit elements** — Update styles, attributes, and text content via AI commands
+- **Insert & delete** — Add new HTML elements or remove existing ones
+- **Responsive editing** — Switch viewports and apply device-specific styles through AI
+- **Live sync** — Changes made by AI are reflected in the visual editor in real time
+
+No extra setup required. The MCP server starts automatically when Zaemit opens.
+
+### Figma Import
+Import designs directly from Figma into your project. Paste a Figma file URL and Zaemit converts frames into clean, production-ready HTML/CSS.
+
+- **One-click import** — Paste the Figma URL, select frames, and generate code
+- **Clean output** — Semantic HTML structure with organized CSS
+- **Image export** — Figma images are automatically downloaded to your project
+- **Responsive-ready** — Imported layouts work as a starting point for responsive design
+
+### Image Editor
+Built-in image editing tools let you adjust images without leaving the editor:
+
+- **Transform** — Rotate, flip horizontal/vertical
+- **Crop** — Crop images to custom dimensions
+- **Resize** — Set exact width and height
+- **Adjustments** — Brightness, contrast, saturation, blur, grayscale, sepia
+- **Non-destructive** — All changes are applied via CSS filters, preserving the original
+
+### Motion & Animation
+Add entrance and exit animations to any element:
+
+- **Entrance effects** — Fade in, slide up/down/left/right, zoom in, bounce
+- **Exit effects** — Fade out, slide out, zoom out
+- **Timing controls** — Duration, delay, and trigger options
+- **Preview** — Test animations directly in the editor
+
 ---
 
 ## Getting Started
